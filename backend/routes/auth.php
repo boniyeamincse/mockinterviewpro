@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AdminAuthController;
 
 // Public authentication routes
 Route::prefix('auth')->group(function () {
@@ -11,6 +12,9 @@ Route::prefix('auth')->group(function () {
     Route::post('reset-password', [AuthController::class, 'resetPassword'])->name('auth.reset-password');
     Route::post('verify-email', [AuthController::class, 'verifyEmail'])->name('auth.verify-email');
     Route::post('resend-verification', [AuthController::class, 'resendVerificationEmail'])->name('auth.resend-verification');
+
+    // Admin authentication routes
+    Route::post('admin/login', [AdminAuthController::class, 'login'])->name('auth.admin.login');
 });
 
 // Protected authentication routes
@@ -21,4 +25,8 @@ Route::middleware('auth:sanctum')->prefix('auth')->group(function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('auth.logout');
     Route::post('refresh-token', [AuthController::class, 'refreshToken'])->name('auth.refresh-token');
     Route::post('refresh', [AuthController::class, 'refreshToken'])->name('auth.refresh');
+
+    // Admin authentication routes
+    Route::post('admin/logout', [AdminAuthController::class, 'logout'])->name('auth.admin.logout');
+    Route::post('admin/refresh', [AdminAuthController::class, 'refresh'])->name('auth.admin.refresh');
 });

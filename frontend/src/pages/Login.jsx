@@ -1,39 +1,46 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, LogIn } from 'lucide-react';
+import { loginUser, api } from '../lib/api';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    let loggedInUser = {
-      email: email,
-      joinedDate: 'May 2026'
-    };
+  useEffect(() => {
+    const user = api.getStoredUser();
+    if (user?.user_type === 'trainer') {
+      navigate('/trainer/dashboard');
+    } else if (user?.user_type === 'student' || user?.user_type === 'admin') {
+      navigate('/dashboard');
+    }
+  }, [navigate]);
 
-    if (email === 'trainer@interviewpro.com') {
-      loggedInUser.name = 'Michael Chang';
-      loggedInUser.role = 'Trainer';
-    } else if (email === 'admin@interviewpro.com') {
-      loggedInUser.name = 'Admin Controller';
-      loggedInUser.role = 'Admin';
-    } else if (email.includes('boni') || email === 'boniyeamin.cse1@gmail.com') {
-      loggedInUser.name = 'Boni Yeamin';
-      loggedInUser.role = 'Candidate';
-    } else {
-      loggedInUser.name = 'Alex Rivera';
-      loggedInUser.role = 'Candidate';
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    try {
+      const response = await loginUser({ email, password });
+      const user = response?.data?.user;
+
+      if (user?.user_type === 'trainer') {
+        navigate('/trainer/dashboard');
+      } else {
+        navigate('/dashboard');
+      }
+    } catch (err) {
+      setError(err?.payload?.message || err.message || 'Unable to sign in');
+    } finally {
+      setLoading(false);
     }
 
-    localStorage.setItem('user', JSON.stringify(loggedInUser));
-
-    if (loggedInUser.role === 'Trainer') {
+    if (false) {
       navigate('/trainer/dashboard');
-    } else {
-      navigate('/dashboard');
     }
   };
 
@@ -53,6 +60,12 @@ const Login = () => {
         <p style={{ color: 'var(--text-secondary)', textAlign: 'center', marginBottom: '32px', fontSize: '0.9rem' }}>
           Enter your details to access your account
         </p>
+
+        {error && (
+          <div style={{ marginBottom: '20px', padding: '12px 14px', borderRadius: '10px', background: 'rgba(239, 68, 68, 0.08)', border: '1px solid rgba(239, 68, 68, 0.2)', color: '#fca5a5', fontSize: '0.85rem' }}>
+            {error}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -117,7 +130,7 @@ const Login = () => {
           </div>
 
           <button type="submit" className="btn btn-primary" style={{ marginTop: '12px', width: '100%', gap: '8px' }}>
-            Sign In <LogIn size={18} />
+            {loading ? 'Signing In...' : <>Sign In <LogIn size={18} /></>}
           </button>
         </form>
 

@@ -1,28 +1,50 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, User, UserPlus } from 'lucide-react';
+import { api, registerUser } from '../lib/api';
 
 const Register = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('student');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const targetRole = role === 'student' ? 'Candidate' : 'Trainer';
-    const newUser = {
-      name,
-      email,
-      role: targetRole,
-      joinedDate: new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
-    };
-    localStorage.setItem('user', JSON.stringify(newUser));
-    if (targetRole === 'Trainer') {
+  useEffect(() => {
+    const user = api.getStoredUser();
+    if (user?.user_type === 'trainer') {
       navigate('/trainer/dashboard');
-    } else {
+    } else if (user?.user_type === 'student' || user?.user_type === 'admin') {
       navigate('/dashboard');
+    }
+  }, [navigate]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    try {
+      await registerUser({
+        name,
+        email,
+        password,
+        password_confirmation: password,
+        user_type: role,
+      });
+
+      const user = api.getStoredUser();
+      if (user?.user_type === 'trainer') {
+        navigate('/trainer/dashboard');
+      } else {
+        navigate('/dashboard');
+      }
+    } catch (err) {
+      setError(err?.payload?.message || err.message || 'Unable to create account');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -44,6 +66,12 @@ const Register = () => {
         <p style={{ color: 'var(--text-secondary)', textAlign: 'center', marginBottom: '32px', fontSize: '0.9rem' }}>
           Join InterviewPro to start preparation or mentoring
         </p>
+
+        {error && (
+          <div style={{ marginBottom: '20px', padding: '12px 14px', borderRadius: '10px', background: 'rgba(239, 68, 68, 0.08)', border: '1px solid rgba(239, 68, 68, 0.2)', color: '#fca5a5', fontSize: '0.85rem' }}>
+            {error}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -163,7 +191,7 @@ const Register = () => {
           </div>
 
           <button type="submit" className="btn btn-primary" style={{ marginTop: '12px', width: '100%', gap: '8px' }}>
-            Create Account <UserPlus size={18} />
+            {loading ? 'Creating Account...' : <>Create Account <UserPlus size={18} /></>}
           </button>
         </form>
 

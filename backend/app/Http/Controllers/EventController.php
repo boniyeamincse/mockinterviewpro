@@ -37,8 +37,8 @@ class EventController extends Controller
         $query = Event::query()->with('user');
         $user = Auth::user();
 
-        // Students can only browse published events.
-        if ($user && $user->isStudent()) {
+        // Guest and students can only browse published events.
+        if (!$user || $user->isStudent()) {
             $query->published();
         }
 
@@ -183,9 +183,9 @@ class EventController extends Controller
     {
         $event = Event::with('user')->findOrFail($id);
 
-        // Students can view only published events; owner/admin can view all.
+        // Guests and students can view only published events; owner/admin can view all.
         $user = Auth::user();
-        if ($user && $user->isStudent() && $event->status !== 'published') {
+        if ((!$user || $user->isStudent()) && $event->status !== 'published') {
             return response()->json([
                 'success' => false,
                 'message' => 'Event not available',

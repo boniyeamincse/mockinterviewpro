@@ -14,16 +14,31 @@ use App\Http\Controllers\TrainerReviewController;
 use App\Http\Controllers\TrainerAnalyticsController;
 use App\Http\Controllers\TrainerNotificationController;
 use App\Http\Controllers\TrainerProfileController;
+use App\Http\Controllers\StudentProfileController;
+use App\Http\Controllers\StudentDiscoveryController;
+use App\Http\Controllers\StudentBookingController;
+use App\Http\Controllers\StudentPaymentController;
+use App\Http\Controllers\StudentReviewController;
+use App\Http\Controllers\StudentNotificationController;
+use App\Http\Controllers\AdminController;
 
 // Auth endpoints
 require base_path('routes/auth.php');
+
+// Public student discovery endpoints
+Route::get('events', [EventController::class, 'index']);
+Route::get('events/search', [StudentDiscoveryController::class, 'search']);
+Route::get('events/{id}/slots', [StudentDiscoveryController::class, 'eventSlots']);
+Route::get('events/{event}', [EventController::class, 'show']);
+Route::get('trainers/{id}/profile', [StudentDiscoveryController::class, 'trainerProfile']);
+Route::get('trainers/{id}/reviews', [StudentDiscoveryController::class, 'trainerReviews']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
     // Task Routes
     Route::apiResource('tasks', TaskController::class);
 
     // Events Routes
-    Route::apiResource('events', EventController::class)->except(['update']);
+    Route::apiResource('events', EventController::class)->except(['index', 'show', 'update']);
     Route::put('events/{event}/status', [EventController::class, 'updateStatus']);
     Route::put('events/{event}', [EventController::class, 'update']);
 
@@ -84,6 +99,130 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('trainer/profile', [TrainerProfileController::class, 'show']);
     Route::put('trainer/profile', [TrainerProfileController::class, 'update']);
     Route::patch('trainer/profile/password', [TrainerProfileController::class, 'changePassword']);
+
+    // Student profile endpoints
+    Route::get('student/profile', [StudentProfileController::class, 'show']);
+    Route::put('student/profile', [StudentProfileController::class, 'update']);
+    Route::patch('student/profile/password', [StudentProfileController::class, 'changePassword']);
+
+    // Student discovery and wishlist
+    Route::post('student/wishlist/{eventId}', [StudentDiscoveryController::class, 'addWishlist']);
+    Route::delete('student/wishlist/{eventId}', [StudentDiscoveryController::class, 'removeWishlist']);
+    Route::get('student/wishlist', [StudentDiscoveryController::class, 'wishlist']);
+
+    // Student bookings
+    Route::post('student/bookings', [StudentBookingController::class, 'store']);
+    Route::get('student/bookings', [StudentBookingController::class, 'index']);
+    Route::get('student/bookings/upcoming', [StudentBookingController::class, 'upcoming']);
+    Route::get('student/bookings/{id}', [StudentBookingController::class, 'show']);
+    Route::patch('student/bookings/{id}/cancel', [StudentBookingController::class, 'cancel']);
+    Route::patch('student/bookings/{id}/reschedule', [StudentBookingController::class, 'reschedule']);
+
+    // Student payments
+    Route::post('student/payments/initiate', [StudentPaymentController::class, 'initiate']);
+    Route::post('student/payments/verify', [StudentPaymentController::class, 'verify']);
+    Route::get('student/payments', [StudentPaymentController::class, 'index']);
+    Route::get('student/payments/{id}', [StudentPaymentController::class, 'show']);
+    Route::get('student/payments/{id}/receipt', [StudentPaymentController::class, 'receipt']);
+
+    // Student reviews
+    Route::post('student/reviews', [StudentReviewController::class, 'store']);
+    Route::get('student/reviews', [StudentReviewController::class, 'index']);
+    Route::put('student/reviews/{id}', [StudentReviewController::class, 'update']);
+    Route::delete('student/reviews/{id}', [StudentReviewController::class, 'destroy']);
+    Route::post('student/reviews/{id}/report', [StudentReviewController::class, 'report']);
+
+    // Student notifications
+    Route::get('student/notifications', [StudentNotificationController::class, 'index']);
+    Route::patch('student/notifications/{id}/read', [StudentNotificationController::class, 'read']);
+    Route::patch('student/notifications/read-all', [StudentNotificationController::class, 'readAll']);
+    Route::put('student/notifications/preferences', [StudentNotificationController::class, 'updatePreferences']);
+
+    // Admin account
+    Route::get('admin/me', [AdminController::class, 'me']);
+    Route::patch('admin/me/password', [AdminController::class, 'changeMyPassword']);
+
+    // Admin trainer management
+    Route::get('admin/trainers', [AdminController::class, 'trainers']);
+    Route::get('admin/trainers/pending', [AdminController::class, 'pendingTrainers']);
+    Route::get('admin/trainers/{id}', [AdminController::class, 'trainer']);
+    Route::patch('admin/trainers/{id}/approve', [AdminController::class, 'approveTrainer']);
+    Route::patch('admin/trainers/{id}/suspend', [AdminController::class, 'suspendTrainer']);
+    Route::patch('admin/trainers/{id}/reinstate', [AdminController::class, 'reinstateTrainer']);
+    Route::delete('admin/trainers/{id}', [AdminController::class, 'deleteTrainer']);
+    Route::post('admin/trainers/{id}/note', [AdminController::class, 'noteTrainer']);
+
+    // Admin student management
+    Route::get('admin/students', [AdminController::class, 'students']);
+    Route::get('admin/students/{id}', [AdminController::class, 'student']);
+    Route::patch('admin/students/{id}/suspend', [AdminController::class, 'suspendStudent']);
+    Route::patch('admin/students/{id}/reinstate', [AdminController::class, 'reinstateStudent']);
+    Route::delete('admin/students/{id}', [AdminController::class, 'deleteStudent']);
+    Route::post('admin/students/{id}/note', [AdminController::class, 'noteStudent']);
+
+    // Admin event management
+    Route::get('admin/events', [AdminController::class, 'events']);
+    Route::get('admin/events/flagged', [AdminController::class, 'flaggedEvents']);
+    Route::get('admin/events/{id}', [AdminController::class, 'event']);
+    Route::patch('admin/events/{id}/unpublish', [AdminController::class, 'unpublishEvent']);
+    Route::patch('admin/events/{id}/publish', [AdminController::class, 'publishEvent']);
+    Route::patch('admin/events/{id}/flag', [AdminController::class, 'flagEvent']);
+    Route::delete('admin/events/{id}', [AdminController::class, 'deleteEvent']);
+
+    // Admin booking oversight
+    Route::get('admin/bookings', [AdminController::class, 'bookings']);
+    Route::get('admin/bookings/disputed', [AdminController::class, 'disputedBookings']);
+    Route::get('admin/bookings/{id}', [AdminController::class, 'booking']);
+    Route::patch('admin/bookings/{id}/cancel', [AdminController::class, 'cancelBooking']);
+    Route::patch('admin/bookings/{id}/complete', [AdminController::class, 'completeBooking']);
+    Route::post('admin/bookings/{id}/note', [AdminController::class, 'noteBooking']);
+
+    // Admin payments and finance
+    Route::get('admin/payments', [AdminController::class, 'payments']);
+    Route::get('admin/payments/{id}', [AdminController::class, 'payment']);
+    Route::post('admin/payments/{id}/refund', [AdminController::class, 'refundPayment']);
+    Route::get('admin/withdrawals', [AdminController::class, 'withdrawals']);
+    Route::get('admin/withdrawals/pending', [AdminController::class, 'pendingWithdrawals']);
+    Route::patch('admin/withdrawals/{id}/approve', [AdminController::class, 'approveWithdrawal']);
+    Route::patch('admin/withdrawals/{id}/reject', [AdminController::class, 'rejectWithdrawal']);
+    Route::get('admin/wallets', [AdminController::class, 'wallets']);
+    Route::get('admin/wallets/company', [AdminController::class, 'companyWallet']);
+    Route::get('admin/finance/summary', [AdminController::class, 'financeSummary']);
+
+    // Admin review moderation
+    Route::get('admin/reviews', [AdminController::class, 'reviews']);
+    Route::get('admin/reviews/flagged', [AdminController::class, 'flaggedReviews']);
+    Route::get('admin/reviews/{id}', [AdminController::class, 'review']);
+    Route::delete('admin/reviews/{id}', [AdminController::class, 'deleteReview']);
+    Route::delete('admin/reviews/{id}/reply', [AdminController::class, 'deleteReviewReply']);
+    Route::patch('admin/reviews/{id}/clear-flag', [AdminController::class, 'clearReviewFlag']);
+
+    // Admin analytics
+    Route::get('admin/analytics/overview', [AdminController::class, 'analyticsOverview']);
+    Route::get('admin/analytics/revenue', [AdminController::class, 'analyticsRevenue']);
+    Route::get('admin/analytics/sessions', [AdminController::class, 'analyticsSessions']);
+    Route::get('admin/analytics/users', [AdminController::class, 'analyticsUsers']);
+    Route::get('admin/analytics/categories', [AdminController::class, 'analyticsCategories']);
+    Route::get('admin/analytics/top-trainers', [AdminController::class, 'analyticsTopTrainers']);
+    Route::get('admin/analytics/retention', [AdminController::class, 'analyticsRetention']);
+    Route::get('admin/analytics/export', [AdminController::class, 'analyticsExport']);
+
+    // Admin notifications and broadcast
+    Route::get('admin/notifications', [AdminController::class, 'notifications']);
+    Route::patch('admin/notifications/read-all', [AdminController::class, 'notificationsReadAll']);
+    Route::post('admin/broadcast', [AdminController::class, 'broadcast']);
+    Route::get('admin/broadcast/history', [AdminController::class, 'broadcastHistory']);
+    Route::post('admin/notifications/email', [AdminController::class, 'sendEmail']);
+    Route::get('admin/notifications/logs', [AdminController::class, 'notificationLogs']);
+
+    // Admin platform settings
+    Route::get('admin/settings', [AdminController::class, 'settings']);
+    Route::put('admin/settings/commission', [AdminController::class, 'setCommission']);
+    Route::put('admin/settings/min-price', [AdminController::class, 'setMinPrice']);
+    Route::put('admin/settings/categories', [AdminController::class, 'setCategories']);
+    Route::put('admin/settings/cancellation-policy', [AdminController::class, 'setCancellationPolicy']);
+    Route::put('admin/settings/recording', [AdminController::class, 'setRecording']);
+    Route::get('admin/settings/audit-log', [AdminController::class, 'settingsAuditLog']);
 
     // Task Progress
     Route::put('tasks/{task}/progress', [TaskController::class, 'updateProgress']);

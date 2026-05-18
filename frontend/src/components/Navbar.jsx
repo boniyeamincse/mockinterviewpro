@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { LogOut, User, Compass } from 'lucide-react';
+import { api, logoutUser } from '../lib/api';
 
 const Navbar = () => {
   const [currentUser, setCurrentUser] = useState(null);
@@ -9,20 +10,11 @@ const Navbar = () => {
 
   // Dynamically load user status on render and route transitions
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      try {
-        setCurrentUser(JSON.parse(storedUser));
-      } catch (e) {
-        setCurrentUser(null);
-      }
-    } else {
-      setCurrentUser(null);
-    }
+    setCurrentUser(api.getStoredUser());
   }, [location]);
 
-  const handleLogout = () => {
-    localStorage.removeItem('user');
+  const handleLogout = async () => {
+    await logoutUser();
     setCurrentUser(null);
     navigate('/login');
   };
@@ -63,16 +55,16 @@ const Navbar = () => {
 
       <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
         <Link to="/features" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.9rem', transition: 'color 0.2s' }} onMouseOver={e => e.target.style.color='white'} onMouseOut={e => e.target.style.color='var(--text-secondary)'}>Features</Link>
-        {(!currentUser || currentUser.role !== 'Trainer') && (
+        {(!currentUser || currentUser.user_type !== 'trainer') && (
           <Link to="/trainers" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.9rem', transition: 'color 0.2s' }} onMouseOver={e => e.target.style.color='white'} onMouseOut={e => e.target.style.color='var(--text-secondary)'}>Find Trainers</Link>
         )}
         
         {currentUser && (
           <>
-            {currentUser.role !== 'Trainer' && (
+            {currentUser.user_type !== 'trainer' && (
               <Link to="/become-trainer" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.9rem', transition: 'color 0.2s' }} onMouseOver={e => e.target.style.color='white'} onMouseOut={e => e.target.style.color='var(--text-secondary)'}>Become a Trainer</Link>
             )}
-            <Link to={currentUser.role === 'Trainer' ? "/trainer/dashboard" : "/dashboard"} style={{ color: 'var(--accent-cyan)', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <Link to={currentUser.user_type === 'trainer' ? "/trainer/dashboard" : "/dashboard"} style={{ color: 'var(--accent-cyan)', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}>
               <Compass size={16} /> Workspace
             </Link>
           </>
@@ -83,7 +75,7 @@ const Navbar = () => {
         {currentUser ? (
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
             <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 500 }}>
-              Hi, <span style={{ color: 'white', fontWeight: 600 }}>{currentUser.name.split(' ')[0]}</span>
+              Hi, <span style={{ color: 'white', fontWeight: 600 }}>{currentUser.name?.split(' ')[0] || 'there'}</span>
             </span>
             <button 
               onClick={handleLogout}
