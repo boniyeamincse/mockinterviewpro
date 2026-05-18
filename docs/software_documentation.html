@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mock Interview Platform - Software Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        nav {
+            background: #f8f9fa;
+            padding: 15px 40px;
+            border-bottom: 2px solid #667eea;
+            position: sticky;
+            top: 0;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        nav a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #764ba2;
+        }
+
+        main {
+            padding: 40px;
+        }
+
+        section {
+            margin-bottom: 50px;
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        h3 {
+            color: #764ba2;
+            font-size: 1.5em;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        h4 {
+            color: #666;
+            font-size: 1.2em;
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        ul, ol {
+            margin-left: 30px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        .feature-box {
+            background: #f0f4ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .payment-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+        }
+
+        .payment-table th,
+        .payment-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .payment-table th {
+            background-color: #667eea;
+            color: white;
+            font-weight: bold;
+        }
+
+        .payment-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .payment-table tr:hover {
+            background-color: #f0f4ff;
+        }
+
+        .diagram {
+            background: #f8f9fa;
+            border: 2px dashed #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            white-space: pre;
+            color: #333;
+        }
+
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            border: 2px solid #667eea;
+            padding: 20px;
+            border-radius: 8px;
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .feature-card h4 {
+            color: #667eea;
+            margin-top: 0;
+        }
+
+        .use-case {
+            background: #fff9e6;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .use-case h4 {
+            color: #d39e00;
+            margin-top: 0;
+        }
+
+        .tech-spec {
+            background: #e7f3ff;
+            border-left: 4px solid #0066cc;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        footer {
+            background: #f8f9fa;
+            padding: 20px 40px;
+            text-align: center;
+            color: #666;
+            border-top: 2px solid #667eea;
+            font-size: 0.9em;
+        }
+
+        .highlight {
+            background-color: #fff3cd;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            main {
+                padding: 20px;
+            }
+
+            h2 {
+                font-size: 1.5em;
+            }
+
+            .diagram {
+                font-size: 0.85em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎓 Mock Interview Platform</h1>
+            <p>Software Documentation</p>
+        </header>
+
+        <nav>
+            <ul>
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#users">Users</a></li>
+                <li><a href="#payment">Payment</a></li>
+                <li><a href="#video">Video</a></li>
+                <li><a href="#sessions">Sessions</a></li>
+            </ul>
+        </nav>
+
+        <main>
+            <!-- Overview Section -->
+            <section id="overview">
+                <h2>📋 Overview</h2>
+                <p>
+                    The <span class="highlight">Mock Interview Platform</span> is a comprehensive virtual training solution designed to help students build confidence and improve their interview skills through realistic practice sessions with experienced trainers.
+                </p>
+                <p>
+                    This platform enables <strong>trainers to monetize their expertise</strong> while providing <strong>students with accessible, affordable interview preparation</strong>.
+                </p>
+
+                <h3>Platform Objectives</h3>
+                <ul>
+                    <li>Empower students to practice interviews in a safe, interactive environment</li>
+                    <li>Enable trainers to reach a wider audience and generate income</li>
+                    <li>Create a seamless user experience with intuitive booking and payment systems</li>
+                    <li>Foster a supportive learning community through reviews and feedback</li>
+                </ul>
+            </section>
+
+            <!-- Features Section -->
+            <section id="features">
+                <h2>🚀 Core Features</h2>
+
+                <div class="feature-list">
+                    <div class="feature-card">
+                        <h4>📅 Event Creation</h4>
+                        <p>Trainers create interview events with customizable session structures, topics, and pricing (e.g., 12 sessions × 30 minutes for 1000 BDT)</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <h4>🔍 Browse & Discovery</h4>
+                        <p>Students browse different interview categories, filter by type and trainer rating, and view detailed session information</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <h4>📱 Session Booking</h4>
+                        <p>One-click session booking with automatic calendar integration, confirmations, reminders, and rescheduling options</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <h4>🎥 Video Interface</h4>
+                        <p>Real-time HD video streaming with trainer video on right, student on left, screen sharing, and optional recording</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <h4>💳 Payment System</h4>
+                        <p>Secure payments with automatic 15% commission: Student pays 100 BDT → Trainer gets 85 BDT, Platform gets 15 BDT</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <h4>⭐ Reviews & Ratings</h4>
+                        <p>Students rate trainers (1-5 stars) and submit detailed feedback; trainers can respond and track ratings trends</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- User Types Section -->
+            <section id="users">
+                <h2>👥 User Types and Roles</h2>
+
+                <h3>Trainers</h3>
+                <p><strong>Role:</strong> Experienced professionals who conduct interview sessions and earn through the platform.</p>
+                <div class="feature-box">
+                    <h4>Trainer Capabilities</h4>
+                    <ul>
+                        <li>Create and manage interview events</li>
+                        <li>Conduct mock interview sessions via video</li>
+                        <li>Track income and view balance management</li>
+                        <li>View and respond to student reviews</li>
+                        <li>Analyze student feedback and performance data</li>
+                        <li>Schedule and manage all upcoming sessions</li>
+                    </ul>
+                </div>
+
+                <h3>Students (Users)</h3>
+                <p><strong>Role:</strong> Individuals preparing for interviews seeking practice and professional guidance.</p>
+                <div class="feature-box">
+                    <h4>Student Capabilities</h4>
+                    <ul>
+                        <li>Browse and filter available trainers and events</li>
+                        <li>View trainer profiles, ratings, and reviews</li>
+                        <li>Book sessions and manage bookings</li>
+                        <li>Make secure payments through the platform</li>
+                        <li>Attend live video sessions with trainers</li>
+                        <li>Submit reviews and ratings after sessions</li>
+                        <li>Track session history and learning progress</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Video Interface Section -->
+            <section id="video">
+                <h2>🎥 Video Interface</h2>
+
+                <h3>Layout Configuration</h3>
+                <p>The video interface is optimized for real-time interaction:</p>
+
+                <h4>Student's View (During Session)</h4>
+                <div class="diagram">┌─────────────────────────────────────────────┐
+│        Trainer Video (Right Side)          │
+│  ┌─────────────────┐   ┌────────────────┐  │
+│  │                 │   │                │  │
+│  │  Student's Self │   │ Trainer Camera │  │
+│  │     Camera      │   │                │  │
+│  └─────────────────┘   └────────────────┘  │
+│                                            │
+│  Chat • Screen Share • Mute • End Session │
+└─────────────────────────────────────────────┘</div>
+
+                <h4>Trainer's View (During Session)</h4>
+                <div class="diagram">┌─────────────────────────────────────────────┐
+│         Student Video (Left Side)          │
+│  ┌─────────────────┐   ┌────────────────┐  │
+│  │                 │   │                │  │
+│  │  Student Camera │   │ Trainer's Self │  │
+│  │                 │   │    Camera      │  │
+│  └─────────────────┘   └────────────────┘  │
+│                                            │
+│  Chat • Screen Share • Record • End       │
+└─────────────────────────────────────────────┘</div>
+
+                <h3>Video Features</h3>
+                <ul>
+                    <li><strong>HD Quality Streaming:</strong> Adaptive bitrate for different connection speeds</li>
+                    <li><strong>Screen Sharing:</strong> Trainers can share screens for code/document demonstrations</li>
+                    <li><strong>Chat Integration:</strong> Real-time text chat during sessions</li>
+                    <li><strong>Session Recording:</strong> Optional recording with explicit consent</li>
+                    <li><strong>Audio Controls:</strong> Mute/unmute and volume adjustment</li>
+                    <li><strong>Connection Monitoring:</strong> Real-time network status indicator</li>
+                </ul>
+            </section>
+
+            <!-- Payment Section -->
+            <section id="payment">
+                <h2>💰 Payment System</h2>
+
+                <h3>Commission Structure</h3>
+                <p>The platform uses a transparent 15% commission model:</p>
+
+                <table class="payment-table">
+                    <thead>
+                        <tr>
+                            <th>Amount</th>
+                            <th>Trainer Receives</th>
+                            <th>Platform Receives</th>
+                            <th>Student Pays</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>100 BDT (single session)</td>
+                            <td>85 BDT (85%)</td>
+                            <td>15 BDT (15%)</td>
+                            <td>100 BDT</td>
+                        </tr>
+                        <tr>
+                            <td>1000 BDT (package)</td>
+                            <td>850 BDT (85%)</td>
+                            <td>150 BDT (15%)</td>
+                            <td>1000 BDT</td>
+                        </tr>
+                        <tr>
+                            <td>500 BDT (half package)</td>
+                            <td>425 BDT (85%)</td>
+                            <td>75 BDT (15%)</td>
+                            <td>500 BDT</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Payment Formula</h3>
+                <div class="feature-box">
+                    <p><strong>Trainer Amount</strong> = Total Amount × 0.85</p>
+                    <p><strong>Platform Amount</strong> = Total Amount × 0.15</p>
+                </div>
+
+                <h3>Payment Features</h3>
+                <ul>
+                    <li>✅ Multiple payment methods (Credit/Debit cards, mobile banking, digital wallets)</li>
+                    <li>✅ Secure, encrypted transactions (PCI DSS compliant)</li>
+                    <li>✅ Complete transaction history for both parties</li>
+                    <li>✅ Automated invoice generation for tax purposes</li>
+                    <li>✅ Real-time balance updates for trainers</li>
+                    <li>✅ Flexible refund and cancellation policies</li>
+                    <li>✅ Withdrawal system for trainer earnings</li>
+                </ul>
+
+                <h3>Payment Flow Diagram</h3>
+                <div class="diagram">Student Books & Pays
+          ↓
+  Payment Processing
+  (Stripe/PayPal/etc)
+          ↓
+    Payment Approved
+          ↓
+    ┌────┴────┐
+    ↓         ↓
+ Trainer    Platform
+Gets 85%    Gets 15%
+(850 BDT)   (150 BDT)
+    ↓         ↓
+  Balance   Revenue
+ Updated    Tracked</div>
+            </section>
+
+            <!-- Trainer Features Section -->
+            <section>
+                <h2>👨‍🏫 Trainer Dashboard Features</h2>
+
+                <h3>Core Dashboard Components</h3>
+                <div class="feature-list">
+                    <div class="feature-card">
+                        <h4>Event Management</h4>
+                        <p>Create, edit, publish, and archive interview events with full customization</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>Income Tracking</h4>
+                        <p>View earnings per event, track commissions, generate financial reports</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>Schedule Management</h4>
+                        <p>Calendar view with reminders, availability settings, and timezone support</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>Review Management</h4>
+                        <p>View ratings, read feedback, respond to comments, track rating trends</p>
+                    </div>
+                </div>
+
+                <h3>Trainer Profile Information</h3>
+                <ul>
+                    <li>Professional biography and qualifications</li>
+                    <li>Expertise areas and experience level</li>
+                    <li>Average rating from student reviews</li>
+                    <li>Session completion statistics</li>
+                    <li>Online/availability status</li>
+                </ul>
+            </section>
+
+            <!-- Student Features Section -->
+            <section>
+                <h2>👨‍🎓 Student Dashboard Features</h2>
+
+                <h3>Core Dashboard Components</h3>
+                <div class="feature-list">
+                    <div class="feature-card">
+                        <h4>Browse & Discover</h4>
+                        <p>Search by category, filter by rating, view profiles and reviews</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>Booking Management</h4>
+                        <p>View availability, book sessions, manage bookings, reschedule as needed</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>Session Attendance</h4>
+                        <p>Calendar view, reminders, one-click join, access notes and materials</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>Progress Tracking</h4>
+                        <p>View completed sessions, monitor skills practiced, track improvements</p>
+                    </div>
+                </div>
+
+                <h3>Student Profile Information</h3>
+                <ul>
+                    <li>Learning preferences and goals</li>
+                    <li>Complete practice history</li>
+                    <li>Interview types focused on</li>
+                    <li>Current skill level assessment</li>
+                    <li>Target interview types</li>
+                </ul>
+            </section>
+
+            <!-- Session Management Section -->
+            <section id="sessions">
+                <h2>📅 Session Management</h2>
+
+                <h3>Session Lifecycle</h3>
+                <ol>
+                    <li><strong>Creation:</strong> Trainer creates event with multiple sessions, published to platform</li>
+                    <li><strong>Booking:</strong> Student books session, payment processed, confirmation sent</li>
+                    <li><strong>Pre-Session:</strong> Reminders sent, join link activated 1 hour before</li>
+                    <li><strong>Active:</strong> Video feeds initialize, interview conducted following structure</li>
+                    <li><strong>Post-Session:</strong> Recording stored, review prompt sent, feedback notifications</li>
+                </ol>
+
+                <h3>Example: Technical Interview JavaScript Course</h3>
+                <div class="use-case">
+                    <h4>📦 Package Details</h4>
+                    <ul>
+                        <li><strong>Title:</strong> Technical Interview - JavaScript Master Course</li>
+                        <li><strong>Total Sessions:</strong> 12</li>
+                        <li><strong>Duration per Session:</strong> 30 minutes</li>
+                        <li><strong>Total Cost:</strong> 1000 BDT</li>
+                    </ul>
+                </div>
+
+                <h3>Session Structure Breakdown</h3>
+                <table class="payment-table">
+                    <thead>
+                        <tr>
+                            <th>Sessions</th>
+                            <th>Topic</th>
+                            <th>Focus Area</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1-2</td>
+                            <td>Fundamentals</td>
+                            <td>Promises, Callbacks, Event Loop</td>
+                        </tr>
+                        <tr>
+                            <td>3-4</td>
+                            <td>Advanced Concepts</td>
+                            <td>Async/Await, Closures, Scope</td>
+                        </tr>
+                        <tr>
+                            <td>5-6</td>
+                            <td>Coding Problems</td>
+                            <td>Easy Level Leetcode-style Questions</td>
+                        </tr>
+                        <tr>
+                            <td>7-8</td>
+                            <td>Coding Problems</td>
+                            <td>Medium Level Leetcode-style Questions</td>
+                        </tr>
+                        <tr>
+                            <td>9-10</td>
+                            <td>System Design</td>
+                            <td>Basic Architecture & Patterns</td>
+                        </tr>
+                        <tr>
+                            <td>11-12</td>
+                            <td>Mock Interview</td>
+                            <td>Full Interview & Comprehensive Feedback</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Technical Section -->
+            <section>
+                <h2>⚙️ Technical Specifications</h2>
+
+                <h3>System Requirements</h3>
+                <h4>Client Requirements</h4>
+                <ul>
+                    <li>Modern web browser (Chrome, Firefox, Safari, Edge)</li>
+                    <li>Minimum 2 Mbps internet speed for HD video</li>
+                    <li>Camera and microphone (for video sessions)</li>
+                    <li>JavaScript enabled</li>
+                </ul>
+
+                <h4>Server Requirements</h4>
+                <ul>
+                    <li>HTTPS encryption for all communications</li>
+                    <li>RESTful API architecture</li>
+                    <li>WebRTC for real-time video streaming</li>
+                    <li>Database for user and transaction management</li>
+                    <li>Message queue for notifications</li>
+                </ul>
+
+                <h3>Security Features</h3>
+                <div class="tech-spec">
+                    <ul>
+                        <li>🔐 End-to-end encryption for sensitive data</li>
+                        <li>🔐 Secure password storage (bcrypt/Argon2)</li>
+                        <li>🔐 Two-factor authentication option</li>
+                        <li>🔐 GDPR and data privacy compliance</li>
+                        <li>🔐 Regular security audits and penetration testing</li>
+                        <li>🔐 PCI DSS compliant payment processing</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Future Enhancements -->
+            <section>
+                <h2>🔮 Future Enhancements</h2>
+                <ul>
+                    <li>🤖 <strong>AI-Powered Analytics:</strong> Personalized feedback using AI analysis</li>
+                    <li>🏆 <strong>Certification:</strong> Badges and certificates upon course completion</li>
+                    <li>🏢 <strong>Corporate Training:</strong> B2B solutions for companies</li>
+                    <li>📱 <strong>Mobile Apps:</strong> Native iOS and Android applications</li>
+                    <li>👥 <strong>Group Sessions:</strong> Multiple students with one trainer</li>
+                    <li>🛒 <strong>Resource Marketplace:</strong> Students purchase interview preparation materials</li>
+                    <li>🎮 <strong>Gamification:</strong> Points, leaderboards, and achievement system</li>
+                    <li>📊 <strong>Advanced Analytics:</strong> Detailed performance metrics and insights</li>
+                </ul>
+            </section>
+        </main>
+
+        <footer>
+            <p>Mock Interview Platform - Software Documentation</p>
+            <p>Last Updated: May 18, 2026 | Version 1.0</p>
+            <p>For support: support@mockinterviewplatform.com</p>
+        </footer>
+    </div>
+</body>
+</html>

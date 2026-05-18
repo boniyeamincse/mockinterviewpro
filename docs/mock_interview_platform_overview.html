@@ -1,0 +1,665 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans, sans-serif); color: var(--color-text-primary); background: transparent; }
+
+.nav { display: flex; gap: 6px; flex-wrap: wrap; padding: 0 0 1.5rem; border-bottom: 0.5px solid var(--color-border-tertiary); margin-bottom: 1.5rem; }
+.nav button { font-size: 12px; padding: 6px 14px; border: 0.5px solid var(--color-border-secondary); border-radius: 20px; background: transparent; color: var(--color-text-secondary); cursor: pointer; transition: all .15s; font-family: inherit; }
+.nav button:hover { background: var(--color-background-secondary); }
+.nav button.active { background: var(--color-background-primary); border-color: var(--color-border-primary); color: var(--color-text-primary); font-weight: 500; }
+
+.page { display: none; }
+.page.active { display: block; }
+
+h1 { font-size: 22px; font-weight: 500; margin-bottom: 6px; }
+h2 { font-size: 18px; font-weight: 500; margin-bottom: 1rem; }
+h3 { font-size: 15px; font-weight: 500; margin-bottom: 8px; }
+p { font-size: 14px; line-height: 1.7; color: var(--color-text-secondary); margin-bottom: 1rem; }
+
+.badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 12px; }
+.badge-blue { background: var(--color-background-info); color: var(--color-text-info); }
+.badge-green { background: var(--color-background-success); color: var(--color-text-success); }
+.badge-amber { background: var(--color-background-warning); color: var(--color-text-warning); }
+.badge-red { background: var(--color-background-danger); color: var(--color-text-danger); }
+
+.card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.25rem; margin-bottom: 1rem; }
+.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 1.5rem; }
+
+.metric { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 1rem; }
+.metric-label { font-size: 12px; color: var(--color-text-secondary); margin-bottom: 4px; }
+.metric-value { font-size: 22px; font-weight: 500; }
+
+.role-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 1.5rem; }
+.role-card { border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.25rem; }
+.role-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 12px; }
+
+.feature-list { list-style: none; }
+.feature-list li { font-size: 13px; color: var(--color-text-secondary); padding: 5px 0; border-bottom: 0.5px solid var(--color-border-tertiary); display: flex; align-items: flex-start; gap: 8px; line-height: 1.5; }
+.feature-list li:last-child { border-bottom: none; }
+.dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; margin-top: 6px; }
+.dot-blue { background: #3B8BD4; }
+.dot-green { background: #63992; }
+.dot-amber { background: #BA7517; }
+.dot-purple { background: #7F77DD; }
+
+.flow-step { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 1rem; }
+.step-num { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; flex-shrink: 0; }
+
+.payment-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.payment-table th { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-align: left; padding: 8px 12px; border-bottom: 0.5px solid var(--color-border-secondary); }
+.payment-table td { padding: 10px 12px; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.payment-table tr:last-child td { border-bottom: none; }
+
+.tag { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 4px; margin: 2px; background: var(--color-background-secondary); color: var(--color-text-secondary); border: 0.5px solid var(--color-border-tertiary); }
+
+.module-header { display: flex; align-items: center; gap: 10px; margin-bottom: 1.25rem; padding-bottom: 12px; border-bottom: 0.5px solid var(--color-border-tertiary); }
+
+.api-row { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; padding: 8px 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.api-row:last-child { border-bottom: none; }
+.method { font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 4px; font-family: var(--font-mono); flex-shrink: 0; }
+.method-get { background: var(--color-background-success); color: var(--color-text-success); }
+.method-post { background: var(--color-background-info); color: var(--color-text-info); }
+.method-put { background: var(--color-background-warning); color: var(--color-text-warning); }
+.method-del { background: var(--color-background-danger); color: var(--color-text-danger); }
+.endpoint { font-family: var(--font-mono); font-size: 12px; color: var(--color-text-primary); }
+.ep-desc { font-size: 12px; color: var(--color-text-secondary); margin-top: 2px; }
+
+.db-table { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); overflow: hidden; margin-bottom: 12px; }
+.db-table-header { background: var(--color-background-secondary); padding: 8px 12px; font-size: 13px; font-weight: 500; border-bottom: 0.5px solid var(--color-border-tertiary); display: flex; align-items: center; gap: 8px; }
+.db-field { display: flex; gap: 8px; align-items: center; padding: 6px 12px; border-bottom: 0.5px solid var(--color-border-tertiary); font-size: 12px; }
+.db-field:last-child { border-bottom: none; }
+.db-type { color: var(--color-text-secondary); font-family: var(--font-mono); font-size: 11px; }
+.db-pk { font-size: 10px; background: var(--color-background-warning); color: var(--color-text-warning); padding: 1px 5px; border-radius: 3px; }
+.db-fk { font-size: 10px; background: var(--color-background-info); color: var(--color-text-info); padding: 1px 5px; border-radius: 3px; }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+@media (max-width: 500px) {
+  .role-grid { grid-template-columns: 1fr; }
+  .two-col { grid-template-columns: 1fr; }
+  .three-col { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav">
+  <button class="active" onclick="show('overview')">Overview</button>
+  <button onclick="show('roles')">User Roles</button>
+  <button onclick="show('modules')">Modules</button>
+  <button onclick="show('workflow')">Workflow</button>
+  <button onclick="show('payment')">Payment Logic</button>
+  <button onclick="show('database')">Database</button>
+  <button onclick="show('api')">API Endpoints</button>
+  <button onclick="show('tech')">Tech Stack</button>
+</nav>
+
+<!-- OVERVIEW -->
+<div class="page active" id="overview">
+  <div style="margin-bottom:1.5rem">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+      <h1>InterviewPro Platform</h1>
+      <span class="badge badge-green">v1.0</span>
+    </div>
+    <p>A virtual mock interview platform that connects students seeking interview practice with expert trainers. Students book sessions, pay securely, attend live video sessions, and leave reviews — while trainers monetize their expertise with automated 85/15 commission splits.</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <span class="tag">📹 Live video sessions</span>
+      <span class="tag">💳 Secure payments</span>
+      <span class="tag">⭐ Reviews & ratings</span>
+      <span class="tag">📅 Smart scheduling</span>
+      <span class="tag">📊 Analytics dashboard</span>
+      <span class="tag">🔔 Notifications</span>
+      <span class="tag">🏷️ Auto commission</span>
+      <span class="tag">🌐 Multi-category</span>
+    </div>
+  </div>
+
+  <div class="card-grid">
+    <div class="metric"><div class="metric-label">User roles</div><div class="metric-value" style="color:var(--color-text-info)">3</div></div>
+    <div class="metric"><div class="metric-label">Core modules</div><div class="metric-value" style="color:var(--color-text-success)">8</div></div>
+    <div class="metric"><div class="metric-label">Commission rate</div><div class="metric-value" style="color:var(--color-text-warning)">15%</div></div>
+    <div class="metric"><div class="metric-label">Trainer payout</div><div class="metric-value" style="color:var(--color-text-primary)">85%</div></div>
+  </div>
+
+  <h2>Platform goals</h2>
+  <div class="two-col" style="margin-bottom:1.5rem">
+    <div class="card">
+      <div class="module-header">
+        <div class="role-icon" style="background:var(--color-background-info)">🎓</div>
+        <div>
+          <h3>For students</h3>
+          <span class="badge badge-blue">Learner-first</span>
+        </div>
+      </div>
+      <ul class="feature-list">
+        <li><span class="dot dot-blue"></span>Build interview confidence through real practice</li>
+        <li><span class="dot dot-blue"></span>Access industry-specific mock sessions</li>
+        <li><span class="dot dot-blue"></span>Get actionable feedback from experienced trainers</li>
+        <li><span class="dot dot-blue"></span>Track personal progress over multiple sessions</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="module-header">
+        <div class="role-icon" style="background:var(--color-background-success)">💼</div>
+        <div>
+          <h3>For trainers</h3>
+          <span class="badge badge-green">Revenue-focused</span>
+        </div>
+      </div>
+      <ul class="feature-list">
+        <li><span class="dot dot-purple"></span>Create flexible session packages</li>
+        <li><span class="dot dot-purple"></span>Set own pricing and availability</li>
+        <li><span class="dot dot-purple"></span>Receive automatic payouts after each session</li>
+        <li><span class="dot dot-purple"></span>Build reputation through student reviews</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Interview categories</h2>
+  <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1.5rem">
+    <span class="tag">💻 Software Engineering</span>
+    <span class="tag">📊 Data Science & ML</span>
+    <span class="tag">🎨 Product Design (UI/UX)</span>
+    <span class="tag">📦 Product Management</span>
+    <span class="tag">💰 Finance & Banking</span>
+    <span class="tag">🏢 Management Consulting</span>
+    <span class="tag">📣 Marketing & Sales</span>
+    <span class="tag">⚙️ DevOps & Cloud</span>
+    <span class="tag">🩺 Healthcare</span>
+    <span class="tag">⚖️ Law & Legal</span>
+    <span class="tag">🎓 Academia</span>
+    <span class="tag">🌐 General / Behavioural</span>
+  </div>
+</div>
+
+<!-- ROLES -->
+<div class="page" id="roles">
+  <h2>User roles</h2>
+  <p>Three distinct roles drive the platform. Each has a dedicated dashboard, specific permissions, and unique feature sets.</p>
+  <div class="role-grid">
+    <div class="role-card" style="border-top:2px solid #3B8BD4">
+      <div class="role-icon" style="background:var(--color-background-info)">👨‍🎓</div>
+      <h3 style="margin-bottom:6px">Student (User)</h3>
+      <span class="badge badge-blue" style="margin-bottom:12px;display:inline-flex">Self-registration</span>
+      <ul class="feature-list">
+        <li><span class="dot dot-blue"></span>Browse & search events by category, type, date, price, trainer</li>
+        <li><span class="dot dot-blue"></span>Book individual session slots</li>
+        <li><span class="dot dot-blue"></span>Pay online via secure checkout</li>
+        <li><span class="dot dot-blue"></span>Join live video sessions</li>
+        <li><span class="dot dot-blue"></span>Rate and review trainers</li>
+        <li><span class="dot dot-blue"></span>View session history & transcripts</li>
+        <li><span class="dot dot-blue"></span>Receive booking reminders</li>
+        <li><span class="dot dot-blue"></span>Manage profile and preferences</li>
+      </ul>
+    </div>
+    <div class="role-card" style="border-top:2px solid #639922">
+      <div class="role-icon" style="background:var(--color-background-success)">🧑‍🏫</div>
+      <h3 style="margin-bottom:6px">Trainer</h3>
+      <span class="badge badge-green" style="margin-bottom:12px;display:inline-flex">Admin approval required</span>
+      <ul class="feature-list">
+        <li><span class="dot dot-purple"></span>Create events with full session structure</li>
+        <li><span class="dot dot-purple"></span>Set price, topic, date/time, session count & duration</li>
+        <li><span class="dot dot-purple"></span>View and manage booked sessions</li>
+        <li><span class="dot dot-purple"></span>Start video sessions with students</li>
+        <li><span class="dot dot-purple"></span>Track wallet balance & withdrawals</li>
+        <li><span class="dot dot-purple"></span>Read student reviews and ratings</li>
+        <li><span class="dot dot-purple"></span>View earnings and session analytics</li>
+        <li><span class="dot dot-purple"></span>Manage availability calendar</li>
+      </ul>
+    </div>
+    <div class="role-card" style="border-top:2px solid #BA7517">
+      <div class="role-icon" style="background:var(--color-background-warning)">🏛️</div>
+      <h3 style="margin-bottom:6px">Admin / Company</h3>
+      <span class="badge badge-amber" style="margin-bottom:12px;display:inline-flex">Internal only</span>
+      <ul class="feature-list">
+        <li><span class="dot dot-amber"></span>Approve or reject trainer registrations</li>
+        <li><span class="dot dot-amber"></span>Manage all users (students & trainers)</li>
+        <li><span class="dot dot-amber"></span>Monitor all sessions platform-wide</li>
+        <li><span class="dot dot-amber"></span>View total commissions collected</li>
+        <li><span class="dot dot-amber"></span>Generate revenue & activity reports</li>
+        <li><span class="dot dot-amber"></span>Handle disputes and refunds</li>
+        <li><span class="dot dot-amber"></span>Manage categories and interview types</li>
+        <li><span class="dot dot-amber"></span>Configure platform settings</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- MODULES -->
+<div class="page" id="modules">
+  <h2>Feature modules</h2>
+  <p>Eight interconnected modules deliver the complete platform experience.</p>
+
+  <div class="card" style="border-left:3px solid #3B8BD4;border-radius:0 var(--border-radius-lg) var(--border-radius-lg) 0">
+    <div class="module-header">
+      <div class="role-icon" style="background:var(--color-background-info);font-size:16px">📋</div>
+      <div><h3>Module 1 — Event & session creation (Trainer)</h3><span class="badge badge-blue">Trainer only</span></div>
+    </div>
+    <ul class="feature-list">
+      <li><span class="dot dot-blue"></span>Create an event with: title, category, interview type, description, topics covered, process overview</li>
+      <li><span class="dot dot-blue"></span>Define session structure: total sessions (e.g. 12), duration per session (e.g. 30 min), price per session (e.g. 1000 BDT)</li>
+      <li><span class="dot dot-blue"></span>Set availability slots using a calendar picker; block unavailable dates</li>
+      <li><span class="dot dot-blue"></span>Publish event to the public marketplace or keep as draft</li>
+      <li><span class="dot dot-blue"></span>Edit or cancel events before any booking is made</li>
+    </ul>
+  </div>
+
+  <div class="card" style="border-left:3px solid #639922;border-radius:0 var(--border-radius-lg) var(--border-radius-lg) 0">
+    <div class="module-header">
+      <div class="role-icon" style="background:var(--color-background-success);font-size:16px">🔍</div>
+      <div><h3>Module 2 — Event discovery & browsing (Student)</h3><span class="badge badge-green">Student only</span></div>
+    </div>
+    <ul class="feature-list">
+      <li><span class="dot dot-purple"></span>Browse events by category (software, finance, product, etc.) and interview type (technical, behavioural, case study, HR)</li>
+      <li><span class="dot dot-purple"></span>Filter by price range, date, trainer rating, session duration, language</li>
+      <li><span class="dot dot-purple"></span>View full event detail page: trainer bio, topics, sample questions, reviews, session structure</li>
+      <li><span class="dot dot-purple"></span>Save events to wishlist / compare events side-by-side</li>
+      <li><span class="dot dot-purple"></span>See real-time availability of slots</li>
+    </ul>
+  </div>
+
+  <div class="card" style="border-left:3px solid #7F77DD;border-radius:0 var(--border-radius-lg) var(--border-radius-lg) 0">
+    <div class="module-header">
+      <div class="role-icon" style="background:var(--color-background-secondary);font-size:16px">📅</div>
+      <div><h3>Module 3 — Booking & scheduling</h3><span class="badge badge-blue">Student</span></div>
+    </div>
+    <ul class="feature-list">
+      <li><span class="dot dot-blue"></span>Select available slot from trainer's calendar; confirm time zone</li>
+      <li><span class="dot dot-blue"></span>Review booking summary (event, trainer, date, time, price) before payment</li>
+      <li><span class="dot dot-blue"></span>On successful payment, booking is confirmed and added to both parties' dashboards</li>
+      <li><span class="dot dot-blue"></span>Email + in-app notifications sent to student and trainer on booking</li>
+      <li><span class="dot dot-blue"></span>Reminder notifications: 24 hours before and 15 minutes before session</li>
+      <li><span class="dot dot-blue"></span>Rescheduling and cancellation policy managed per event rules</li>
+    </ul>
+  </div>
+
+  <div class="card" style="border-left:3px solid #D85A30;border-radius:0 var(--border-radius-lg) var(--border-radius-lg) 0">
+    <div class="module-header">
+      <div class="role-icon" style="background:var(--color-background-danger);font-size:16px">📹</div>
+      <div><h3>Module 4 — Live video session</h3><span class="badge badge-blue">Both roles</span></div>
+    </div>
+    <ul class="feature-list">
+      <li><span class="dot dot-amber"></span>Browser-based video interface — no app download required</li>
+      <li><span class="dot dot-amber"></span>Split-screen layout: student video on LEFT, trainer video on RIGHT</li>
+      <li><span class="dot dot-amber"></span>Session timer visible to both parties; auto-ends at scheduled duration</li>
+      <li><span class="dot dot-amber"></span>Controls: mute/unmute audio, enable/disable camera, end session</li>
+      <li><span class="dot dot-amber"></span>In-session text chat panel for sharing links, code, or notes</li>
+      <li><span class="dot dot-amber"></span>Screen sharing support for technical demonstrations</li>
+      <li><span class="dot dot-amber"></span>Session recording stored securely for 30 days (opt-in, both consent)</li>
+      <li><span class="dot dot-amber"></span>Automatic payment distribution triggers on session completion</li>
+    </ul>
+  </div>
+
+  <div class="two-col">
+    <div class="card" style="border-left:3px solid #BA7517;border-radius:0 var(--border-radius-lg) var(--border-radius-lg) 0">
+      <div class="module-header">
+        <div class="role-icon" style="background:var(--color-background-warning);font-size:16px">💳</div>
+        <div><h3>Module 5 — Payments</h3><span class="badge badge-amber">All roles</span></div>
+      </div>
+      <ul class="feature-list">
+        <li><span class="dot dot-amber"></span>Student pays at booking (card, mobile banking, bKash)</li>
+        <li><span class="dot dot-amber"></span>Funds held in escrow until session completes</li>
+        <li><span class="dot dot-amber"></span>15% auto-deducted to company wallet on completion</li>
+        <li><span class="dot dot-amber"></span>85% credited to trainer wallet</li>
+        <li><span class="dot dot-amber"></span>Trainer withdraws to bank account on demand</li>
+        <li><span class="dot dot-amber"></span>Full payment history and receipts for all parties</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:3px solid #1D9E75;border-radius:0 var(--border-radius-lg) var(--border-radius-lg) 0">
+      <div class="module-header">
+        <div class="role-icon" style="background:var(--color-background-success);font-size:16px">⭐</div>
+        <div><h3>Module 6 — Reviews & ratings</h3><span class="badge badge-green">Student → Trainer</span></div>
+      </div>
+      <ul class="feature-list">
+        <li><span class="dot dot-purple"></span>Student submits 1–5 star rating after session</li>
+        <li><span class="dot dot-purple"></span>Written review (optional) with character limit</li>
+        <li><span class="dot dot-purple"></span>Trainer can respond to reviews publicly</li>
+        <li><span class="dot dot-purple"></span>Aggregate rating displayed on trainer profile</li>
+        <li><span class="dot dot-purple"></span>Admin can moderate and remove abusive reviews</li>
+        <li><span class="dot dot-purple"></span>Reviews influence event ranking in search results</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card" style="border-left:3px solid #7F77DD;border-radius:0 var(--border-radius-lg) var(--border-radius-lg) 0">
+      <div class="module-header">
+        <div class="role-icon" style="background:var(--color-background-secondary);font-size:16px">📊</div>
+        <div><h3>Module 7 — Analytics</h3><span class="badge badge-blue">Trainer + Admin</span></div>
+      </div>
+      <ul class="feature-list">
+        <li><span class="dot dot-blue"></span>Trainer: total earnings, sessions completed, upcoming count</li>
+        <li><span class="dot dot-blue"></span>Average rating trend over time</li>
+        <li><span class="dot dot-blue"></span>Revenue by month (bar chart)</li>
+        <li><span class="dot dot-blue"></span>Admin: platform-wide revenue, commission totals</li>
+        <li><span class="dot dot-blue"></span>Most active categories and trainers</li>
+        <li><span class="dot dot-blue"></span>Student retention rate and repeat bookings</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:3px solid #3B8BD4;border-radius:0 var(--border-radius-lg) var(--border-radius-lg) 0">
+      <div class="module-header">
+        <div class="role-icon" style="background:var(--color-background-info);font-size:16px">🔔</div>
+        <div><h3>Module 8 — Notifications</h3><span class="badge badge-blue">All roles</span></div>
+      </div>
+      <ul class="feature-list">
+        <li><span class="dot dot-blue"></span>Email: booking confirmation, reminders, receipts</li>
+        <li><span class="dot dot-blue"></span>In-app: real-time bell notifications</li>
+        <li><span class="dot dot-blue"></span>SMS: session reminders (optional)</li>
+        <li><span class="dot dot-blue"></span>Push: mobile app notifications</li>
+        <li><span class="dot dot-blue"></span>Trainer notified on new booking, review, withdrawal</li>
+        <li><span class="dot dot-blue"></span>Admin notified on trainer applications, disputes</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- WORKFLOW -->
+<div class="page" id="workflow">
+  <h2>End-to-end workflow</h2>
+  <p>The complete journey from event creation to post-session review, step by step.</p>
+
+  <div class="card">
+    <h3 style="margin-bottom:1rem;color:var(--color-text-secondary);font-size:13px;font-weight:400;text-transform:uppercase;letter-spacing:.5px">Phase 1 — Setup</h3>
+    <div class="flow-step"><div class="step-num" style="background:var(--color-background-info);color:var(--color-text-info)">1</div><div><strong style="font-size:13px">Trainer registers & gets approved</strong><p style="margin:4px 0 0;font-size:13px">Trainer signs up, submits credentials and bio. Admin reviews and approves the trainer account.</p></div></div>
+    <div class="flow-step"><div class="step-num" style="background:var(--color-background-info);color:var(--color-text-info)">2</div><div><strong style="font-size:13px">Trainer creates an event</strong><p style="margin:4px 0 0;font-size:13px">Sets title, category (e.g. "Software Engineering"), interview type, topics, process, session structure (12 × 30 min @ 1000 BDT each), and available time slots.</p></div></div>
+    <div class="flow-step"><div class="step-num" style="background:var(--color-background-info);color:var(--color-text-info)">3</div><div><strong style="font-size:13px">Event published to marketplace</strong><p style="margin:4px 0 0;font-size:13px">Event appears in the public listing with all details, trainer profile, and real-time slot availability.</p></div></div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-bottom:1rem;color:var(--color-text-secondary);font-size:13px;font-weight:400;text-transform:uppercase;letter-spacing:.5px">Phase 2 — Booking</h3>
+    <div class="flow-step"><div class="step-num" style="background:var(--color-background-success);color:var(--color-text-success)">4</div><div><strong style="font-size:13px">Student discovers event</strong><p style="margin:4px 0 0;font-size:13px">Searches or browses by category, reads event detail page, views trainer reviews, selects an available time slot.</p></div></div>
+    <div class="flow-step"><div class="step-num" style="background:var(--color-background-success);color:var(--color-text-success)">5</div><div><strong style="font-size:13px">Student pays securely</strong><p style="margin:4px 0 0;font-size:13px">Checks out: 1000 BDT held in platform escrow. Slot is locked immediately.</p></div></div>
+    <div class="flow-step"><div class="step-num" style="background:var(--color-background-success);color:var(--color-text-success)">6</div><div><strong style="font-size:13px">Confirmation sent to both parties</strong><p style="margin:4px 0 0;font-size:13px">Email + in-app notification. Session appears in both dashboards. Calendar invite generated.</p></div></div>
+  </div>
+
+  <div class="card" style="border:0.5px solid var(--color-border-danger)">
+    <h3 style="margin-bottom:1rem;color:var(--color-text-secondary);font-size:13px;font-weight:400;text-transform:uppercase;letter-spacing:.5px">Phase 3 — Live session (core experience)</h3>
+    <div class="flow-step"><div class="step-num" style="background:var(--color-background-danger);color:var(--color-text-danger)">7</div><div><strong style="font-size:13px">Reminder sent 15 minutes before</strong><p style="margin:4px 0 0;font-size:13px">Both student and trainer receive a "session starting soon" notification with a direct join link.</p></div></div>
+    <div class="flow-step"><div class="step-num" style="background:var(--color-background-danger);color:var(--color-text-danger)">8</div><div><strong style="font-size:13px">Video interface opens</strong><p style="margin:4px 0 0;font-size:13px">Student's camera appears on the LEFT panel. Trainer's camera appears on the RIGHT panel. Session timer counts down. Chat sidebar available.</p></div></div>
+    <div class="flow-step"><div class="step-num" style="background:var(--color-background-danger);color:var(--color-text-danger)">9</div><div><strong style="font-size:13px">Session completes (auto or manual end)</strong><p style="margin:4px 0 0;font-size:13px">Timer expires or trainer ends session. Recording saved (if opted in). Video call terminates cleanly.</p></div></div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-bottom:1rem;color:var(--color-text-secondary);font-size:13px;font-weight:400;text-transform:uppercase;letter-spacing:.5px">Phase 4 — Payment & feedback</h3>
+    <div class="flow-step"><div class="step-num" style="background:var(--color-background-warning);color:var(--color-text-warning)">10</div><div><strong style="font-size:13px">Automatic payment distribution</strong><p style="margin:4px 0 0;font-size:13px">System auto-splits: 850 BDT → Trainer wallet | 150 BDT → Company wallet. Trainer receives receipt.</p></div></div>
+    <div class="flow-step"><div class="step-num" style="background:var(--color-background-warning);color:var(--color-text-warning)">11</div><div><strong style="font-size:13px">Student submits review</strong><p style="margin:4px 0 0;font-size:13px">Prompted to rate (1–5 stars) and leave a written comment. Review published on trainer profile.</p></div></div>
+    <div class="flow-step"><div class="step-num" style="background:var(--color-background-warning);color:var(--color-text-warning)">12</div><div><strong style="font-size:13px">Trainer views feedback & balance</strong><p style="margin:4px 0 0;font-size:13px">Dashboard shows new review, updated rating, and credited balance. Trainer can initiate withdrawal.</p></div></div>
+  </div>
+</div>
+
+<!-- PAYMENT -->
+<div class="page" id="payment">
+  <h2>Payment logic</h2>
+  <p>Every payment is automatically split at the moment a session is marked complete. No manual intervention needed.</p>
+
+  <div class="card-grid">
+    <div class="metric"><div class="metric-label">Company commission</div><div class="metric-value" style="color:var(--color-text-warning)">15%</div></div>
+    <div class="metric"><div class="metric-label">Trainer payout</div><div class="metric-value" style="color:var(--color-text-success)">85%</div></div>
+    <div class="metric"><div class="metric-label">Trigger event</div><div class="metric-value" style="font-size:14px;color:var(--color-text-info)">Session complete</div></div>
+    <div class="metric"><div class="metric-label">Escrow period</div><div class="metric-value" style="font-size:16px">Until session ends</div></div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-bottom:1rem">Commission breakdown table</h3>
+    <table class="payment-table">
+      <thead><tr><th>Student pays (BDT)</th><th>Trainer receives (BDT)</th><th>Company receives (BDT)</th><th>Formula</th></tr></thead>
+      <tbody>
+        <tr><td>100</td><td style="color:var(--color-text-success);font-weight:500">85</td><td style="color:var(--color-text-warning)">15</td><td style="color:var(--color-text-secondary);font-family:var(--font-mono);font-size:11px">100 × 0.85 | 100 × 0.15</td></tr>
+        <tr><td>500</td><td style="color:var(--color-text-success);font-weight:500">425</td><td style="color:var(--color-text-warning)">75</td><td style="color:var(--color-text-secondary);font-family:var(--font-mono);font-size:11px">500 × 0.85 | 500 × 0.15</td></tr>
+        <tr><td>1,000</td><td style="color:var(--color-text-success);font-weight:500">850</td><td style="color:var(--color-text-warning)">150</td><td style="color:var(--color-text-secondary);font-family:var(--font-mono);font-size:11px">1000 × 0.85 | 1000 × 0.15</td></tr>
+        <tr><td>5,000</td><td style="color:var(--color-text-success);font-weight:500">4,250</td><td style="color:var(--color-text-warning)">750</td><td style="color:var(--color-text-secondary);font-family:var(--font-mono);font-size:11px">5000 × 0.85 | 5000 × 0.15</td></tr>
+        <tr><td>12,000</td><td style="color:var(--color-text-success);font-weight:500">10,200</td><td style="color:var(--color-text-warning)">1,800</td><td style="color:var(--color-text-secondary);font-family:var(--font-mono);font-size:11px">12000 × 0.85 | 12000 × 0.15</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-bottom:1rem">Live payment calculator</h3>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:1rem;flex-wrap:wrap">
+      <label style="font-size:13px;color:var(--color-text-secondary)">Session price (BDT)</label>
+      <input type="range" id="price-slider" min="100" max="10000" step="100" value="1000" style="flex:1;min-width:120px" oninput="calcSplit(this.value)">
+      <span id="price-display" style="font-size:14px;font-weight:500;min-width:60px">1,000</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+      <div class="metric"><div class="metric-label">Student pays</div><div class="metric-value" id="c-total" style="font-size:18px">1,000 BDT</div></div>
+      <div class="metric"><div class="metric-label">Trainer receives (85%)</div><div class="metric-value" id="c-trainer" style="font-size:18px;color:var(--color-text-success)">850 BDT</div></div>
+      <div class="metric"><div class="metric-label">Company receives (15%)</div><div class="metric-value" id="c-company" style="font-size:18px;color:var(--color-text-warning)">150 BDT</div></div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <h3 style="margin-bottom:12px">Payment methods (students)</h3>
+      <ul class="feature-list">
+        <li><span class="dot dot-blue"></span>Debit / credit card (Visa, Mastercard)</li>
+        <li><span class="dot dot-blue"></span>bKash mobile banking</li>
+        <li><span class="dot dot-blue"></span>Nagad</li>
+        <li><span class="dot dot-blue"></span>Rocket</li>
+        <li><span class="dot dot-blue"></span>Net banking (selected banks)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3 style="margin-bottom:12px">Trainer withdrawal options</h3>
+      <ul class="feature-list">
+        <li><span class="dot dot-purple"></span>Bank account transfer (1-3 business days)</li>
+        <li><span class="dot dot-purple"></span>bKash / Nagad instant transfer</li>
+        <li><span class="dot dot-purple"></span>Minimum withdrawal: 500 BDT</li>
+        <li><span class="dot dot-purple"></span>Wallet balance always visible in dashboard</li>
+        <li><span class="dot dot-purple"></span>Full transaction history downloadable</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- DATABASE -->
+<div class="page" id="database">
+  <h2>Database schema</h2>
+  <p>Core tables and their key fields. Relationships are shown via foreign keys (FK).</p>
+  <div class="three-col">
+    <div>
+      <div class="db-table">
+        <div class="db-table-header">👤 users</div>
+        <div class="db-field"><span class="db-pk">PK</span><span>id</span><span class="db-type">uuid</span></div>
+        <div class="db-field"><span style="width:32px"></span><span>name</span><span class="db-type">varchar</span></div>
+        <div class="db-field"><span style="width:32px"></span><span>email</span><span class="db-type">varchar</span></div>
+        <div class="db-field"><span style="width:32px"></span><span>password_hash</span><span class="db-type">text</span></div>
+        <div class="db-field"><span style="width:32px"></span><span>role</span><span class="db-type">enum</span></div>
+        <div class="db-field"><span style="width:32px"></span><span>avatar_url</span><span class="db-type">text</span></div>
+        <div class="db-field"><span style="width:32px"></span><span>is_active</span><span class="db-type">boolean</span></div>
+        <div class="db-field"><span style="width:32px"></span><span>created_at</span><span class="db-type">timestamp</span></div>
+      </div>
+      <div class="db-table">
+        <div class="db-table-header">🧑‍🏫 trainer_profiles</div>
+        <div class="db-field"><span class="db-pk">PK</span><span>id</span><span class="db-type">uuid</span></div>
+        <div class="db-field"><span class="db-fk">FK</span><span>user_id</span><span class="db-type">uuid</span></div>
+        <div class="db-field"><span style="width:32px"></span><span>bio</span><span class="db-type">text</span></div>
+        <div class="db-field"><span style="width:32px"></span><span>expertise</span><span class="db-type">text[]</span></div>
+        <div class="db-field"><span style="width:32px"></span><span>avg_rating</span><span class="db-type">decimal</span></div>
+        <div class="db-field"><span style="width:32px"></span><span>total_sessions</span><span class="db-type">int</span></div>
+        <div class="db-field"><span style="width:32px"></span><span>wallet_balance</span><span class="db-type">decimal</span></div>
+        <div class="db-field"><span style="width:32px"></span><span>approved_at</span><span class="db-type">timestamp</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="db-table">
+        <div class="db-table-header">📋 events</div>
+        <div class="db-field"><span class="db-pk">PK</span><span>id</span><span class="db-type">uuid</span></div>
+        <div class="db-field"><span class="db-fk">FK</span><span>trainer_id</span><span class="db-type">uuid</span></div>
+        <div class="db-field"><span style="width:32px"></span><span>title</span><span class="db-type">varchar</span></div>
+        <div class="db-field"><span style="width:32px"></span><span>category</span><span class="db-type">varchar</span></div>
+        <div class="db-field"><span style="width:32px"></span><span>interview_type</span><span class="db-type">varchar</span></div>
+        <div class="db-field"><span style="width:32px"></span><span>description</span><span class="db-type">text</span></div>
+        <div class="db-field"><span style="width:32px"></span><span>topics</span><span class="db-type">text[]</span></div>
+        <div class="db-field"><span style="width:32px"></span><span>session_count</span><span class="db-type">int</span></div>
+        <div class="db-field"><span style="width:32px"></span><span>session_duration_min</span><span class="db-type">int</span></div>
+        <div class="db-field"><span style="width:32px"></span><span>price_per_session</span><span class="db-type">decimal</span></div>
+        <div class="db-field"><span style="width:32px"></span><span>status</span><span class="db-type">enum</span></div>
+        <div class="db-field"><span style="width:32px"></span><span>created_at</span><span class="db-type">timestamp</span></div>
+      </div>
+      <div class="db-table">
+        <div class="db-table-header">📅 bookings</div>
+        <div class="db-field"><span class="db-pk">PK</span><span>id</span><span class="db-type">uuid</span></div>
+        <div class="db-field"><span class="db-fk">FK</span><span>event_id</span><span class="db-type">uuid</span></div>
+        <div class="db-field"><span class="db-fk">FK</span><span>student_id</span><span class="db-type">uuid</span></div>
+        <div class="db-field"><span style="width:32px"></span><span>scheduled_at</span><span class="db-type">timestamp</span></div>
+        <div class="db-field"><span style="width:32px"></span><span>status</span><span class="db-type">enum</span></div>
+        <div class="db-field"><span style="width:32px"></span><span>session_url</span><span class="db-type">text</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="db-table">
+        <div class="db-table-header">💳 payments</div>
+        <div class="db-field"><span class="db-pk">PK</span><span>id</span><span class="db-type">uuid</span></div>
+        <div class="db-field"><span class="db-fk">FK</span><span>booking_id</span><span class="db-type">uuid</span></div>
+        <div class="db-field"><span style="width:32px"></span><span>amount</span><span class="db-type">decimal</span></div>
+        <div class="db-field"><span style="width:32px"></span><span>trainer_amount</span><span class="db-type">decimal</span></div>
+        <div class="db-field"><span style="width:32px"></span><span>company_amount</span><span class="db-type">decimal</span></div>
+        <div class="db-field"><span style="width:32px"></span><span>status</span><span class="db-type">enum</span></div>
+        <div class="db-field"><span style="width:32px"></span><span>gateway_ref</span><span class="db-type">varchar</span></div>
+        <div class="db-field"><span style="width:32px"></span><span>paid_at</span><span class="db-type">timestamp</span></div>
+      </div>
+      <div class="db-table">
+        <div class="db-table-header">⭐ reviews</div>
+        <div class="db-field"><span class="db-pk">PK</span><span>id</span><span class="db-type">uuid</span></div>
+        <div class="db-field"><span class="db-fk">FK</span><span>booking_id</span><span class="db-type">uuid</span></div>
+        <div class="db-field"><span class="db-fk">FK</span><span>student_id</span><span class="db-type">uuid</span></div>
+        <div class="db-field"><span class="db-fk">FK</span><span>trainer_id</span><span class="db-type">uuid</span></div>
+        <div class="db-field"><span style="width:32px"></span><span>rating</span><span class="db-type">int (1-5)</span></div>
+        <div class="db-field"><span style="width:32px"></span><span>comment</span><span class="db-type">text</span></div>
+        <div class="db-field"><span style="width:32px"></span><span>trainer_reply</span><span class="db-type">text</span></div>
+        <div class="db-field"><span style="width:32px"></span><span>created_at</span><span class="db-type">timestamp</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- API -->
+<div class="page" id="api">
+  <h2>API endpoints</h2>
+  <p>RESTful API. All endpoints prefixed with <code style="font-size:12px;background:var(--color-background-secondary);padding:2px 6px;border-radius:4px">/api/v1</code>. Authentication via JWT bearer token.</p>
+
+  <div class="card">
+    <h3 style="margin-bottom:12px">Auth</h3>
+    <div class="api-row"><span class="method method-post">POST</span><div><div class="endpoint">/auth/register</div><div class="ep-desc">Register new student or trainer account</div></div></div>
+    <div class="api-row"><span class="method method-post">POST</span><div><div class="endpoint">/auth/login</div><div class="ep-desc">Login and receive JWT token</div></div></div>
+    <div class="api-row"><span class="method method-post">POST</span><div><div class="endpoint">/auth/refresh</div><div class="ep-desc">Refresh access token</div></div></div>
+    <div class="api-row"><span class="method method-post">POST</span><div><div class="endpoint">/auth/logout</div><div class="ep-desc">Invalidate current session token</div></div></div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <h3 style="margin-bottom:12px">Events</h3>
+      <div class="api-row"><span class="method method-get">GET</span><div><div class="endpoint">/events</div><div class="ep-desc">List all events (filters: category, type, price, date)</div></div></div>
+      <div class="api-row"><span class="method method-get">GET</span><div><div class="endpoint">/events/:id</div><div class="ep-desc">Get single event detail</div></div></div>
+      <div class="api-row"><span class="method method-post">POST</span><div><div class="endpoint">/events</div><div class="ep-desc">Create new event (trainer only)</div></div></div>
+      <div class="api-row"><span class="method method-put">PUT</span><div><div class="endpoint">/events/:id</div><div class="ep-desc">Update event (trainer only)</div></div></div>
+      <div class="api-row"><span class="method method-del">DEL</span><div><div class="endpoint">/events/:id</div><div class="ep-desc">Delete event (trainer / admin)</div></div></div>
+      <div class="api-row"><span class="method method-get">GET</span><div><div class="endpoint">/events/:id/slots</div><div class="ep-desc">Get available time slots</div></div></div>
+    </div>
+    <div class="card">
+      <h3 style="margin-bottom:12px">Bookings</h3>
+      <div class="api-row"><span class="method method-post">POST</span><div><div class="endpoint">/bookings</div><div class="ep-desc">Create booking (student only)</div></div></div>
+      <div class="api-row"><span class="method method-get">GET</span><div><div class="endpoint">/bookings/my</div><div class="ep-desc">Get my bookings (student or trainer)</div></div></div>
+      <div class="api-row"><span class="method method-put">PUT</span><div><div class="endpoint">/bookings/:id/cancel</div><div class="ep-desc">Cancel a booking</div></div></div>
+      <div class="api-row"><span class="method method-put">PUT</span><div><div class="endpoint">/bookings/:id/reschedule</div><div class="ep-desc">Reschedule booking to new slot</div></div></div>
+      <div class="api-row"><span class="method method-put">PUT</span><div><div class="endpoint">/bookings/:id/complete</div><div class="ep-desc">Mark session complete (triggers payment split)</div></div></div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <h3 style="margin-bottom:12px">Payments</h3>
+      <div class="api-row"><span class="method method-post">POST</span><div><div class="endpoint">/payments/initiate</div><div class="ep-desc">Initiate payment for a booking</div></div></div>
+      <div class="api-row"><span class="method method-post">POST</span><div><div class="endpoint">/payments/callback</div><div class="ep-desc">Payment gateway webhook callback</div></div></div>
+      <div class="api-row"><span class="method method-get">GET</span><div><div class="endpoint">/payments/history</div><div class="ep-desc">Get payment history (student / trainer)</div></div></div>
+      <div class="api-row"><span class="method method-post">POST</span><div><div class="endpoint">/trainer/withdraw</div><div class="ep-desc">Trainer requests wallet withdrawal</div></div></div>
+      <div class="api-row"><span class="method method-get">GET</span><div><div class="endpoint">/trainer/wallet</div><div class="ep-desc">Get trainer wallet balance</div></div></div>
+    </div>
+    <div class="card">
+      <h3 style="margin-bottom:12px">Reviews & sessions</h3>
+      <div class="api-row"><span class="method method-post">POST</span><div><div class="endpoint">/reviews</div><div class="ep-desc">Submit review after session (student)</div></div></div>
+      <div class="api-row"><span class="method method-get">GET</span><div><div class="endpoint">/reviews/trainer/:id</div><div class="ep-desc">Get all reviews for a trainer</div></div></div>
+      <div class="api-row"><span class="method method-post">POST</span><div><div class="endpoint">/sessions/:id/join</div><div class="ep-desc">Get video session token (WebRTC room)</div></div></div>
+      <div class="api-row"><span class="method method-get">GET</span><div><div class="endpoint">/admin/users</div><div class="ep-desc">List all users (admin only)</div></div></div>
+      <div class="api-row"><span class="method method-put">PUT</span><div><div class="endpoint">/admin/trainers/:id/approve</div><div class="ep-desc">Approve trainer application (admin)</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- TECH STACK -->
+<div class="page" id="tech">
+  <h2>Recommended tech stack</h2>
+  <p>A production-ready stack suited for a Bangladesh-based SaaS platform with real-time video requirements.</p>
+  <div class="two-col">
+    <div class="card">
+      <h3 style="margin-bottom:12px">Frontend</h3>
+      <ul class="feature-list">
+        <li><span class="dot dot-blue"></span><strong>React.js</strong> — component-based UI for student and trainer dashboards</li>
+        <li><span class="dot dot-blue"></span><strong>Next.js</strong> — SSR for SEO on public event pages</li>
+        <li><span class="dot dot-blue"></span><strong>Tailwind CSS</strong> — rapid, responsive styling</li>
+        <li><span class="dot dot-blue"></span><strong>WebRTC / Daily.co or Jitsi</strong> — browser-based video sessions</li>
+        <li><span class="dot dot-blue"></span><strong>Socket.IO</strong> — real-time session status and chat</li>
+        <li><span class="dot dot-blue"></span><strong>React Query</strong> — server state management</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3 style="margin-bottom:12px">Backend</h3>
+      <ul class="feature-list">
+        <li><span class="dot dot-purple"></span><strong>Node.js + Express</strong> or <strong>Django REST Framework</strong></li>
+        <li><span class="dot dot-purple"></span><strong>PostgreSQL</strong> — relational DB for all core data</li>
+        <li><span class="dot dot-purple"></span><strong>Redis</strong> — session caching, real-time notifications</li>
+        <li><span class="dot dot-purple"></span><strong>Celery / Bull</strong> — scheduled jobs (reminders, payouts)</li>
+        <li><span class="dot dot-purple"></span><strong>JWT</strong> — stateless authentication</li>
+        <li><span class="dot dot-purple"></span><strong>AWS S3 / Cloudflare R2</strong> — session recording storage</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3 style="margin-bottom:12px">Payments</h3>
+      <ul class="feature-list">
+        <li><span class="dot dot-amber"></span><strong>SSLCommerz</strong> — Bangladesh's most widely used payment gateway</li>
+        <li><span class="dot dot-amber"></span><strong>bKash API</strong> — mobile banking integration</li>
+        <li><span class="dot dot-amber"></span><strong>Nagad API</strong> — secondary mobile wallet</li>
+        <li><span class="dot dot-amber"></span>Webhook-based payment confirmation</li>
+        <li><span class="dot dot-amber"></span>Escrow hold until session complete</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3 style="margin-bottom:12px">Infrastructure & DevOps</h3>
+      <ul class="feature-list">
+        <li><span class="dot dot-blue"></span><strong>Docker + Docker Compose</strong> — containerized dev and prod</li>
+        <li><span class="dot dot-blue"></span><strong>AWS / DigitalOcean</strong> — cloud hosting</li>
+        <li><span class="dot dot-blue"></span><strong>Nginx</strong> — reverse proxy and SSL termination</li>
+        <li><span class="dot dot-blue"></span><strong>GitHub Actions</strong> — CI/CD pipeline</li>
+        <li><span class="dot dot-blue"></span><strong>Sentry</strong> — error monitoring</li>
+        <li><span class="dot dot-blue"></span><strong>Firebase Cloud Messaging</strong> — push notifications</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+function show(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const btns = document.querySelectorAll('.nav button');
+  const order = ['overview','roles','modules','workflow','payment','database','api','tech'];
+  btns[order.indexOf(id)].classList.add('active');
+}
+
+function calcSplit(val) {
+  const v = parseInt(val);
+  const trainer = Math.round(v * 0.85);
+  const company = Math.round(v * 0.15);
+  document.getElementById('price-display').textContent = v.toLocaleString();
+  document.getElementById('c-total').textContent = v.toLocaleString() + ' BDT';
+  document.getElementById('c-trainer').textContent = trainer.toLocaleString() + ' BDT';
+  document.getElementById('c-company').textContent = company.toLocaleString() + ' BDT';
+}
+</script>
+</body>
+</html>

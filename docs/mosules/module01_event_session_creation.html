@@ -1,0 +1,194 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.sec{margin-bottom:1.5rem}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.25rem;margin-bottom:12px}
+.card-accent{border-left:3px solid #378ADD;border-radius:0 var(--border-radius-lg) var(--border-radius-lg) 0}
+.row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.col{flex:1;min-width:200px}
+.label{font-size:11px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px}
+.val{font-size:13.5px;color:var(--color-text-primary);line-height:1.5}
+.muted{color:var(--color-text-secondary)}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px}
+.badge-blue{background:var(--color-background-info);color:var(--color-text-info)}
+.badge-amber{background:var(--color-background-warning);color:var(--color-text-warning)}
+.badge-green{background:var(--color-background-success);color:var(--color-text-success)}
+.badge-gray{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.divider{border:none;border-top:0.5px solid var(--color-border-tertiary);margin:14px 0}
+.field-row{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:13px}
+.field-row:last-child{border-bottom:none}
+.field-name{min-width:150px;color:var(--color-text-secondary);flex-shrink:0}
+.field-val{color:var(--color-text-primary);flex:1;line-height:1.5}
+.field-type{font-size:11px;color:var(--color-text-tertiary);font-family:var(--font-mono);flex-shrink:0;margin-left:auto;padding-left:8px}
+.step-row{display:flex;gap:12px;align-items:flex-start;margin-bottom:14px}
+.step-num{width:26px;height:26px;border-radius:50%;background:var(--color-background-info);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--color-text-info);flex-shrink:0}
+.step-body{flex:1}
+.step-title{font-size:13.5px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px}
+.step-desc{font-size:12.5px;color:var(--color-text-secondary);line-height:1.5}
+.rule-row{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;color:var(--color-text-secondary);padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary);line-height:1.5}
+.rule-row:last-child{border-bottom:none}
+.dot{width:5px;height:5px;border-radius:50%;background:#378ADD;flex-shrink:0;margin-top:5px}
+.dot-amber{background:#BA7517}
+.dot-green{background:#639922}
+.dot-red{background:#E24B4A}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:1.5rem}
+.metric{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:14px 1rem}
+.metric-label{font-size:11px;color:var(--color-text-secondary);margin-bottom:5px}
+.metric-val{font-size:20px;font-weight:500;color:var(--color-text-primary)}
+.metric-sub{font-size:11px;color:var(--color-text-tertiary);margin-top:2px}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:4px;background:var(--color-background-secondary);color:var(--color-text-secondary);border:0.5px solid var(--color-border-tertiary);margin:2px}
+.section-head{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.section-icon{width:32px;height:32px;border-radius:var(--border-radius-md);background:var(--color-background-info);display:flex;align-items:center;justify-content:center}
+.status-pill{display:inline-flex;align-items:center;gap:5px;font-size:12px;padding:4px 12px;border-radius:20px;border:0.5px solid var(--color-border-secondary)}
+</style>
+
+<h2 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Module 01 — Event and session creation full specification for AI understanding</h2>
+
+<div style="padding:1.5rem 0 0">
+
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+    <div style="width:38px;height:38px;border-radius:var(--border-radius-md);background:var(--color-background-info);display:flex;align-items:center;justify-content:center">
+      <i class="ti ti-calendar-event" style="font-size:20px;color:var(--color-text-info)" aria-hidden="true"></i>
+    </div>
+    <div>
+      <div style="font-size:11px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.07em">Module 01</div>
+      <div style="font-size:18px;font-weight:500;color:var(--color-text-primary)">Event & session creation</div>
+    </div>
+    <span class="badge badge-blue" style="margin-left:auto"><i class="ti ti-user" style="font-size:12px" aria-hidden="true"></i> Trainer only</span>
+  </div>
+  <p style="font-size:13.5px;color:var(--color-text-secondary);line-height:1.6;margin-bottom:1.5rem">Trainers use this module to package their expertise into bookable events. Each event is a structured offering with a topic, pricing, and time slots that students can discover and book. This is the supply-side of the marketplace.</p>
+
+  <div class="metrics">
+    <div class="metric"><div class="metric-label">Who creates</div><div class="metric-val">Trainer</div><div class="metric-sub">After admin approval</div></div>
+    <div class="metric"><div class="metric-label">Status on save</div><div class="metric-val">Draft</div><div class="metric-sub">Until published</div></div>
+    <div class="metric"><div class="metric-label">Session limit</div><div class="metric-val">Flexible</div><div class="metric-sub">Trainer sets count</div></div>
+    <div class="metric"><div class="metric-label">Pricing unit</div><div class="metric-val">Per session</div><div class="metric-sub">In BDT</div></div>
+  </div>
+
+  <div class="sec">
+    <div style="font-size:14px;font-weight:500;color:var(--color-text-primary);margin-bottom:10px">
+      <i class="ti ti-forms" style="font-size:15px;vertical-align:-2px;margin-right:6px;color:var(--color-text-info)" aria-hidden="true"></i>Step 1 — Basic event info
+    </div>
+    <div class="card card-accent">
+      <div class="field-row"><span class="field-name">Event title</span><span class="field-val">Short, descriptive name students see in search. E.g. "Software Engineering Mock Interview – FAANG Level"</span><span class="field-type">string · required</span></div>
+      <div class="field-row"><span class="field-name">Category</span><span class="field-val">Domain of the interview. Options: Software Engineering, Data Science & ML, Product Design, Product Management, Finance, Consulting, Marketing, DevOps, Healthcare, Law, Academia, General/Behavioural</span><span class="field-type">enum · required</span></div>
+      <div class="field-row"><span class="field-name">Interview type</span><span class="field-val">Nature of the session. Options: Technical, Behavioural, Case Study, HR, Mixed. Helps students filter correctly.</span><span class="field-type">enum · required</span></div>
+      <div class="field-row"><span class="field-name">Description</span><span class="field-val">Markdown-supported rich text. Trainer explains what the session covers, who it's for, and expected outcomes. Shown on event detail page.</span><span class="field-type">text · required</span></div>
+      <div class="field-row"><span class="field-name">Topics covered</span><span class="field-val">Tag list e.g. "System Design", "LeetCode Medium", "Leadership Principles". Used for keyword search and filtering.</span><span class="field-type">tags · required</span></div>
+      <div class="field-row"><span class="field-name">Process overview</span><span class="field-val">Short outline of how the session runs — e.g. "10 min warm-up → 30 min mock interview → 20 min feedback". Sets student expectations.</span><span class="field-type">text · optional</span></div>
+      <div class="field-row"><span class="field-name">Language</span><span class="field-val">Primary language of the session. Default: Bangla + English. Shown as filter option for students.</span><span class="field-type">enum · optional</span></div>
+      <div class="field-row"><span class="field-name">Sample questions</span><span class="field-val">Up to 5 example questions students can expect. Increases booking confidence.</span><span class="field-type">list · optional</span></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div style="font-size:14px;font-weight:500;color:var(--color-text-primary);margin-bottom:10px">
+      <i class="ti ti-layers" style="font-size:15px;vertical-align:-2px;margin-right:6px;color:var(--color-text-info)" aria-hidden="true"></i>Step 2 — Session structure & pricing
+    </div>
+    <div class="card card-accent">
+      <div class="field-row"><span class="field-name">Total sessions</span><span class="field-val">How many slots this event offers in total. E.g. 12 means 12 separate students can book this event independently. Trainer sets the cap.</span><span class="field-type">integer · required</span></div>
+      <div class="field-row"><span class="field-name">Duration per session</span><span class="field-val">Length of each individual live session. Options: 30 min, 45 min, 60 min, 90 min. Determines how long the video room stays open.</span><span class="field-type">enum · required</span></div>
+      <div class="field-row"><span class="field-name">Price per session</span><span class="field-val">Amount student pays in BDT for one session. Trainer earns 85% of this. Platform keeps 15%. Example: 1000 BDT → trainer gets 850 BDT.</span><span class="field-type">integer · required</span></div>
+      <div class="field-row"><span class="field-name">Cancellation policy</span><span class="field-val">Rules trainer sets: e.g. "Free cancel up to 24h before session", "No refund within 6h". Applied automatically at booking cancel.</span><span class="field-type">enum/text · required</span></div>
+      <div class="field-row"><span class="field-name">Rescheduling policy</span><span class="field-val">Whether student can reschedule and how many hours before session is the cutoff. Trainer defines limit (e.g. "up to 1 reschedule, 12h notice").</span><span class="field-type">text · optional</span></div>
+    </div>
+    <div style="background:var(--color-background-warning);border-radius:var(--border-radius-md);padding:10px 14px;display:flex;gap:8px;align-items:flex-start">
+      <i class="ti ti-info-circle" style="font-size:16px;color:var(--color-text-warning);flex-shrink:0;margin-top:1px" aria-hidden="true"></i>
+      <span style="font-size:12.5px;color:var(--color-text-warning);line-height:1.5">Commission is auto-deducted. Trainer never needs to manually split — when session completes, 85% moves to trainer wallet and 15% to company wallet instantly.</span>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div style="font-size:14px;font-weight:500;color:var(--color-text-primary);margin-bottom:10px">
+      <i class="ti ti-calendar" style="font-size:15px;vertical-align:-2px;margin-right:6px;color:var(--color-text-info)" aria-hidden="true"></i>Step 3 — Availability & scheduling
+    </div>
+    <div class="card card-accent">
+      <div class="field-row"><span class="field-name">Available slots</span><span class="field-val">Trainer uses calendar picker to mark specific dates + times they are free. Each slot = one bookable session. Students see only open slots in real-time.</span><span class="field-type">datetime[] · required</span></div>
+      <div class="field-row"><span class="field-name">Blocked dates</span><span class="field-val">Dates trainer marks as unavailable (holidays, busy periods). Automatically hidden from student booking view.</span><span class="field-type">date[] · optional</span></div>
+      <div class="field-row"><span class="field-name">Time zone</span><span class="field-val">Trainer's local time zone. All slots stored in UTC. Students see slots converted to their own time zone automatically.</span><span class="field-type">timezone · required</span></div>
+      <div class="field-row"><span class="field-name">Slot buffer</span><span class="field-val">Gap between consecutive sessions (e.g. 15 min). Prevents back-to-back bookings that leave no prep time for trainer.</span><span class="field-type">integer (min) · optional</span></div>
+      <div class="field-row"><span class="field-name">Advance notice</span><span class="field-val">Minimum time before a session slot can be booked. E.g. "24h" means students can't book a session starting in less than 24 hours.</span><span class="field-type">integer (h) · optional</span></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div style="font-size:14px;font-weight:500;color:var(--color-text-primary);margin-bottom:10px">
+      <i class="ti ti-send" style="font-size:15px;vertical-align:-2px;margin-right:6px;color:var(--color-text-info)" aria-hidden="true"></i>Step 4 — Publish controls
+    </div>
+    <div class="two">
+      <div class="card" style="border-top:2px solid #639922;border-radius:0 0 var(--border-radius-lg) var(--border-radius-lg)">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+          <i class="ti ti-world" style="font-size:18px;color:var(--color-text-success)" aria-hidden="true"></i>
+          <span style="font-size:13.5px;font-weight:500;color:var(--color-text-primary)">Publish to marketplace</span>
+          <span class="badge badge-green" style="margin-left:auto">Live</span>
+        </div>
+        <div style="font-size:12.5px;color:var(--color-text-secondary);line-height:1.6">Event appears in public search. Students can find, view, and book it immediately. Trainer's profile shows the event. Booking notifications start arriving.</div>
+      </div>
+      <div class="card" style="border-top:2px solid #888780;border-radius:0 0 var(--border-radius-lg) var(--border-radius-lg)">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+          <i class="ti ti-lock" style="font-size:18px;color:var(--color-text-secondary)" aria-hidden="true"></i>
+          <span style="font-size:13.5px;font-weight:500;color:var(--color-text-primary)">Save as draft</span>
+          <span class="badge badge-gray" style="margin-left:auto">Hidden</span>
+        </div>
+        <div style="font-size:12.5px;color:var(--color-text-secondary);line-height:1.6">Event is saved but invisible to students. Trainer can edit freely. Useful for preparing an event in advance. No bookings possible in draft state.</div>
+      </div>
+    </div>
+    <div class="card" style="background:var(--color-background-secondary);border:none">
+      <div style="font-size:12.5px;font-weight:500;color:var(--color-text-primary);margin-bottom:8px">Edit & cancel rules after publishing</div>
+      <div class="rule-row"><span class="dot"></span>Trainer can edit title, description, topics, and process overview at any time without affecting existing bookings.</div>
+      <div class="rule-row"><span class="dot dot-amber"></span>Changing price or duration only affects new bookings — existing confirmed bookings honour the original terms.</div>
+      <div class="rule-row"><span class="dot dot-amber"></span>Removing a published slot that already has a confirmed booking is not allowed. Trainer must cancel the booking first.</div>
+      <div class="rule-row"><span class="dot dot-red"></span>Cancelling the entire event is only allowed if zero bookings exist. Otherwise trainer must cancel each booking individually, triggering refunds per policy.</div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div style="font-size:14px;font-weight:500;color:var(--color-text-primary);margin-bottom:10px">
+      <i class="ti ti-arrows-right-left" style="font-size:15px;vertical-align:-2px;margin-right:6px;color:var(--color-text-info)" aria-hidden="true"></i>How this connects to other modules
+    </div>
+    <div class="card" style="padding:1rem">
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div class="step-body"><div class="step-title">Event discovery (Module 02)</div><div class="step-desc">Once published, the event enters the student-facing marketplace. Category, interview type, price, and rating are the primary filter fields students use. Topics covered power keyword search.</div></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">3</div>
+        <div class="step-body"><div class="step-title">Booking & scheduling (Module 03)</div><div class="step-desc">Availability slots defined here become the selectable time options during student checkout. Slot availability updates in real-time as bookings are made.</div></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">5</div>
+        <div class="step-body"><div class="step-title">Payments (Module 05)</div><div class="step-desc">Price per session defined here drives the checkout amount. Cancellation policy defined here governs whether a refund is issued if a student cancels.</div></div>
+      </div>
+      <div class="step-row" style="margin-bottom:0">
+        <div class="step-num">7</div>
+        <div class="step-body"><div class="step-title">Analytics (Module 07)</div><div class="step-desc">Event-level data (views, bookings, completion rate, average rating) feeds the trainer analytics dashboard. Helps trainer optimise pricing and availability.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div style="font-size:14px;font-weight:500;color:var(--color-text-primary);margin-bottom:10px">
+      <i class="ti ti-shield-check" style="font-size:15px;vertical-align:-2px;margin-right:6px;color:var(--color-text-info)" aria-hidden="true"></i>Business rules & constraints
+    </div>
+    <div class="card card-accent">
+      <div class="rule-row"><span class="dot"></span>Only trainers with admin-approved accounts can access the event creation form. Unapproved trainer accounts see a pending-approval screen instead.</div>
+      <div class="rule-row"><span class="dot"></span>A trainer can have multiple events live simultaneously across different categories.</div>
+      <div class="rule-row"><span class="dot dot-amber"></span>Minimum price per session is 200 BDT. Platform enforces this to maintain quality signal.</div>
+      <div class="rule-row"><span class="dot dot-amber"></span>Each event must have at least 1 available slot before it can be published.</div>
+      <div class="rule-row"><span class="dot dot-green"></span>Drafts are auto-saved every 30 seconds to prevent data loss.</div>
+      <div class="rule-row"><span class="dot dot-green"></span>Trainer receives in-app + email notification when the first booking is made on a newly published event.</div>
+      <div class="rule-row"><span class="dot dot-red"></span>Admin can unpublish or hide any event platform-wide if it violates guidelines, without trainer consent.</div>
+    </div>
+  </div>
+
+  <div style="padding-bottom:1.5rem">
+    <div style="font-size:14px;font-weight:500;color:var(--color-text-primary);margin-bottom:10px">
+      <i class="ti ti-database" style="font-size:15px;vertical-align:-2px;margin-right:6px;color:var(--color-text-info)" aria-hidden="true"></i>Key data stored per event
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">
+      <span class="tag">event_id</span><span class="tag">trainer_id (FK)</span><span class="tag">title</span><span class="tag">category</span><span class="tag">interview_type</span><span class="tag">description</span><span class="tag">topics[]</span><span class="tag">process_overview</span><span class="tag">session_count</span><span class="tag">duration_min</span><span class="tag">price_bdt</span><span class="tag">cancellation_policy</span><span class="tag">reschedule_policy</span><span class="tag">status (draft/published)</span><span class="tag">language</span><span class="tag">slots[]</span><span class="tag">blocked_dates[]</span><span class="tag">timezone</span><span class="tag">buffer_min</span><span class="tag">advance_notice_h</span><span class="tag">created_at</span><span class="tag">updated_at</span>
+    </div>
+  </div>
+
+</div>
