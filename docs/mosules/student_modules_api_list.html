@@ -1,0 +1,204 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.sec{margin-bottom:1.5rem}
+.sec-head{display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);margin-bottom:10px}
+.sec-title{font-size:13.5px;font-weight:500;color:var(--color-text-primary)}
+.sec-sub{font-size:12px;color:var(--color-text-secondary);margin-left:auto}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;margin-bottom:12px}
+.api-row{display:flex;align-items:flex-start;gap:10px;padding:9px 12px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.api-row:last-child{border-bottom:none}
+.method{font-size:11px;font-weight:500;padding:2px 7px;border-radius:4px;font-family:var(--font-mono);flex-shrink:0;min-width:52px;text-align:center;margin-top:1px}
+.get{background:#E6F1FB;color:#0C447C}
+.post{background:#EAF3DE;color:#27500A}
+.put{background:#FAEEDA;color:#633806}
+.patch{background:#FAEEDA;color:#633806}
+.delete{background:#FCEBEB;color:#791F1F}
+.pub{background:#EEEDFE;color:#3C3489}
+.endpoint{font-family:var(--font-mono);font-size:12px;color:var(--color-text-primary);flex:1;word-break:break-all;line-height:1.5}
+.desc{font-size:12px;color:var(--color-text-secondary);min-width:170px;max-width:210px;line-height:1.4}
+.badge{display:inline-flex;font-size:11px;padding:2px 8px;border-radius:20px;flex-shrink:0;margin-top:1px}
+.b-pub{background:#EEEDFE;color:#3C3489}
+.b-std{background:#E1F5EE;color:#085041}
+.role-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;margin-bottom:1.5rem}
+.role-header{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.perm-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;padding:14px 16px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.perm{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--color-text-secondary)}
+.pchk{width:16px;height:16px;border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.yes{background:#EAF3DE;color:#27500A}
+.no{background:#FCEBEB;color:#791F1F}
+</style>
+
+<h2 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Student role permissions and full API endpoint list module by module for InterviewPro</h2>
+
+<div style="padding:1.5rem 0 0">
+
+  <div style="margin-bottom:1.5rem">
+    <div style="font-size:18px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px">Student — role & API reference</div>
+    <div style="font-size:13px;color:var(--color-text-secondary)">All modules, permissions, and REST endpoints for the student role</div>
+  </div>
+
+  <div class="role-card">
+    <div class="role-header">
+      <div style="width:34px;height:34px;border-radius:var(--border-radius-md);background:#E1F5EE;display:flex;align-items:center;justify-content:center">
+        <i class="ti ti-school" style="font-size:18px;color:#085041" aria-hidden="true"></i>
+      </div>
+      <div>
+        <div style="font-size:14px;font-weight:500;color:var(--color-text-primary)">Student</div>
+        <div style="font-size:12px;color:var(--color-text-secondary);margin-top:1px">Job seeker who browses, books, and attends mock interview sessions</div>
+      </div>
+      <span style="margin-left:auto;font-size:11px;padding:3px 10px;border-radius:20px;background:#E1F5EE;color:#085041;font-weight:500">role: student</span>
+    </div>
+    <div class="perm-grid">
+      <div class="perm"><div class="pchk yes"><i class="ti ti-check" style="font-size:11px" aria-hidden="true"></i></div>Browse & search events</div>
+      <div class="perm"><div class="pchk yes"><i class="ti ti-check" style="font-size:11px" aria-hidden="true"></i></div>Book sessions & pay</div>
+      <div class="perm"><div class="pchk yes"><i class="ti ti-check" style="font-size:11px" aria-hidden="true"></i></div>Cancel / reschedule</div>
+      <div class="perm"><div class="pchk yes"><i class="ti ti-check" style="font-size:11px" aria-hidden="true"></i></div>Join live sessions</div>
+      <div class="perm"><div class="pchk yes"><i class="ti ti-check" style="font-size:11px" aria-hidden="true"></i></div>Write reviews & ratings</div>
+      <div class="perm"><div class="pchk yes"><i class="ti ti-check" style="font-size:11px" aria-hidden="true"></i></div>View payment history</div>
+      <div class="perm"><div class="pchk yes"><i class="ti ti-check" style="font-size:11px" aria-hidden="true"></i></div>Save events to wishlist</div>
+      <div class="perm"><div class="pchk yes"><i class="ti ti-check" style="font-size:11px" aria-hidden="true"></i></div>View session recordings</div>
+      <div class="perm"><div class="pchk no"><i class="ti ti-x" style="font-size:11px" aria-hidden="true"></i></div>Create events</div>
+      <div class="perm"><div class="pchk no"><i class="ti ti-x" style="font-size:11px" aria-hidden="true"></i></div>View trainer earnings</div>
+      <div class="perm"><div class="pchk no"><i class="ti ti-x" style="font-size:11px" aria-hidden="true"></i></div>Access admin panel</div>
+      <div class="perm"><div class="pchk no"><i class="ti ti-x" style="font-size:11px" aria-hidden="true"></i></div>Moderate any content</div>
+    </div>
+    <div style="padding:10px 16px;background:var(--color-background-secondary)">
+      <span style="font-size:12px;color:var(--color-text-secondary)">Protected endpoints require: </span>
+      <span style="font-size:12px;font-family:var(--font-mono);color:var(--color-text-primary)">Authorization: Bearer &lt;jwt_token&gt;</span>
+      <span style="font-size:12px;color:var(--color-text-secondary)"> — public endpoints need no token</span>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head">
+      <i class="ti ti-user-circle" style="font-size:16px;color:#085041" aria-hidden="true"></i>
+      <span class="sec-title">Auth & profile</span>
+      <span class="sec-sub">7 endpoints</span>
+    </div>
+    <div class="card">
+      <div class="api-row"><span class="method post">POST</span><span class="endpoint">/api/auth/register</span><span class="desc">Register new student account</span><span class="badge b-pub">public</span></div>
+      <div class="api-row"><span class="method post">POST</span><span class="endpoint">/api/auth/login</span><span class="desc">Login, returns JWT token</span><span class="badge b-pub">public</span></div>
+      <div class="api-row"><span class="method post">POST</span><span class="endpoint">/api/auth/logout</span><span class="desc">Invalidate access token</span><span class="badge b-std">student</span></div>
+      <div class="api-row"><span class="method post">POST</span><span class="endpoint">/api/auth/refresh</span><span class="desc">Refresh JWT token</span><span class="badge b-std">student</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/student/profile</span><span class="desc">Get own profile data</span><span class="badge b-std">student</span></div>
+      <div class="api-row"><span class="method put">PUT</span><span class="endpoint">/api/student/profile</span><span class="desc">Update name, photo, bio, goals</span><span class="badge b-std">student</span></div>
+      <div class="api-row"><span class="method patch">PATCH</span><span class="endpoint">/api/student/profile/password</span><span class="desc">Change password</span><span class="badge b-std">student</span></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head">
+      <i class="ti ti-search" style="font-size:16px;color:#085041" aria-hidden="true"></i>
+      <span class="sec-title">Module 02 — Event discovery & browsing</span>
+      <span class="sec-sub">6 endpoints</span>
+    </div>
+    <div class="card">
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/events</span><span class="desc">Browse all published events (filter: category, type, price, rating, date)</span><span class="badge b-pub">public</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/events/:id</span><span class="desc">Full event detail page — bio, topics, reviews, slots</span><span class="badge b-pub">public</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/events/search?q=</span><span class="desc">Keyword search across title, topics, trainer name</span><span class="badge b-pub">public</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/events/:id/slots</span><span class="desc">Available time slots for an event</span><span class="badge b-pub">public</span></div>
+      <div class="api-row"><span class="method post">POST</span><span class="endpoint">/api/student/wishlist/:eventId</span><span class="desc">Save event to wishlist</span><span class="badge b-std">student</span></div>
+      <div class="api-row"><span class="method delete">DELETE</span><span class="endpoint">/api/student/wishlist/:eventId</span><span class="desc">Remove event from wishlist</span><span class="badge b-std">student</span></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head">
+      <i class="ti ti-calendar-check" style="font-size:16px;color:#085041" aria-hidden="true"></i>
+      <span class="sec-title">Module 03 — Booking & scheduling</span>
+      <span class="sec-sub">7 endpoints</span>
+    </div>
+    <div class="card">
+      <div class="api-row"><span class="method post">POST</span><span class="endpoint">/api/student/bookings</span><span class="desc">Create booking — select event + slot</span><span class="badge b-std">student</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/student/bookings</span><span class="desc">All own bookings (upcoming + past)</span><span class="badge b-std">student</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/student/bookings/:id</span><span class="desc">Single booking detail</span><span class="badge b-std">student</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/student/bookings/upcoming</span><span class="desc">Upcoming sessions only</span><span class="badge b-std">student</span></div>
+      <div class="api-row"><span class="method patch">PATCH</span><span class="endpoint">/api/student/bookings/:id/cancel</span><span class="desc">Cancel booking (refund per policy)</span><span class="badge b-std">student</span></div>
+      <div class="api-row"><span class="method patch">PATCH</span><span class="endpoint">/api/student/bookings/:id/reschedule</span><span class="desc">Reschedule to another open slot</span><span class="badge b-std">student</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/student/wishlist</span><span class="desc">Get all saved wishlist events</span><span class="badge b-std">student</span></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head">
+      <i class="ti ti-video" style="font-size:16px;color:#085041" aria-hidden="true"></i>
+      <span class="sec-title">Module 04 — Live video session</span>
+      <span class="sec-sub">3 endpoints</span>
+    </div>
+    <div class="card">
+      <div class="api-row"><span class="method post">POST</span><span class="endpoint">/api/sessions/:bookingId/join</span><span class="desc">Generate video room token for student</span><span class="badge b-std">student</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/sessions/:bookingId/status</span><span class="desc">Room status (waiting / live / ended)</span><span class="badge b-std">student</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/sessions/:bookingId/recording</span><span class="desc">Get recording link (if consented)</span><span class="badge b-std">student</span></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head">
+      <i class="ti ti-credit-card" style="font-size:16px;color:#085041" aria-hidden="true"></i>
+      <span class="sec-title">Module 05 — Payments</span>
+      <span class="sec-sub">5 endpoints</span>
+    </div>
+    <div class="card">
+      <div class="api-row"><span class="method post">POST</span><span class="endpoint">/api/student/payments/initiate</span><span class="desc">Initiate payment for a booking (returns gateway URL)</span><span class="badge b-std">student</span></div>
+      <div class="api-row"><span class="method post">POST</span><span class="endpoint">/api/student/payments/verify</span><span class="desc">Verify payment after gateway callback</span><span class="badge b-std">student</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/student/payments</span><span class="desc">Full payment + refund history</span><span class="badge b-std">student</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/student/payments/:id</span><span class="desc">Single payment receipt detail</span><span class="badge b-std">student</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/student/payments/:id/receipt</span><span class="desc">Download PDF receipt</span><span class="badge b-std">student</span></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head">
+      <i class="ti ti-star" style="font-size:16px;color:#085041" aria-hidden="true"></i>
+      <span class="sec-title">Module 06 — Reviews & ratings</span>
+      <span class="sec-sub">5 endpoints</span>
+    </div>
+    <div class="card">
+      <div class="api-row"><span class="method post">POST</span><span class="endpoint">/api/student/reviews</span><span class="desc">Submit rating + review after session</span><span class="badge b-std">student</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/student/reviews</span><span class="desc">All reviews submitted by student</span><span class="badge b-std">student</span></div>
+      <div class="api-row"><span class="method put">PUT</span><span class="endpoint">/api/student/reviews/:id</span><span class="desc">Edit own review (before trainer replies)</span><span class="badge b-std">student</span></div>
+      <div class="api-row"><span class="method delete">DELETE</span><span class="endpoint">/api/student/reviews/:id</span><span class="desc">Delete own review</span><span class="badge b-std">student</span></div>
+      <div class="api-row"><span class="method post">POST</span><span class="endpoint">/api/student/reviews/:id/report</span><span class="desc">Report a trainer reply as inappropriate</span><span class="badge b-std">student</span></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head">
+      <i class="ti ti-bell" style="font-size:16px;color:#085041" aria-hidden="true"></i>
+      <span class="sec-title">Module 08 — Notifications</span>
+      <span class="sec-sub">4 endpoints</span>
+    </div>
+    <div class="card">
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/student/notifications</span><span class="desc">In-app notification list</span><span class="badge b-std">student</span></div>
+      <div class="api-row"><span class="method patch">PATCH</span><span class="endpoint">/api/student/notifications/:id/read</span><span class="desc">Mark one notification read</span><span class="badge b-std">student</span></div>
+      <div class="api-row"><span class="method patch">PATCH</span><span class="endpoint">/api/student/notifications/read-all</span><span class="desc">Mark all notifications read</span><span class="badge b-std">student</span></div>
+      <div class="api-row"><span class="method put">PUT</span><span class="endpoint">/api/student/notifications/preferences</span><span class="desc">Update email / SMS / push settings</span><span class="badge b-std">student</span></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head">
+      <i class="ti ti-user" style="font-size:16px;color:#085041" aria-hidden="true"></i>
+      <span class="sec-title">Trainer public profile (read-only)</span>
+      <span class="sec-sub">2 endpoints</span>
+    </div>
+    <div class="card">
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/trainers/:id/profile</span><span class="desc">Trainer public profile — bio, expertise, rating</span><span class="badge b-pub">public</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/trainers/:id/reviews</span><span class="desc">All reviews for a trainer (paginated)</span><span class="badge b-pub">public</span></div>
+    </div>
+  </div>
+
+  <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:8px">
+    <div style="font-size:12.5px;color:var(--color-text-secondary)">Total student API endpoints</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <span style="font-size:12px;padding:3px 10px;border-radius:20px;background:#E6F1FB;color:#0C447C;font-family:var(--font-mono)">GET 19</span>
+      <span style="font-size:12px;padding:3px 10px;border-radius:20px;background:#EAF3DE;color:#27500A;font-family:var(--font-mono)">POST 10</span>
+      <span style="font-size:12px;padding:3px 10px;border-radius:20px;background:#FAEEDA;color:#633806;font-family:var(--font-mono)">PUT 2</span>
+      <span style="font-size:12px;padding:3px 10px;border-radius:20px;background:#FAEEDA;color:#633806;font-family:var(--font-mono)">PATCH 5</span>
+      <span style="font-size:12px;padding:3px 10px;border-radius:20px;background:#FCEBEB;color:#791F1F;font-family:var(--font-mono)">DELETE 2</span>
+      <span style="font-size:12px;padding:3px 10px;border-radius:20px;background:#E1F5EE;color:#085041;font-weight:500">38 total</span>
+    </div>
+  </div>
+
+</div>

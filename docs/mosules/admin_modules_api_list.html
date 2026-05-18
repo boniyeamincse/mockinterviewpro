@@ -1,0 +1,249 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.sec{margin-bottom:1.5rem}
+.sec-head{display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);margin-bottom:10px}
+.sec-title{font-size:13.5px;font-weight:500;color:var(--color-text-primary)}
+.sec-sub{font-size:12px;color:var(--color-text-secondary);margin-left:auto}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;margin-bottom:12px}
+.api-row{display:flex;align-items:flex-start;gap:10px;padding:9px 12px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.api-row:last-child{border-bottom:none}
+.method{font-size:11px;font-weight:500;padding:2px 7px;border-radius:4px;font-family:var(--font-mono);flex-shrink:0;min-width:52px;text-align:center;margin-top:1px}
+.get{background:#E6F1FB;color:#0C447C}
+.post{background:#EAF3DE;color:#27500A}
+.put{background:#FAEEDA;color:#633806}
+.patch{background:#FAEEDA;color:#633806}
+.delete{background:#FCEBEB;color:#791F1F}
+.endpoint{font-family:var(--font-mono);font-size:12px;color:var(--color-text-primary);flex:1;word-break:break-all;line-height:1.5}
+.desc{font-size:12px;color:var(--color-text-secondary);min-width:170px;max-width:210px;line-height:1.4}
+.role-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;margin-bottom:1.5rem}
+.role-header{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.role-icon{width:34px;height:34px;border-radius:var(--border-radius-md);background:#FCEBEB;display:flex;align-items:center;justify-content:center}
+.perm-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;padding:14px 16px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.perm{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--color-text-secondary)}
+.pchk{width:16px;height:16px;border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.yes{background:#EAF3DE;color:#27500A}
+.danger{background:#FCEBEB;color:#791F1F}
+</style>
+
+<h2 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Admin role permissions and full API endpoint list module by module for InterviewPro</h2>
+
+<div style="padding:1.5rem 0 0">
+
+  <div style="margin-bottom:1.5rem">
+    <div style="font-size:18px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px">Admin — role & API reference</div>
+    <div style="font-size:13px;color:var(--color-text-secondary)">Full platform control — all modules, permissions, and REST endpoints</div>
+  </div>
+
+  <div class="role-card">
+    <div class="role-header">
+      <div class="role-icon"><i class="ti ti-shield-check" style="font-size:18px;color:#A32D2D" aria-hidden="true"></i></div>
+      <div>
+        <div style="font-size:14px;font-weight:500;color:var(--color-text-primary)">Admin</div>
+        <div style="font-size:12px;color:var(--color-text-secondary);margin-top:1px">Superuser with full read/write access to all platform data</div>
+      </div>
+      <span style="margin-left:auto;font-size:11px;padding:3px 10px;border-radius:20px;background:#FCEBEB;color:#791F1F;font-weight:500">role: admin</span>
+    </div>
+    <div class="perm-grid">
+      <div class="perm"><div class="pchk yes"><i class="ti ti-check" style="font-size:11px" aria-hidden="true"></i></div>Approve / suspend trainers</div>
+      <div class="perm"><div class="pchk yes"><i class="ti ti-check" style="font-size:11px" aria-hidden="true"></i></div>Manage all users</div>
+      <div class="perm"><div class="pchk yes"><i class="ti ti-check" style="font-size:11px" aria-hidden="true"></i></div>View all bookings</div>
+      <div class="perm"><div class="pchk yes"><i class="ti ti-check" style="font-size:11px" aria-hidden="true"></i></div>View all payments</div>
+      <div class="perm"><div class="pchk yes"><i class="ti ti-check" style="font-size:11px" aria-hidden="true"></i></div>Approve withdrawals</div>
+      <div class="perm"><div class="pchk yes"><i class="ti ti-check" style="font-size:11px" aria-hidden="true"></i></div>Moderate reviews</div>
+      <div class="perm"><div class="pchk yes"><i class="ti ti-check" style="font-size:11px" aria-hidden="true"></i></div>Unpublish any event</div>
+      <div class="perm"><div class="pchk yes"><i class="ti ti-check" style="font-size:11px" aria-hidden="true"></i></div>Platform-wide analytics</div>
+      <div class="perm"><div class="pchk yes"><i class="ti ti-check" style="font-size:11px" aria-hidden="true"></i></div>Issue manual refunds</div>
+      <div class="perm"><div class="pchk yes"><i class="ti ti-check" style="font-size:11px" aria-hidden="true"></i></div>Send broadcast notifications</div>
+      <div class="perm"><div class="pchk danger"><i class="ti ti-x" style="font-size:11px" aria-hidden="true"></i></div>Join live sessions</div>
+      <div class="perm"><div class="pchk danger"><i class="ti ti-x" style="font-size:11px" aria-hidden="true"></i></div>Book sessions as student</div>
+    </div>
+    <div style="padding:10px 16px;background:var(--color-background-secondary)">
+      <span style="font-size:12px;color:var(--color-text-secondary)">All endpoints require: </span>
+      <span style="font-size:12px;font-family:var(--font-mono);color:var(--color-text-primary)">Authorization: Bearer &lt;jwt_token&gt;</span>
+      <span style="font-size:12px;color:var(--color-text-secondary)"> with role admin</span>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head">
+      <i class="ti ti-users" style="font-size:16px;color:#A32D2D" aria-hidden="true"></i>
+      <span class="sec-title">Module — Trainer management</span>
+      <span class="sec-sub">8 endpoints</span>
+    </div>
+    <div class="card">
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/admin/trainers</span><span class="desc">List all trainers (filter: status, date)</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/admin/trainers/:id</span><span class="desc">Get full trainer profile + stats</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/admin/trainers/pending</span><span class="desc">Trainers awaiting approval</span></div>
+      <div class="api-row"><span class="method patch">PATCH</span><span class="endpoint">/api/admin/trainers/:id/approve</span><span class="desc">Approve trainer registration</span></div>
+      <div class="api-row"><span class="method patch">PATCH</span><span class="endpoint">/api/admin/trainers/:id/suspend</span><span class="desc">Suspend trainer account</span></div>
+      <div class="api-row"><span class="method patch">PATCH</span><span class="endpoint">/api/admin/trainers/:id/reinstate</span><span class="desc">Reinstate suspended trainer</span></div>
+      <div class="api-row"><span class="method delete">DELETE</span><span class="endpoint">/api/admin/trainers/:id</span><span class="desc">Permanently delete trainer account</span></div>
+      <div class="api-row"><span class="method post">POST</span><span class="endpoint">/api/admin/trainers/:id/note</span><span class="desc">Add internal admin note to trainer</span></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head">
+      <i class="ti ti-user" style="font-size:16px;color:#A32D2D" aria-hidden="true"></i>
+      <span class="sec-title">Module — Student management</span>
+      <span class="sec-sub">6 endpoints</span>
+    </div>
+    <div class="card">
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/admin/students</span><span class="desc">List all students (filter: date, status)</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/admin/students/:id</span><span class="desc">Student profile + booking history</span></div>
+      <div class="api-row"><span class="method patch">PATCH</span><span class="endpoint">/api/admin/students/:id/suspend</span><span class="desc">Suspend student account</span></div>
+      <div class="api-row"><span class="method patch">PATCH</span><span class="endpoint">/api/admin/students/:id/reinstate</span><span class="desc">Reinstate suspended student</span></div>
+      <div class="api-row"><span class="method delete">DELETE</span><span class="endpoint">/api/admin/students/:id</span><span class="desc">Delete student account</span></div>
+      <div class="api-row"><span class="method post">POST</span><span class="endpoint">/api/admin/students/:id/note</span><span class="desc">Add internal admin note to student</span></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head">
+      <i class="ti ti-calendar-event" style="font-size:16px;color:#A32D2D" aria-hidden="true"></i>
+      <span class="sec-title">Module 01 — Event management</span>
+      <span class="sec-sub">7 endpoints</span>
+    </div>
+    <div class="card">
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/admin/events</span><span class="desc">All events (filter: status, category, trainer)</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/admin/events/:id</span><span class="desc">Full event detail with booking stats</span></div>
+      <div class="api-row"><span class="method patch">PATCH</span><span class="endpoint">/api/admin/events/:id/unpublish</span><span class="desc">Force-unpublish any live event</span></div>
+      <div class="api-row"><span class="method patch">PATCH</span><span class="endpoint">/api/admin/events/:id/publish</span><span class="desc">Re-publish a hidden event</span></div>
+      <div class="api-row"><span class="method patch">PATCH</span><span class="endpoint">/api/admin/events/:id/flag</span><span class="desc">Flag event for review / guideline breach</span></div>
+      <div class="api-row"><span class="method delete">DELETE</span><span class="endpoint">/api/admin/events/:id</span><span class="desc">Hard-delete event (platform override)</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/admin/events/flagged</span><span class="desc">List all flagged events</span></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head">
+      <i class="ti ti-calendar-check" style="font-size:16px;color:#A32D2D" aria-hidden="true"></i>
+      <span class="sec-title">Module 03 — Booking oversight</span>
+      <span class="sec-sub">6 endpoints</span>
+    </div>
+    <div class="card">
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/admin/bookings</span><span class="desc">All bookings (filter: date, status, trainer)</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/admin/bookings/:id</span><span class="desc">Full booking detail (student + trainer)</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/admin/bookings/disputed</span><span class="desc">Disputed or complaint bookings</span></div>
+      <div class="api-row"><span class="method patch">PATCH</span><span class="endpoint">/api/admin/bookings/:id/cancel</span><span class="desc">Force-cancel any booking</span></div>
+      <div class="api-row"><span class="method patch">PATCH</span><span class="endpoint">/api/admin/bookings/:id/complete</span><span class="desc">Force-mark booking as completed</span></div>
+      <div class="api-row"><span class="method post">POST</span><span class="endpoint">/api/admin/bookings/:id/note</span><span class="desc">Add admin note to booking record</span></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head">
+      <i class="ti ti-credit-card" style="font-size:16px;color:#A32D2D" aria-hidden="true"></i>
+      <span class="sec-title">Module 05 — Payments & finance</span>
+      <span class="sec-sub">10 endpoints</span>
+    </div>
+    <div class="card">
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/admin/payments</span><span class="desc">All payment transactions (filter: date, status)</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/admin/payments/:id</span><span class="desc">Single payment detail + gateway ref</span></div>
+      <div class="api-row"><span class="method post">POST</span><span class="endpoint">/api/admin/payments/:id/refund</span><span class="desc">Issue manual full or partial refund</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/admin/withdrawals</span><span class="desc">All trainer withdrawal requests</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/admin/withdrawals/pending</span><span class="desc">Pending withdrawal requests only</span></div>
+      <div class="api-row"><span class="method patch">PATCH</span><span class="endpoint">/api/admin/withdrawals/:id/approve</span><span class="desc">Approve withdrawal, trigger payout</span></div>
+      <div class="api-row"><span class="method patch">PATCH</span><span class="endpoint">/api/admin/withdrawals/:id/reject</span><span class="desc">Reject withdrawal with reason</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/admin/wallets</span><span class="desc">All trainer wallet balances</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/admin/wallets/company</span><span class="desc">Company commission wallet balance</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/admin/finance/summary</span><span class="desc">Revenue, commission, payout totals</span></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head">
+      <i class="ti ti-star" style="font-size:16px;color:#A32D2D" aria-hidden="true"></i>
+      <span class="sec-title">Module 06 — Review moderation</span>
+      <span class="sec-sub">6 endpoints</span>
+    </div>
+    <div class="card">
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/admin/reviews</span><span class="desc">All reviews across platform</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/admin/reviews/flagged</span><span class="desc">Reported or auto-flagged reviews</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/admin/reviews/:id</span><span class="desc">Single review detail + trainer reply</span></div>
+      <div class="api-row"><span class="method delete">DELETE</span><span class="endpoint">/api/admin/reviews/:id</span><span class="desc">Remove review (guideline violation)</span></div>
+      <div class="api-row"><span class="method delete">DELETE</span><span class="endpoint">/api/admin/reviews/:id/reply</span><span class="desc">Remove trainer reply</span></div>
+      <div class="api-row"><span class="method patch">PATCH</span><span class="endpoint">/api/admin/reviews/:id/clear-flag</span><span class="desc">Clear flag — review approved as-is</span></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head">
+      <i class="ti ti-chart-bar" style="font-size:16px;color:#A32D2D" aria-hidden="true"></i>
+      <span class="sec-title">Module 07 — Platform analytics</span>
+      <span class="sec-sub">8 endpoints</span>
+    </div>
+    <div class="card">
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/admin/analytics/overview</span><span class="desc">KPIs: users, sessions, revenue, GMV</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/admin/analytics/revenue</span><span class="desc">Monthly revenue + commission chart data</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/admin/analytics/sessions</span><span class="desc">Session volume, completion, cancel rate</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/admin/analytics/users</span><span class="desc">User growth: new trainers vs students</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/admin/analytics/categories</span><span class="desc">Bookings and revenue by category</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/admin/analytics/top-trainers</span><span class="desc">Top trainers by revenue / rating</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/admin/analytics/retention</span><span class="desc">Student repeat booking rate</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/admin/analytics/export</span><span class="desc">Export full report as CSV</span></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head">
+      <i class="ti ti-bell" style="font-size:16px;color:#A32D2D" aria-hidden="true"></i>
+      <span class="sec-title">Module 08 — Notifications & broadcast</span>
+      <span class="sec-sub">6 endpoints</span>
+    </div>
+    <div class="card">
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/admin/notifications</span><span class="desc">Admin in-app notification list</span></div>
+      <div class="api-row"><span class="method patch">PATCH</span><span class="endpoint">/api/admin/notifications/read-all</span><span class="desc">Mark all admin notifications read</span></div>
+      <div class="api-row"><span class="method post">POST</span><span class="endpoint">/api/admin/broadcast</span><span class="desc">Send notification to all users or role</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/admin/broadcast/history</span><span class="desc">Past broadcast messages</span></div>
+      <div class="api-row"><span class="method post">POST</span><span class="endpoint">/api/admin/notifications/email</span><span class="desc">Send manual email to specific user</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/admin/notifications/logs</span><span class="desc">Notification delivery log (sent/failed)</span></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head">
+      <i class="ti ti-settings" style="font-size:16px;color:#A32D2D" aria-hidden="true"></i>
+      <span class="sec-title">Module — Platform settings</span>
+      <span class="sec-sub">7 endpoints</span>
+    </div>
+    <div class="card">
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/admin/settings</span><span class="desc">Get all platform settings</span></div>
+      <div class="api-row"><span class="method put">PUT</span><span class="endpoint">/api/admin/settings/commission</span><span class="desc">Update trainer commission % (default 85/15)</span></div>
+      <div class="api-row"><span class="method put">PUT</span><span class="endpoint">/api/admin/settings/min-price</span><span class="desc">Update minimum allowed session price</span></div>
+      <div class="api-row"><span class="method put">PUT</span><span class="endpoint">/api/admin/settings/categories</span><span class="desc">Add / rename / disable event categories</span></div>
+      <div class="api-row"><span class="method put">PUT</span><span class="endpoint">/api/admin/settings/cancellation-policy</span><span class="desc">Update platform default cancel policy</span></div>
+      <div class="api-row"><span class="method put">PUT</span><span class="endpoint">/api/admin/settings/recording</span><span class="desc">Toggle platform-wide recording allowed</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/admin/settings/audit-log</span><span class="desc">Log of all admin setting changes</span></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head">
+      <i class="ti ti-shield" style="font-size:16px;color:#A32D2D" aria-hidden="true"></i>
+      <span class="sec-title">Auth & admin account</span>
+      <span class="sec-sub">5 endpoints</span>
+    </div>
+    <div class="card">
+      <div class="api-row"><span class="method post">POST</span><span class="endpoint">/api/auth/admin/login</span><span class="desc">Admin login — separate auth flow</span></div>
+      <div class="api-row"><span class="method post">POST</span><span class="endpoint">/api/auth/admin/logout</span><span class="desc">Invalidate admin session token</span></div>
+      <div class="api-row"><span class="method post">POST</span><span class="endpoint">/api/auth/admin/refresh</span><span class="desc">Refresh admin JWT</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/admin/me</span><span class="desc">Current admin profile</span></div>
+      <div class="api-row"><span class="method patch">PATCH</span><span class="endpoint">/api/admin/me/password</span><span class="desc">Change admin password</span></div>
+    </div>
+  </div>
+
+  <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:8px">
+    <div style="font-size:12.5px;color:var(--color-text-secondary)">Total admin API endpoints</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <span style="font-size:12px;padding:3px 10px;border-radius:20px;background:#E6F1FB;color:#0C447C;font-family:var(--font-mono)">GET 30</span>
+      <span style="font-size:12px;padding:3px 10px;border-radius:20px;background:#EAF3DE;color:#27500A;font-family:var(--font-mono)">POST 7</span>
+      <span style="font-size:12px;padding:3px 10px;border-radius:20px;background:#FAEEDA;color:#633806;font-family:var(--font-mono)">PUT 5</span>
+      <span style="font-size:12px;padding:3px 10px;border-radius:20px;background:#FAEEDA;color:#633806;font-family:var(--font-mono)">PATCH 11</span>
+      <span style="font-size:12px;padding:3px 10px;border-radius:20px;background:#FCEBEB;color:#791F1F;font-family:var(--font-mono)">DELETE 5</span>
+      <span style="font-size:12px;padding:3px 10px;border-radius:20px;background:#FCEBEB;color:#791F1F;font-weight:500">58 total</span>
+    </div>
+  </div>
+
+</div>

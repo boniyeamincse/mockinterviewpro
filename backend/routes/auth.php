@@ -20,4 +20,5 @@ Route::middleware('auth:sanctum')->prefix('auth')->group(function () {
     Route::post('change-password', [AuthController::class, 'changePassword'])->name('auth.change-password');
     Route::post('logout', [AuthController::class, 'logout'])->name('auth.logout');
     Route::post('refresh-token', [AuthController::class, 'refreshToken'])->name('auth.refresh-token');
+    Route::post('refresh', [AuthController::class, 'refreshToken'])->name('auth.refresh');
 });

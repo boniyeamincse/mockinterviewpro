@@ -144,16 +144,16 @@ This section is the development “front door” for the **Task List API** so th
 
 ### Phase 4: Events API (10 tasks)
 
-- [ ] 81. Create events controller (create, list, show)
-- [ ] 82. Test create event endpoint
-- [ ] 83. Test list events with filters
-- [ ] 84. Test event status updates (draft, published, archived)
-- [ ] 85. Test event pagination
-- [ ] 86. Create events migration
+- [x] 81. Create events controller (create, list, show)
+- [x] 82. Test create event endpoint
+- [x] 83. Test list events with filters
+- [x] 84. Test event status updates (draft, published, archived)
+- [x] 85. Test event pagination
+- [x] 86. Create events migration
 - [ ] 87. Setup event caching
-- [ ] 88. Add event search functionality
+- [x] 88. Add event search functionality
 - [ ] 89. Create event seeder
-- [ ] 90. Test get single event details
+- [x] 90. Test get single event details
 
 ### Phase 5: Bookings & Sessions API (10 tasks)
 

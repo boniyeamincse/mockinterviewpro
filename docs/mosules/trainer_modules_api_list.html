@@ -1,0 +1,219 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.sec{margin-bottom:1.5rem}
+.sec-head{display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);margin-bottom:10px}
+.sec-title{font-size:13.5px;font-weight:500;color:var(--color-text-primary)}
+.sec-sub{font-size:12px;color:var(--color-text-secondary);margin-left:auto}
+.api-row{display:flex;align-items:flex-start;gap:10px;padding:9px 12px;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12.5px}
+.api-row:last-child{border-bottom:none}
+.method{font-size:11px;font-weight:500;padding:2px 8px;border-radius:4px;font-family:var(--font-mono);flex-shrink:0;min-width:50px;text-align:center}
+.get{background:#E6F1FB;color:#0C447C}
+.post{background:#EAF3DE;color:#27500A}
+.put{background:#FAEEDA;color:#633806}
+.patch{background:#FAEEDA;color:#633806}
+.delete{background:#FCEBEB;color:#791F1F}
+.endpoint{font-family:var(--font-mono);font-size:12px;color:var(--color-text-primary);flex:1;word-break:break-all}
+.desc{font-size:12px;color:var(--color-text-secondary);min-width:180px;max-width:220px;line-height:1.4}
+.auth-badge{font-size:10px;padding:2px 7px;border-radius:20px;flex-shrink:0}
+.auth-trainer{background:#EEEDFE;color:#3C3489}
+.auth-both{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;margin-bottom:12px}
+.role-header{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.role-icon{width:34px;height:34px;border-radius:var(--border-radius-md);display:flex;align-items:center;justify-content:center}
+.role-title{font-size:14px;font-weight:500;color:var(--color-text-primary)}
+.role-desc{font-size:12px;color:var(--color-text-secondary);margin-top:1px}
+.perm-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;padding:14px 16px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.perm{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--color-text-secondary)}
+.perm-check{width:16px;height:16px;border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.yes{background:#EAF3DE;color:#27500A}
+.no{background:#FCEBEB;color:#791F1F}
+</style>
+
+<h2 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Trainer role permissions and full API endpoint list for InterviewPro platform</h2>
+
+<div style="padding:1.5rem 0 0">
+
+  <div style="margin-bottom:1.5rem">
+    <div style="font-size:18px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px">Trainer — role & API reference</div>
+    <div style="font-size:13px;color:var(--color-text-secondary)">All modules, permissions, and REST endpoints for the trainer role</div>
+  </div>
+
+  <div class="card" style="margin-bottom:1.5rem">
+    <div class="role-header">
+      <div class="role-icon" style="background:#E6F1FB"><i class="ti ti-user-check" style="font-size:18px;color:#0C447C" aria-hidden="true"></i></div>
+      <div>
+        <div class="role-title">Trainer</div>
+        <div class="role-desc">Approved expert who creates and delivers mock interview sessions</div>
+      </div>
+      <span style="margin-left:auto;font-size:11px;padding:3px 10px;border-radius:20px;background:#EEEDFE;color:#3C3489;font-weight:500">role: trainer</span>
+    </div>
+    <div class="perm-grid">
+      <div class="perm"><div class="perm-check yes"><i class="ti ti-check" style="font-size:11px" aria-hidden="true"></i></div>Create & manage events</div>
+      <div class="perm"><div class="perm-check yes"><i class="ti ti-check" style="font-size:11px" aria-hidden="true"></i></div>Set availability slots</div>
+      <div class="perm"><div class="perm-check yes"><i class="ti ti-check" style="font-size:11px" aria-hidden="true"></i></div>Join live sessions</div>
+      <div class="perm"><div class="perm-check yes"><i class="ti ti-check" style="font-size:11px" aria-hidden="true"></i></div>View own earnings</div>
+      <div class="perm"><div class="perm-check yes"><i class="ti ti-check" style="font-size:11px" aria-hidden="true"></i></div>Withdraw to bank</div>
+      <div class="perm"><div class="perm-check yes"><i class="ti ti-check" style="font-size:11px" aria-hidden="true"></i></div>Respond to reviews</div>
+      <div class="perm"><div class="perm-check yes"><i class="ti ti-check" style="font-size:11px" aria-hidden="true"></i></div>View own analytics</div>
+      <div class="perm"><div class="perm-check no"><i class="ti ti-x" style="font-size:11px" aria-hidden="true"></i></div>View other trainers</div>
+      <div class="perm"><div class="perm-check no"><i class="ti ti-x" style="font-size:11px" aria-hidden="true"></i></div>Access admin panel</div>
+      <div class="perm"><div class="perm-check no"><i class="ti ti-x" style="font-size:11px" aria-hidden="true"></i></div>Moderate reviews</div>
+      <div class="perm"><div class="perm-check no"><i class="ti ti-x" style="font-size:11px" aria-hidden="true"></i></div>View student payments</div>
+      <div class="perm"><div class="perm-check no"><i class="ti ti-x" style="font-size:11px" aria-hidden="true"></i></div>Platform-wide reports</div>
+    </div>
+    <div style="padding:10px 16px;background:var(--color-background-secondary)">
+      <span style="font-size:12px;color:var(--color-text-secondary)">Auth header required on all endpoints: </span>
+      <span style="font-size:12px;font-family:var(--font-mono);color:var(--color-text-primary)">Authorization: Bearer &lt;jwt_token&gt;</span>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head">
+      <i class="ti ti-calendar-event" style="font-size:16px;color:#0C447C" aria-hidden="true"></i>
+      <span class="sec-title">Module 01 — Event & session creation</span>
+      <span class="sec-sub">7 endpoints</span>
+    </div>
+    <div class="card">
+      <div class="api-row"><span class="method post">POST</span><span class="endpoint">/api/trainer/events</span><span class="desc">Create a new event (draft)</span><span class="auth-badge auth-trainer">trainer</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/trainer/events</span><span class="desc">List all own events (draft + published)</span><span class="auth-badge auth-trainer">trainer</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/trainer/events/:id</span><span class="desc">Get single event detail</span><span class="auth-badge auth-trainer">trainer</span></div>
+      <div class="api-row"><span class="method put">PUT</span><span class="endpoint">/api/trainer/events/:id</span><span class="desc">Update event info, pricing, structure</span><span class="auth-badge auth-trainer">trainer</span></div>
+      <div class="api-row"><span class="method patch">PATCH</span><span class="endpoint">/api/trainer/events/:id/publish</span><span class="desc">Publish draft to marketplace</span><span class="auth-badge auth-trainer">trainer</span></div>
+      <div class="api-row"><span class="method patch">PATCH</span><span class="endpoint">/api/trainer/events/:id/unpublish</span><span class="desc">Pull event back to draft</span><span class="auth-badge auth-trainer">trainer</span></div>
+      <div class="api-row"><span class="method delete">DELETE</span><span class="endpoint">/api/trainer/events/:id</span><span class="desc">Delete event (only if 0 bookings)</span><span class="auth-badge auth-trainer">trainer</span></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head">
+      <i class="ti ti-calendar" style="font-size:16px;color:#0C447C" aria-hidden="true"></i>
+      <span class="sec-title">Module 01b — Availability & slots</span>
+      <span class="sec-sub">5 endpoints</span>
+    </div>
+    <div class="card">
+      <div class="api-row"><span class="method post">POST</span><span class="endpoint">/api/trainer/events/:id/slots</span><span class="desc">Add available time slots to event</span><span class="auth-badge auth-trainer">trainer</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/trainer/events/:id/slots</span><span class="desc">List all slots (open + booked)</span><span class="auth-badge auth-trainer">trainer</span></div>
+      <div class="api-row"><span class="method delete">DELETE</span><span class="endpoint">/api/trainer/slots/:slotId</span><span class="desc">Remove an open slot (not booked)</span><span class="auth-badge auth-trainer">trainer</span></div>
+      <div class="api-row"><span class="method post">POST</span><span class="endpoint">/api/trainer/availability/block</span><span class="desc">Block dates (unavailable)</span><span class="auth-badge auth-trainer">trainer</span></div>
+      <div class="api-row"><span class="method delete">DELETE</span><span class="endpoint">/api/trainer/availability/block/:id</span><span class="desc">Remove a blocked date</span><span class="auth-badge auth-trainer">trainer</span></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head">
+      <i class="ti ti-calendar-check" style="font-size:16px;color:#0C447C" aria-hidden="true"></i>
+      <span class="sec-title">Module 03 — Bookings (trainer view)</span>
+      <span class="sec-sub">5 endpoints</span>
+    </div>
+    <div class="card">
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/trainer/bookings</span><span class="desc">List all bookings (upcoming + past)</span><span class="auth-badge auth-trainer">trainer</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/trainer/bookings/:bookingId</span><span class="desc">Get single booking detail</span><span class="auth-badge auth-trainer">trainer</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/trainer/bookings/today</span><span class="desc">Today's session list</span><span class="auth-badge auth-trainer">trainer</span></div>
+      <div class="api-row"><span class="method patch">PATCH</span><span class="endpoint">/api/trainer/bookings/:id/cancel</span><span class="desc">Cancel a booking (triggers refund)</span><span class="auth-badge auth-trainer">trainer</span></div>
+      <div class="api-row"><span class="method patch">PATCH</span><span class="endpoint">/api/trainer/bookings/:id/complete</span><span class="desc">Mark session as completed</span><span class="auth-badge auth-trainer">trainer</span></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head">
+      <i class="ti ti-video" style="font-size:16px;color:#0C447C" aria-hidden="true"></i>
+      <span class="sec-title">Module 04 — Live video session</span>
+      <span class="sec-sub">4 endpoints</span>
+    </div>
+    <div class="card">
+      <div class="api-row"><span class="method post">POST</span><span class="endpoint">/api/sessions/:bookingId/join</span><span class="desc">Generate video room token for trainer</span><span class="auth-badge auth-both">trainer + student</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/sessions/:bookingId/status</span><span class="desc">Room status (waiting / live / ended)</span><span class="auth-badge auth-both">trainer + student</span></div>
+      <div class="api-row"><span class="method post">POST</span><span class="endpoint">/api/sessions/:bookingId/end</span><span class="desc">End the session room</span><span class="auth-badge auth-trainer">trainer</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/sessions/:bookingId/recording</span><span class="desc">Get recording URL (if enabled)</span><span class="auth-badge auth-both">trainer + student</span></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head">
+      <i class="ti ti-wallet" style="font-size:16px;color:#0C447C" aria-hidden="true"></i>
+      <span class="sec-title">Module 05 — Wallet & earnings</span>
+      <span class="sec-sub">6 endpoints</span>
+    </div>
+    <div class="card">
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/trainer/wallet</span><span class="desc">Wallet balance + pending amount</span><span class="auth-badge auth-trainer">trainer</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/trainer/wallet/transactions</span><span class="desc">Full earnings history</span><span class="auth-badge auth-trainer">trainer</span></div>
+      <div class="api-row"><span class="method post">POST</span><span class="endpoint">/api/trainer/wallet/withdraw</span><span class="desc">Request withdrawal to bank</span><span class="auth-badge auth-trainer">trainer</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/trainer/wallet/withdrawals</span><span class="desc">Withdrawal request history + status</span><span class="auth-badge auth-trainer">trainer</span></div>
+      <div class="api-row"><span class="method post">POST</span><span class="endpoint">/api/trainer/bank-account</span><span class="desc">Save bank / bKash account info</span><span class="auth-badge auth-trainer">trainer</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/trainer/bank-account</span><span class="desc">Get saved bank account info</span><span class="auth-badge auth-trainer">trainer</span></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head">
+      <i class="ti ti-star" style="font-size:16px;color:#0C447C" aria-hidden="true"></i>
+      <span class="sec-title">Module 06 — Reviews</span>
+      <span class="sec-sub">3 endpoints</span>
+    </div>
+    <div class="card">
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/trainer/reviews</span><span class="desc">All reviews received (paginated)</span><span class="auth-badge auth-trainer">trainer</span></div>
+      <div class="api-row"><span class="method post">POST</span><span class="endpoint">/api/trainer/reviews/:reviewId/reply</span><span class="desc">Post public reply to a review</span><span class="auth-badge auth-trainer">trainer</span></div>
+      <div class="api-row"><span class="method put">PUT</span><span class="endpoint">/api/trainer/reviews/:reviewId/reply</span><span class="desc">Edit existing reply</span><span class="auth-badge auth-trainer">trainer</span></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head">
+      <i class="ti ti-chart-bar" style="font-size:16px;color:#0C447C" aria-hidden="true"></i>
+      <span class="sec-title">Module 07 — Analytics</span>
+      <span class="sec-sub">5 endpoints</span>
+    </div>
+    <div class="card">
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/trainer/analytics/overview</span><span class="desc">Total sessions, earnings, avg rating</span><span class="auth-badge auth-trainer">trainer</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/trainer/analytics/revenue</span><span class="desc">Monthly revenue chart data</span><span class="auth-badge auth-trainer">trainer</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/trainer/analytics/sessions</span><span class="desc">Sessions by category, completion rate</span><span class="auth-badge auth-trainer">trainer</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/trainer/analytics/events/:id</span><span class="desc">Per-event: views, bookings, rating</span><span class="auth-badge auth-trainer">trainer</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/trainer/analytics/ratings</span><span class="desc">Rating trend over time</span><span class="auth-badge auth-trainer">trainer</span></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head">
+      <i class="ti ti-bell" style="font-size:16px;color:#0C447C" aria-hidden="true"></i>
+      <span class="sec-title">Module 08 — Notifications</span>
+      <span class="sec-sub">4 endpoints</span>
+    </div>
+    <div class="card">
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/trainer/notifications</span><span class="desc">In-app notification list</span><span class="auth-badge auth-trainer">trainer</span></div>
+      <div class="api-row"><span class="method patch">PATCH</span><span class="endpoint">/api/trainer/notifications/:id/read</span><span class="desc">Mark one notification read</span><span class="auth-badge auth-trainer">trainer</span></div>
+      <div class="api-row"><span class="method patch">PATCH</span><span class="endpoint">/api/trainer/notifications/read-all</span><span class="desc">Mark all notifications read</span><span class="auth-badge auth-trainer">trainer</span></div>
+      <div class="api-row"><span class="method put">PUT</span><span class="endpoint">/api/trainer/notifications/preferences</span><span class="desc">Update email / SMS / push settings</span><span class="auth-badge auth-trainer">trainer</span></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head">
+      <i class="ti ti-user-circle" style="font-size:16px;color:#0C447C" aria-hidden="true"></i>
+      <span class="sec-title">Auth & profile</span>
+      <span class="sec-sub">7 endpoints</span>
+    </div>
+    <div class="card">
+      <div class="api-row"><span class="method post">POST</span><span class="endpoint">/api/auth/register</span><span class="desc">Trainer registration (role: trainer)</span><span class="auth-badge auth-both">public</span></div>
+      <div class="api-row"><span class="method post">POST</span><span class="endpoint">/api/auth/login</span><span class="desc">Login, returns JWT token</span><span class="auth-badge auth-both">public</span></div>
+      <div class="api-row"><span class="method post">POST</span><span class="endpoint">/api/auth/logout</span><span class="desc">Invalidate token</span><span class="auth-badge auth-trainer">trainer</span></div>
+      <div class="api-row"><span class="method post">POST</span><span class="endpoint">/api/auth/refresh</span><span class="desc">Refresh access token</span><span class="auth-badge auth-trainer">trainer</span></div>
+      <div class="api-row"><span class="method get">GET</span><span class="endpoint">/api/trainer/profile</span><span class="desc">Get own profile data</span><span class="auth-badge auth-trainer">trainer</span></div>
+      <div class="api-row"><span class="method put">PUT</span><span class="endpoint">/api/trainer/profile</span><span class="desc">Update bio, photo, expertise, links</span><span class="auth-badge auth-trainer">trainer</span></div>
+      <div class="api-row"><span class="method patch">PATCH</span><span class="endpoint">/api/trainer/profile/password</span><span class="desc">Change password</span><span class="auth-badge auth-trainer">trainer</span></div>
+    </div>
+  </div>
+
+  <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:8px">
+    <div style="font-size:12.5px;color:var(--color-text-secondary)">Total trainer API endpoints</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <span style="font-size:12px;padding:3px 10px;border-radius:20px;background:#EAF3DE;color:#27500A;font-family:var(--font-mono)">GET 22</span>
+      <span style="font-size:12px;padding:3px 10px;border-radius:20px;background:#EAF3DE;color:#27500A;font-family:var(--font-mono)">POST 12</span>
+      <span style="font-size:12px;padding:3px 10px;border-radius:20px;background:#FAEEDA;color:#633806;font-family:var(--font-mono)">PUT 4</span>
+      <span style="font-size:12px;padding:3px 10px;border-radius:20px;background:#FAEEDA;color:#633806;font-family:var(--font-mono)">PATCH 9</span>
+      <span style="font-size:12px;padding:3px 10px;border-radius:20px;background:#FCEBEB;color:#791F1F;font-family:var(--font-mono)">DELETE 3</span>
+      <span style="font-size:12px;padding:3px 10px;border-radius:20px;background:#EEEDFE;color:#3C3489;font-weight:500">46 total</span>
+    </div>
+  </div>
+
+</div>
