@@ -30,6 +30,7 @@ Route::get('events', [EventController::class, 'index']);
 Route::get('events/search', [StudentDiscoveryController::class, 'search']);
 Route::get('events/{id}/slots', [StudentDiscoveryController::class, 'eventSlots']);
 Route::get('events/{event}', [EventController::class, 'show']);
+Route::get('trainers', [StudentDiscoveryController::class, 'trainers']);
 Route::get('trainers/{id}/profile', [StudentDiscoveryController::class, 'trainerProfile']);
 Route::get('trainers/{id}/reviews', [StudentDiscoveryController::class, 'trainerReviews']);
 

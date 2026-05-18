@@ -312,3 +312,171 @@ export async function updateNotificationPreferences(payload) {
     body: payload,
   });
 }
+
+// ─── Trainer API ─────────────────────────────────────────────────────────────
+
+export async function getTrainers({ q = '', category = '', maxPrice } = {}) {
+  const params = new URLSearchParams();
+  if (q) params.set('q', q);
+  if (category && category !== 'all') params.set('category', category);
+  if (maxPrice != null) params.set('max_price', maxPrice);
+  const suffix = params.toString() ? `?${params.toString()}` : '';
+  return request(`/trainers${suffix}`, { auth: false });
+}
+
+export async function getTrainerPublicProfile(id) {
+  return request(`/trainers/${id}/profile`, { auth: false });
+}
+
+export async function getTrainerPublicReviews(id) {
+  return request(`/trainers/${id}/reviews`, { auth: false });
+}
+
+export async function getTrainerProfile() {
+  return request('/trainer/profile');
+}
+
+export async function updateTrainerProfile(payload) {
+  return request('/trainer/profile', { method: 'PUT', body: payload });
+}
+
+export async function changeTrainerPassword(payload) {
+  return request('/trainer/profile/password', { method: 'PATCH', body: payload });
+}
+
+export async function getTrainerBookings(params = {}) {
+  const qs = new URLSearchParams(params).toString();
+  return request(`/trainer/bookings${qs ? `?${qs}` : ''}`);
+}
+
+export async function getTrainerBookingsToday() {
+  return request('/trainer/bookings/today');
+}
+
+export async function getTrainerBooking(id) {
+  return request(`/trainer/bookings/${id}`);
+}
+
+export async function cancelTrainerBooking(id, payload) {
+  return request(`/trainer/bookings/${id}/cancel`, { method: 'PATCH', body: payload });
+}
+
+export async function completeTrainerBooking(id) {
+  return request(`/trainer/bookings/${id}/complete`, { method: 'PATCH' });
+}
+
+export async function getTrainerEvents() {
+  return request('/trainer/events');
+}
+
+export async function createTrainerEvent(payload) {
+  return request('/trainer/events', { method: 'POST', body: payload });
+}
+
+export async function getTrainerEvent(id) {
+  return request(`/trainer/events/${id}`);
+}
+
+export async function updateTrainerEvent(id, payload) {
+  return request(`/trainer/events/${id}`, { method: 'PUT', body: payload });
+}
+
+export async function publishTrainerEvent(id) {
+  return request(`/trainer/events/${id}/publish`, { method: 'PATCH' });
+}
+
+export async function unpublishTrainerEvent(id) {
+  return request(`/trainer/events/${id}/unpublish`, { method: 'PATCH' });
+}
+
+export async function deleteTrainerEvent(id) {
+  return request(`/trainer/events/${id}`, { method: 'DELETE' });
+}
+
+export async function addTrainerEventSlots(id, payload) {
+  return request(`/trainer/events/${id}/slots`, { method: 'POST', body: payload });
+}
+
+export async function getTrainerEventSlots(id) {
+  return request(`/trainer/events/${id}/slots`);
+}
+
+export async function deleteTrainerSlot(slotId) {
+  return request(`/trainer/slots/${slotId}`, { method: 'DELETE' });
+}
+
+export async function blockTrainerAvailability(payload) {
+  return request('/trainer/availability/block', { method: 'POST', body: payload });
+}
+
+export async function unblockTrainerAvailability(id) {
+  return request(`/trainer/availability/block/${id}`, { method: 'DELETE' });
+}
+
+export async function getTrainerAnalyticsOverview() {
+  return request('/trainer/analytics/overview');
+}
+
+export async function getTrainerAnalyticsRevenue() {
+  return request('/trainer/analytics/revenue');
+}
+
+export async function getTrainerAnalyticsSessions() {
+  return request('/trainer/analytics/sessions');
+}
+
+export async function getTrainerAnalyticsRatings() {
+  return request('/trainer/analytics/ratings');
+}
+
+export async function getTrainerWallet() {
+  return request('/trainer/wallet');
+}
+
+export async function getTrainerWalletTransactions() {
+  return request('/trainer/wallet/transactions');
+}
+
+export async function requestTrainerWithdrawal(payload) {
+  return request('/trainer/wallet/withdraw', { method: 'POST', body: payload });
+}
+
+export async function getTrainerWithdrawals() {
+  return request('/trainer/wallet/withdrawals');
+}
+
+export async function saveTrainerBankAccount(payload) {
+  return request('/trainer/bank-account', { method: 'POST', body: payload });
+}
+
+export async function getTrainerBankAccount() {
+  return request('/trainer/bank-account');
+}
+
+export async function getTrainerReviews() {
+  return request('/trainer/reviews');
+}
+
+export async function replyToTrainerReview(reviewId, payload) {
+  return request(`/trainer/reviews/${reviewId}/reply`, { method: 'POST', body: payload });
+}
+
+export async function updateTrainerReviewReply(reviewId, payload) {
+  return request(`/trainer/reviews/${reviewId}/reply`, { method: 'PUT', body: payload });
+}
+
+export async function getTrainerNotifications() {
+  return request('/trainer/notifications');
+}
+
+export async function markTrainerNotificationRead(id) {
+  return request(`/trainer/notifications/${id}/read`, { method: 'PATCH' });
+}
+
+export async function markAllTrainerNotificationsRead() {
+  return request('/trainer/notifications/read-all', { method: 'PATCH' });
+}
+
+export async function updateTrainerNotificationPreferences(payload) {
+  return request('/trainer/notifications/preferences', { method: 'PUT', body: payload });
+}

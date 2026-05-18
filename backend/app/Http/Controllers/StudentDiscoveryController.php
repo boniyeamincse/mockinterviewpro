@@ -93,6 +93,61 @@ class StudentDiscoveryController extends Controller
         return response()->json(['success' => true, 'message' => 'Wishlist retrieved', 'data' => $events]);
     }
 
+    public function trainers(Request $request): JsonResponse
+    {
+        $search = (string) $request->get('q', '');
+        $category = (string) $request->get('category', '');
+        $maxPrice = $request->get('max_price');
+
+        $trainers = DB::table('users')
+            ->where('user_type', 'trainer')
+            ->where('is_active', true)
+            ->select('id', 'name', 'bio', 'profile_image', 'expertise', 'experience_years', 'linkedin_url')
+            ->when($search, function ($q) use ($search) {
+                $q->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                      ->orWhere('bio', 'like', "%{$search}%");
+                });
+            })
+            ->get();
+
+        $result = $trainers->map(function ($trainer) use ($category) {
+            $trainer->expertise = $trainer->expertise ? json_decode($trainer->expertise, true) : [];
+            $trainer->avg_rating = round((float) DB::table('reviews')->where('trainer_id', $trainer->id)->avg('rating'), 2);
+            $trainer->review_count = (int) DB::table('reviews')->where('trainer_id', $trainer->id)->count();
+
+            $eventQuery = DB::table('events')
+                ->where('user_id', $trainer->id)
+                ->where('status', 'published');
+            if ($category && $category !== 'all') {
+                $eventQuery->where('category', $category);
+            }
+
+            $trainer->min_price_bdt = (int) ($eventQuery->min('price_bdt') ?? 0);
+            $trainer->categories = DB::table('events')
+                ->where('user_id', $trainer->id)
+                ->where('status', 'published')
+                ->distinct()
+                ->pluck('category')
+                ->toArray();
+
+            return $trainer;
+        });
+
+        if ($maxPrice !== null) {
+            $result = $result->filter(fn ($t) => !$t->min_price_bdt || $t->min_price_bdt <= (int) $maxPrice);
+        }
+        if ($category && $category !== 'all') {
+            $result = $result->filter(fn ($t) => in_array($category, $t->categories));
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Trainers retrieved',
+            'data' => $result->values(),
+        ]);
+    }
+
     public function trainerProfile(int $id): JsonResponse
     {
         $trainer = DB::table('users')

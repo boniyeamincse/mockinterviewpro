@@ -24,6 +24,14 @@ import {
   Play,
   Briefcase
 } from 'lucide-react';
+import {
+  getTrainerProfile,
+  getTrainerAnalyticsOverview,
+  getTrainerBookingsToday,
+  getTrainerWallet,
+  getTrainerWalletTransactions,
+  logoutUser,
+} from '../lib/api';
 
 const TrainerDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -36,6 +44,10 @@ const TrainerDashboard = () => {
     writtenNotes: ''
   });
   const [submittedFeedback, setSubmittedFeedback] = useState(false);
+  const [analytics, setAnalytics] = useState(null);
+  const [todayBookings, setTodayBookings] = useState([]);
+  const [wallet, setWallet] = useState(null);
+  const [transactions, setTransactions] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -55,9 +67,9 @@ const TrainerDashboard = () => {
   });
 
   const getGreeting = () => {
-    if (!currentUser) return 'Good morning, Rafiq';
+    if (!currentUser) return 'Good morning';
     const hr = currentTime.getHours();
-    const name = currentUser.name.includes('Michael') ? 'Rafiq' : currentUser.name.split(' ')[0];
+    const name = currentUser.name?.split(' ')[0] || 'Trainer';
     if (hr < 12) return `Good morning, ${name}`;
     if (hr < 17) return `Good afternoon, ${name}`;
     return `Good evening, ${name}`;
@@ -71,14 +83,22 @@ const TrainerDashboard = () => {
         navigate('/dashboard');
       } else {
         setCurrentUser(parsed);
+        // Fetch live trainer data
+        getTrainerProfile().then(res => res?.data && setCurrentUser(prev => ({ ...prev, ...res.data }))).catch(() => {});
+        getTrainerAnalyticsOverview().then(res => res?.data && setAnalytics(res.data)).catch(() => {});
+        getTrainerBookingsToday().then(res => res?.data && setTodayBookings(Array.isArray(res.data) ? res.data : [])).catch(() => {});
+        getTrainerWallet().then(res => res?.data && setWallet(res.data)).catch(() => {});
+        getTrainerWalletTransactions().then(res => res?.data?.data && setTransactions(res.data.data)).catch(() => {});
       }
     } else {
       navigate('/login');
     }
   }, [navigate]);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try { await logoutUser(); } catch (_) {}
     localStorage.removeItem('user');
+    localStorage.removeItem('token');
     setCurrentUser(null);
     navigate('/login');
   };
@@ -147,7 +167,7 @@ const TrainerDashboard = () => {
               color: 'white',
               boxShadow: '0 8px 24px rgba(139, 92, 246, 0.3)'
             }}>
-              MC
+              {currentUser?.name?.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase() || 'TR'}
             </div>
             <div style={{
               position: 'absolute',
@@ -162,7 +182,7 @@ const TrainerDashboard = () => {
             }}></div>
           </div>
           <div>
-            <div style={{ fontWeight: 700, fontSize: '1rem', letterSpacing: '0.5px' }}>Michael Chang</div>
+            <div style={{ fontWeight: 700, fontSize: '1rem', letterSpacing: '0.5px' }}>{currentUser?.name || 'Trainer'}</div>
             <div style={{ fontSize: '0.75rem', color: 'var(--accent-cyan)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', marginTop: '4px' }}>Verified Expert</div>
           </div>
         </div>
@@ -357,7 +377,7 @@ const TrainerDashboard = () => {
                   <TrendingUp size={16} style={{ color: 'var(--accent-purple)' }} />
                   <span>Total earned</span>
                 </div>
-                <div style={{ fontSize: '2rem', fontWeight: 800, color: 'white' }}>47,650 BDT</div>
+                <div style={{ fontSize: '2rem', fontWeight: 800, color: 'white' }}>{analytics ? `${Number(analytics.total_earnings_bdt || 0).toLocaleString()} BDT` : '— BDT'}</div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '10px', fontSize: '0.8rem', color: '#10b981', fontWeight: 600 }}>
                   <TrendingUp size={14} /> <span>+12% this month</span>
                 </div>
@@ -369,9 +389,9 @@ const TrainerDashboard = () => {
                   <Video size={16} style={{ color: 'var(--accent-cyan)' }} />
                   <span>Sessions done</span>
                 </div>
-                <div style={{ fontSize: '2rem', fontWeight: 800, color: 'white' }}>63</div>
+                <div style={{ fontSize: '2rem', fontWeight: 800, color: 'white' }}>{analytics ? analytics.completed_sessions ?? '—' : '—'}</div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '10px', fontSize: '0.8rem', color: '#10b981', fontWeight: 600 }}>
-                  <TrendingUp size={14} /> <span>+8 this month</span>
+                  <TrendingUp size={14} /> <span>completion rate: {analytics?.completion_rate ?? '—'}%</span>
                 </div>
               </div>
 
@@ -381,9 +401,9 @@ const TrainerDashboard = () => {
                   <Award size={16} style={{ color: '#eab308' }} />
                   <span>Avg rating</span>
                 </div>
-                <div style={{ fontSize: '2rem', fontWeight: 800, color: 'white' }}>4.8</div>
+                <div style={{ fontSize: '2rem', fontWeight: 800, color: 'white' }}>{analytics?.avg_rating ?? '—'}</div>
                 <div style={{ marginTop: '10px', fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 500 }}>
-                  from 51 reviews
+                  from {analytics?.total_sessions ?? '—'} total sessions
                 </div>
               </div>
 
@@ -393,7 +413,7 @@ const TrainerDashboard = () => {
                   <Clock size={16} style={{ color: 'var(--accent-cyan)' }} />
                   <span>Upcoming</span>
                 </div>
-                <div style={{ fontSize: '2rem', fontWeight: 800, color: 'white' }}>7</div>
+                <div style={{ fontSize: '2rem', fontWeight: 800, color: 'white' }}>{todayBookings.length}</div>
                 <div style={{ marginTop: '10px', fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 500 }}>
                   next 7 days
                 </div>
@@ -412,133 +432,34 @@ const TrainerDashboard = () => {
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
-                  {/* Tahmid Islam */}
-                  <div style={{ 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    justifyContent: 'space-between',
-                    paddingBottom: '16px',
-                    borderBottom: '1px solid rgba(255, 255, 255, 0.05)'
-                  }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                      <div style={{
-                        width: '44px',
-                        height: '44px',
-                        borderRadius: '50%',
-                        background: 'rgba(34, 197, 94, 0.1)',
-                        color: '#22c55e',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontWeight: 700,
-                        fontSize: '0.95rem'
-                      }}>
-                        TI
+                  {todayBookings.length === 0 ? (
+                    <p style={{ color: 'var(--text-secondary)', textAlign: 'center', margin: '16px 0' }}>No sessions scheduled for today.</p>
+                  ) : todayBookings.map((booking, idx) => {
+                    const initials = (booking.student_name || booking.user_name || 'ST').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+                    const colors = ['rgba(34, 197, 94, 0.1)', 'rgba(14, 165, 233, 0.1)', 'rgba(234, 179, 8, 0.1)'];
+                    const textColors = ['#22c55e', 'var(--accent-cyan)', '#eab308'];
+                    const color = colors[idx % colors.length];
+                    const textColor = textColors[idx % textColors.length];
+                    const time = booking.scheduled_at ? new Date(booking.scheduled_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }) : '—';
+                    return (
+                      <div key={booking.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '16px', borderBottom: idx < todayBookings.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                          <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: color, color: textColor, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '0.95rem' }}>
+                            {initials}
+                          </div>
+                          <div>
+                            <h4 style={{ margin: 0, fontSize: '1rem', color: 'white', fontWeight: 600 }}>{booking.student_name || booking.user_name || 'Student'}</h4>
+                            <p style={{ margin: '4px 0 0 0', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
+                              {time} • {booking.duration_minutes || 60} min
+                            </p>
+                          </div>
+                        </div>
+                        <span style={{ fontSize: '0.75rem', padding: '4px 12px', borderRadius: '6px', background: 'rgba(34, 197, 94, 0.12)', color: '#22c55e', border: '1px solid rgba(34, 197, 94, 0.2)', fontWeight: 600 }}>
+                          {booking.status || 'Confirmed'}
+                        </span>
                       </div>
-                      <div>
-                        <h4 style={{ margin: 0, fontSize: '1rem', color: 'white', fontWeight: 600 }}>Tahmid Islam</h4>
-                        <p style={{ margin: '4px 0 0 0', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-                          10:00 AM • 60 min • Software Engineering
-                        </p>
-                      </div>
-                    </div>
-                    <span style={{ 
-                      fontSize: '0.75rem', 
-                      padding: '4px 12px', 
-                      borderRadius: '6px', 
-                      background: 'rgba(34, 197, 94, 0.12)', 
-                      color: '#22c55e', 
-                      border: '1px solid rgba(34, 197, 94, 0.2)',
-                      fontWeight: 600
-                    }}>
-                      Confirmed
-                    </span>
-                  </div>
-
-                  {/* Nadia Sultana */}
-                  <div style={{ 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    justifyContent: 'space-between',
-                    paddingBottom: '16px',
-                    borderBottom: '1px solid rgba(255, 255, 255, 0.05)'
-                  }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                      <div style={{
-                        width: '44px',
-                        height: '44px',
-                        borderRadius: '50%',
-                        background: 'rgba(14, 165, 233, 0.1)',
-                        color: 'var(--accent-cyan)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontWeight: 700,
-                        fontSize: '0.95rem'
-                      }}>
-                        NS
-                      </div>
-                      <div>
-                        <h4 style={{ margin: 0, fontSize: '1rem', color: 'white', fontWeight: 600 }}>Nadia Sultana</h4>
-                        <p style={{ margin: '4px 0 0 0', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-                          2:30 PM • 45 min • Behavioural
-                        </p>
-                      </div>
-                    </div>
-                    <span style={{ 
-                      fontSize: '0.75rem', 
-                      padding: '4px 12px', 
-                      borderRadius: '6px', 
-                      background: 'rgba(34, 197, 94, 0.12)', 
-                      color: '#22c55e', 
-                      border: '1px solid rgba(34, 197, 94, 0.2)',
-                      fontWeight: 600
-                    }}>
-                      Confirmed
-                    </span>
-                  </div>
-
-                  {/* Mehedi Hasan */}
-                  <div style={{ 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    justifyContent: 'space-between'
-                  }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                      <div style={{
-                        width: '44px',
-                        height: '44px',
-                        borderRadius: '50%',
-                        background: 'rgba(234, 179, 8, 0.1)',
-                        color: '#eab308',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontWeight: 700,
-                        fontSize: '0.95rem'
-                      }}>
-                        MH
-                      </div>
-                      <div>
-                        <h4 style={{ margin: 0, fontSize: '1rem', color: 'white', fontWeight: 600 }}>Mehedi Hasan</h4>
-                        <p style={{ margin: '4px 0 0 0', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-                          5:00 PM • 60 min • Data Science
-                        </p>
-                      </div>
-                    </div>
-                    <span style={{ 
-                      fontSize: '0.75rem', 
-                      padding: '4px 12px', 
-                      borderRadius: '6px', 
-                      background: 'rgba(234, 179, 8, 0.12)', 
-                      color: '#eab308', 
-                      border: '1px solid rgba(234, 179, 8, 0.2)',
-                      fontWeight: 600
-                    }}>
-                      In 2 hrs
-                    </span>
-                  </div>
-                </div>
+                    );
+                  })}
               </div>
 
               {/* Monthly Revenue (BDT) */}
@@ -593,11 +514,11 @@ const TrainerDashboard = () => {
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '16px', paddingTop: '10px' }}>
                   <div>
                     <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 500 }}>This month</div>
-                    <div style={{ fontSize: '1.4rem', fontWeight: 850, color: 'white', marginTop: '4px' }}>9,350 BDT</div>
+                    <div style={{ fontSize: '1.4rem', fontWeight: 850, color: 'white', marginTop: '4px' }}>{wallet ? `${Number(wallet.available_balance_bdt || 0).toLocaleString()} BDT` : '— BDT'}</div>
                   </div>
                   <div style={{ textAlign: 'right' }}>
                     <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 500 }}>Pending withdrawal</div>
-                    <div style={{ fontSize: '1.4rem', fontWeight: 850, color: '#22c55e', marginTop: '4px' }}>12,750 BDT</div>
+                    <div style={{ fontSize: '1.4rem', fontWeight: 850, color: '#22c55e', marginTop: '4px' }}>{wallet ? `${Number(wallet.pending_withdrawal_bdt || 0).toLocaleString()} BDT` : '— BDT'}</div>
                   </div>
                 </div>
               </div>
@@ -842,31 +763,28 @@ const TrainerDashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.03)', background: 'rgba(255,255,255,0.01)' }}>
-                    <td style={{ padding: '20px 16px', fontWeight: 600 }}>Boni Yeamin</td>
-                    <td style={{ padding: '20px 16px' }}>System Design Mock</td>
-                    <td style={{ padding: '20px 16px' }}>$150.00</td>
-                    <td style={{ padding: '20px 16px', color: 'var(--accent-cyan)' }}>$22.50</td>
-                    <td style={{ padding: '20px 16px', color: '#22c55e', fontWeight: 700 }}>$127.50</td>
-                    <td style={{ padding: '20px 16px' }}>
-                      <span style={{ fontSize: '0.75rem', padding: '4px 12px', borderRadius: '100px', background: 'rgba(14, 165, 233, 0.15)', color: 'var(--accent-cyan)', border: '1px solid rgba(14,165,233,0.3)', fontWeight: 600 }}>
-                        Active Escrow Hold
-                      </span>
-                    </td>
-                  </tr>
-                  <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.03)' }}>
-                    <td style={{ padding: '20px 16px', fontWeight: 600 }}>Alex Rivera</td>
-                    <td style={{ padding: '20px 16px' }}>Coding & Algorithms</td>
-                    <td style={{ padding: '20px 16px' }}>$150.00</td>
-                    <td style={{ padding: '20px 16px', color: 'var(--accent-cyan)' }}>$22.50</td>
-                    <td style={{ padding: '20px 16px', color: '#22c55e', fontWeight: 700 }}>$127.50</td>
-                    <td style={{ padding: '20px 16px' }}>
-                      <span style={{ fontSize: '0.75rem', padding: '4px 12px', borderRadius: '100px', background: 'rgba(34, 197, 94, 0.15)', color: '#22c55e', border: '1px solid rgba(34,197,94,0.3)', fontWeight: 600 }}>
-                        Released to Ledger
-                      </span>
-                    </td>
-                  </tr>
-                </tbody>
+                  {transactions.length === 0 ? (
+                    <tr><td colSpan={6} style={{ padding: '24px', textAlign: 'center', color: 'var(--text-secondary)' }}>No transactions found.</td></tr>
+                  ) : transactions.map(tx => {
+                    const gross = Number(tx.amount_bdt || 0);
+                    const commission = Math.round(gross * 0.15);
+                    const net = gross - commission;
+                    const isReleased = tx.type === 'credit';
+                    return (
+                      <tr key={tx.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.03)', background: 'rgba(255,255,255,0.01)' }}>
+                        <td style={{ padding: '20px 16px', fontWeight: 600 }}>{tx.description || '—'}</td>
+                        <td style={{ padding: '20px 16px' }}>{tx.reference_type || '—'}</td>
+                        <td style={{ padding: '20px 16px' }}>{gross.toLocaleString()} BDT</td>
+                        <td style={{ padding: '20px 16px', color: 'var(--accent-cyan)' }}>{commission.toLocaleString()} BDT</td>
+                        <td style={{ padding: '20px 16px', color: '#22c55e', fontWeight: 700 }}>{net.toLocaleString()} BDT</td>
+                        <td style={{ padding: '20px 16px' }}>
+                          <span style={{ fontSize: '0.75rem', padding: '4px 12px', borderRadius: '100px', background: isReleased ? 'rgba(34,197,94,0.15)' : 'rgba(14,165,233,0.15)', color: isReleased ? '#22c55e' : 'var(--accent-cyan)', border: isReleased ? '1px solid rgba(34,197,94,0.3)' : '1px solid rgba(14,165,233,0.3)', fontWeight: 600 }}>
+                            {isReleased ? 'Released to Ledger' : 'Active Escrow Hold'}
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })}
               </table>
             </div>
           </div>

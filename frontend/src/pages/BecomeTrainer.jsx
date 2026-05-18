@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
 import { DollarSign, Shield, Award, Calendar, ChevronRight, CheckCircle2, User, Briefcase, FileText, Sparkles } from 'lucide-react';
+import { registerUser, updateTrainerProfile } from '../lib/api';
 
 const BecomeTrainer = () => {
   const [step, setStep] = useState(1);
   const [submitted, setSubmitted] = useState(false);
-  
-  // Form State
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    password: '',
+    password_confirmation: '',
     company: '',
     role: '',
     linkedin: '',
@@ -24,12 +28,47 @@ const BecomeTrainer = () => {
 
   const handleNext = (e) => {
     e.preventDefault();
+    if (formData.password !== formData.password_confirmation) {
+      setError('Passwords do not match.');
+      return;
+    }
+    setError(null);
     setStep(2);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
+    setLoading(true);
+    setError(null);
+    try {
+      await registerUser({
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        password_confirmation: formData.password_confirmation,
+        user_type: 'trainer',
+      });
+
+      const expertiseArray = formData.expertise
+        ? formData.expertise.split(',').map(s => s.trim()).filter(Boolean)
+        : [];
+
+      try {
+        await updateTrainerProfile({
+          bio: formData.bio,
+          expertise: expertiseArray,
+          linkedin_url: formData.linkedin || undefined,
+        });
+      } catch {
+        // profile update failure is non-fatal; account already created
+      }
+
+      setSubmitted(true);
+    } catch (err) {
+      setError(err.message || 'Registration failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -299,6 +338,39 @@ const BecomeTrainer = () => {
                   />
                 </div>
 
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <label style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 500 }}>Password</label>
+                    <input
+                      type="password"
+                      name="password"
+                      placeholder="Min. 8 characters"
+                      value={formData.password}
+                      onChange={handleChange}
+                      required
+                      minLength={8}
+                      style={{ width: '100%', padding: '12px', borderRadius: '8px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border-light)', color: 'white', fontFamily: 'inherit', outline: 'none' }}
+                    />
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <label style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 500 }}>Confirm Password</label>
+                    <input
+                      type="password"
+                      name="password_confirmation"
+                      placeholder="Repeat password"
+                      value={formData.password_confirmation}
+                      onChange={handleChange}
+                      required
+                      minLength={8}
+                      style={{ width: '100%', padding: '12px', borderRadius: '8px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border-light)', color: 'white', fontFamily: 'inherit', outline: 'none' }}
+                    />
+                  </div>
+                </div>
+
+                {error && (
+                  <p style={{ color: '#ef4444', fontSize: '0.85rem', margin: 0 }}>{error}</p>
+                )}
+
                 <button type="submit" className="btn btn-primary" style={{ marginTop: '12px', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
                   Continue to Next Step <ChevronRight size={18} />
                 </button>
@@ -409,13 +481,17 @@ const BecomeTrainer = () => {
                 </div>
 
                 <div style={{ display: 'flex', gap: '12px', marginTop: '12px' }}>
-                  <button type="button" onClick={() => setStep(1)} className="btn btn-secondary" style={{ flex: 1, padding: '12px' }}>
+                  <button type="button" onClick={() => setStep(1)} className="btn btn-secondary" style={{ flex: 1, padding: '12px' }} disabled={loading}>
                     Back
                   </button>
-                  <button type="submit" className="btn btn-primary" style={{ flex: 2, padding: '12px', gap: '8px' }}>
-                    Submit Portal Application <Sparkles size={18} />
+                  <button type="submit" className="btn btn-primary" style={{ flex: 2, padding: '12px', gap: '8px' }} disabled={loading}>
+                    {loading ? 'Submitting...' : <><span>Submit Portal Application</span> <Sparkles size={18} /></>}
                   </button>
                 </div>
+
+                {error && (
+                  <p style={{ color: '#ef4444', fontSize: '0.85rem', margin: 0 }}>{error}</p>
+                )}
               </form>
             )}
 
