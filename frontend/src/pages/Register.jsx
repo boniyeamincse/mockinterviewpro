@@ -11,14 +11,19 @@ const Register = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const targetRole = role === 'student' ? 'Candidate' : 'Trainer';
     const newUser = {
       name,
       email,
-      role: role === 'student' ? 'Candidate' : 'Trainer',
+      role: targetRole,
       joinedDate: new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
     };
     localStorage.setItem('user', JSON.stringify(newUser));
-    navigate('/dashboard');
+    if (targetRole === 'Trainer') {
+      navigate('/trainer/dashboard');
+    } else {
+      navigate('/dashboard');
+    }
   };
 
   return (

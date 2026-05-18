@@ -5,6 +5,7 @@ import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import TrainerDashboard from './pages/TrainerDashboard';
 import FindTrainer from './pages/FindTrainer';
 import BecomeTrainer from './pages/BecomeTrainer';
 
@@ -17,6 +18,7 @@ function App() {
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route path="dashboard" element={<Dashboard />} />
+          <Route path="trainer/dashboard" element={<TrainerDashboard />} />
           <Route path="trainers" element={<FindTrainer />} />
           <Route path="become-trainer" element={<BecomeTrainer />} />
         </Route>

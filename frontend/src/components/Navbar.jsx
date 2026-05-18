@@ -67,8 +67,10 @@ const Navbar = () => {
         
         {currentUser && (
           <>
-            <Link to="/become-trainer" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.9rem', transition: 'color 0.2s' }} onMouseOver={e => e.target.style.color='white'} onMouseOut={e => e.target.style.color='var(--text-secondary)'}>Become a Trainer</Link>
-            <Link to="/dashboard" style={{ color: 'var(--accent-cyan)', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}>
+            {currentUser.role !== 'Trainer' && (
+              <Link to="/become-trainer" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.9rem', transition: 'color 0.2s' }} onMouseOver={e => e.target.style.color='white'} onMouseOut={e => e.target.style.color='var(--text-secondary)'}>Become a Trainer</Link>
+            )}
+            <Link to={currentUser.role === 'Trainer' ? "/trainer/dashboard" : "/dashboard"} style={{ color: 'var(--accent-cyan)', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}>
               <Compass size={16} /> Workspace
             </Link>
           </>

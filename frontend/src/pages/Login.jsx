@@ -9,21 +9,32 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Save active user info based on form inputs (or fallback to Boni if email is boni)
-    const existing = localStorage.getItem('user');
-    let loggedInUser = existing ? JSON.parse(existing) : null;
-    
-    if (!loggedInUser || loggedInUser.email !== email) {
-      loggedInUser = {
-        name: email.includes('boni') ? 'Boni Yeamin' : 'Alex Rivera',
-        email: email,
-        role: 'Candidate',
-        joinedDate: 'May 2026'
-      };
-      localStorage.setItem('user', JSON.stringify(loggedInUser));
+    let loggedInUser = {
+      email: email,
+      joinedDate: 'May 2026'
+    };
+
+    if (email === 'trainer@interviewpro.com') {
+      loggedInUser.name = 'Michael Chang';
+      loggedInUser.role = 'Trainer';
+    } else if (email === 'admin@interviewpro.com') {
+      loggedInUser.name = 'Admin Controller';
+      loggedInUser.role = 'Admin';
+    } else if (email.includes('boni') || email === 'boniyeamin.cse1@gmail.com') {
+      loggedInUser.name = 'Boni Yeamin';
+      loggedInUser.role = 'Candidate';
+    } else {
+      loggedInUser.name = 'Alex Rivera';
+      loggedInUser.role = 'Candidate';
     }
-    
-    navigate('/dashboard');
+
+    localStorage.setItem('user', JSON.stringify(loggedInUser));
+
+    if (loggedInUser.role === 'Trainer') {
+      navigate('/trainer/dashboard');
+    } else {
+      navigate('/dashboard');
+    }
   };
 
   return (
