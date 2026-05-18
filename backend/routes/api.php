@@ -21,6 +21,9 @@ use App\Http\Controllers\StudentPaymentController;
 use App\Http\Controllers\StudentReviewController;
 use App\Http\Controllers\StudentNotificationController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\MultiDayEventController;
+use App\Http\Controllers\MultiDayBookingController;
+use App\Http\Controllers\MultiDaySessionController;
 
 // Auth endpoints
 require base_path('routes/auth.php');
@@ -242,6 +245,29 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('tasks/{task}/checklist', [TaskChecklistController::class, 'store']);
     Route::put('tasks/{task}/checklist/{item}', [TaskChecklistController::class, 'update']);
     Route::delete('tasks/{task}/checklist/{item}', [TaskChecklistController::class, 'destroy']);
+
+    // Multi-Day Events (Scalable 1-on-1 Package-Based System)
+    Route::get('multi-day-events', [MultiDayEventController::class, 'index']); // Public browse
+    Route::get('multi-day-events/{id}', [MultiDayEventController::class, 'show']); // Public details
+    Route::post('multi-day-events', [MultiDayEventController::class, 'store']); // Tutor create
+    Route::put('multi-day-events/{id}', [MultiDayEventController::class, 'update']); // Tutor update
+    Route::delete('multi-day-events/{id}', [MultiDayEventController::class, 'destroy']); // Tutor delete
+    Route::get('trainer/multi-day-events', [MultiDayEventController::class, 'tutorEvents']); // Tutor's events
+    
+    // Multi-Day Bookings
+    Route::post('multi-day-bookings', [MultiDayBookingController::class, 'store']); // Student book
+    Route::get('user/multi-day-bookings', [MultiDayBookingController::class, 'userBookings']); // Student's bookings
+    Route::get('trainer/multi-day-bookings', [MultiDayBookingController::class, 'tutorBookings']); // Tutor's bookings
+    Route::get('multi-day-bookings/{id}', [MultiDayBookingController::class, 'show']); // Booking details
+    Route::post('multi-day-bookings/{id}/cancel', [MultiDayBookingController::class, 'cancel']); // Student cancel
+    
+    // Multi-Day Sessions & Video
+    Route::get('multi-day-sessions/{id}', [MultiDaySessionController::class, 'show']); // Session details
+    Route::post('multi-day-sessions/{id}/join', [MultiDaySessionController::class, 'joinSession']); // Join video call
+    Route::post('multi-day-sessions/{id}/leave', [MultiDaySessionController::class, 'leaveSession']); // Leave session
+    Route::post('multi-day-sessions/{id}/complete', [MultiDaySessionController::class, 'completeSession']); // Mark complete
+    Route::get('multi-day-bookings/{bookingId}/video/{dayNumber}', [MultiDaySessionController::class, 'videoSession']); // Video page
+    Route::get('multi-day-events/{eventId}/sessions', [MultiDaySessionController::class, 'eventSessions']); // Tutor view all
 });
 
 // Public routes (if needed)

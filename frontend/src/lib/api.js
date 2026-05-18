@@ -61,6 +61,47 @@ async function request(path, options = {}) {
   return payload;
 }
 
+async function requestFormData(path, options = {}) {
+  const { auth = true, body, headers = {}, ...rest } = options;
+  const finalHeaders = {
+    Accept: 'application/json',
+    ...headers,
+  };
+
+  if (auth) {
+    const token = localStorage.getItem(TOKEN_KEY);
+    if (token) {
+      finalHeaders.Authorization = `Bearer ${token}`;
+    }
+  }
+
+  // Don't set Content-Type for FormData - browser will set it with boundary
+  const response = await fetch(`${API_BASE}${path}`, {
+    ...rest,
+    headers: finalHeaders,
+    body: body,
+  });
+
+  const text = await response.text();
+  let payload = null;
+  if (text) {
+    try {
+      payload = JSON.parse(text);
+    } catch {
+      payload = { success: false, message: text };
+    }
+  }
+
+  if (!response.ok) {
+    const error = new Error(payload?.message || 'Request failed');
+    error.status = response.status;
+    error.payload = payload;
+    throw error;
+  }
+
+  return payload;
+}
+
 function normalizeUser(user) {
   if (!user) return null;
 
@@ -337,6 +378,11 @@ export async function getTrainerProfile() {
 }
 
 export async function updateTrainerProfile(payload) {
+  // Handle FormData (for file uploads)
+  if (payload instanceof FormData) {
+    return requestFormData('/trainer/profile', { method: 'PUT', body: payload });
+  }
+  // Handle JSON object
   return request('/trainer/profile', { method: 'PUT', body: payload });
 }
 
@@ -480,3 +526,82 @@ export async function markAllTrainerNotificationsRead() {
 export async function updateTrainerNotificationPreferences(payload) {
   return request('/trainer/notifications/preferences', { method: 'PUT', body: payload });
 }
+// ─── Admin API ────────────────────────────────────────────────────────────────
+
+export async function adminMe() { return request('/admin/me'); }
+export async function adminChangePassword(payload) { return request('/admin/me/password', { method: 'PATCH', body: payload }); }
+
+// Trainers
+export async function adminGetTrainers(params = {}) {
+  const q = new URLSearchParams(params).toString();
+  return request(`/admin/trainers${q ? '?' + q : ''}`);
+}
+export async function adminGetPendingTrainers() { return request('/admin/trainers/pending'); }
+export async function adminGetTrainer(id) { return request(`/admin/trainers/${id}`); }
+export async function adminApproveTrainer(id) { return request(`/admin/trainers/${id}/approve`, { method: 'PATCH' }); }
+export async function adminSuspendTrainer(id) { return request(`/admin/trainers/${id}/suspend`, { method: 'PATCH' }); }
+export async function adminReinstateTrainer(id) { return request(`/admin/trainers/${id}/reinstate`, { method: 'PATCH' }); }
+export async function adminDeleteTrainer(id) { return request(`/admin/trainers/${id}`, { method: 'DELETE' }); }
+export async function adminNoteTrainer(id, note) { return request(`/admin/trainers/${id}/note`, { method: 'POST', body: { note } }); }
+
+// Students
+export async function adminGetStudents(params = {}) {
+  const q = new URLSearchParams(params).toString();
+  return request(`/admin/students${q ? '?' + q : ''}`);
+}
+export async function adminGetStudent(id) { return request(`/admin/students/${id}`); }
+export async function adminSuspendStudent(id) { return request(`/admin/students/${id}/suspend`, { method: 'PATCH' }); }
+export async function adminReinstateStudent(id) { return request(`/admin/students/${id}/reinstate`, { method: 'PATCH' }); }
+export async function adminDeleteStudent(id) { return request(`/admin/students/${id}`, { method: 'DELETE' }); }
+
+// Events
+export async function adminGetEvents(params = {}) {
+  const q = new URLSearchParams(params).toString();
+  return request(`/admin/events${q ? '?' + q : ''}`);
+}
+export async function adminGetFlaggedEvents() { return request('/admin/events/flagged'); }
+export async function adminPublishEvent(id) { return request(`/admin/events/${id}/publish`, { method: 'PATCH' }); }
+export async function adminUnpublishEvent(id) { return request(`/admin/events/${id}/unpublish`, { method: 'PATCH' }); }
+export async function adminFlagEvent(id, reason) { return request(`/admin/events/${id}/flag`, { method: 'PATCH', body: { reason } }); }
+export async function adminDeleteEvent(id) { return request(`/admin/events/${id}`, { method: 'DELETE' }); }
+
+// Bookings
+export async function adminGetBookings(params = {}) {
+  const q = new URLSearchParams(params).toString();
+  return request(`/admin/bookings${q ? '?' + q : ''}`);
+}
+export async function adminGetDisputedBookings() { return request('/admin/bookings/disputed'); }
+export async function adminCancelBooking(id, reason) { return request(`/admin/bookings/${id}/cancel`, { method: 'PATCH', body: { reason } }); }
+export async function adminCompleteBooking(id) { return request(`/admin/bookings/${id}/complete`, { method: 'PATCH' }); }
+
+// Withdrawals
+export async function adminGetWithdrawals() { return request('/admin/withdrawals'); }
+export async function adminGetPendingWithdrawals() { return request('/admin/withdrawals/pending'); }
+export async function adminApproveWithdrawal(id) { return request(`/admin/withdrawals/${id}/approve`, { method: 'PATCH' }); }
+export async function adminRejectWithdrawal(id, reason) { return request(`/admin/withdrawals/${id}/reject`, { method: 'PATCH', body: { reason } }); }
+
+// Finance
+export async function adminGetFinanceSummary() { return request('/admin/finance/summary'); }
+
+// Reviews
+export async function adminGetReviews() { return request('/admin/reviews'); }
+export async function adminGetFlaggedReviews() { return request('/admin/reviews/flagged'); }
+export async function adminDeleteReview(id) { return request(`/admin/reviews/${id}`, { method: 'DELETE' }); }
+export async function adminClearReviewFlag(id) { return request(`/admin/reviews/${id}/clear-flag`, { method: 'PATCH' }); }
+
+// Analytics
+export async function adminGetAnalyticsOverview() { return request('/admin/analytics/overview'); }
+export async function adminGetAnalyticsRevenue() { return request('/admin/analytics/revenue'); }
+export async function adminGetAnalyticsSessions() { return request('/admin/analytics/sessions'); }
+export async function adminGetAnalyticsTopTrainers() { return request('/admin/analytics/top-trainers'); }
+export async function adminGetAnalyticsCategories() { return request('/admin/analytics/categories'); }
+
+// Settings
+export async function adminGetSettings() { return request('/admin/settings'); }
+export async function adminSetCommission(rate) { return request('/admin/settings/commission', { method: 'PATCH', body: { rate } }); }
+export async function adminSetMinPrice(price) { return request('/admin/settings/min-price', { method: 'PATCH', body: { price } }); }
+
+// Notifications
+export async function adminGetNotifications() { return request('/admin/notifications'); }
+export async function adminBroadcast(payload) { return request('/admin/notifications/broadcast', { method: 'POST', body: payload }); }
+export async function adminBroadcastHistory() { return request('/admin/notifications/broadcast/history'); }

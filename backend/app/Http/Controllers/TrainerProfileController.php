@@ -6,6 +6,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class TrainerProfileController extends Controller
 {
@@ -42,10 +44,38 @@ class TrainerProfileController extends Controller
             'experience_years' => 'nullable|integer|min:0|max:60',
             'linkedin_url' => 'nullable|url|max:255',
             'website_url' => 'nullable|url|max:255',
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120', // 5MB max
+            'academic_background' => 'nullable|string|max:1000',
+            'certifications' => 'nullable|array',
+            'certifications.*' => 'string|max:200',
         ]);
 
         $user = Auth::user();
+
+        // Handle profile image upload
+        if ($request->hasFile('profile_image')) {
+            // Delete old image if exists
+            if ($user->profile_image) {
+                Storage::disk('public')->delete($user->profile_image);
+            }
+
+            // Store new image
+            $file = $request->file('profile_image');
+            $filename = 'trainers/' . Str::slug($user->id) . '-' . time() . '.' . $file->getClientOriginalExtension();
+            $path = Storage::disk('public')->putFileAs('trainers', $file, basename($filename));
+            $validated['profile_image'] = $path;
+        }
+
+        // Remove profile_image from validated if not set
+        unset($validated['profile_image']);
+
+        // Update user profile
         $user->update($validated);
+
+        // Update profile_image separately if it was uploaded
+        if ($request->hasFile('profile_image')) {
+            $user->update(['profile_image' => $path]);
+        }
 
         return response()->json(['success' => true, 'message' => 'Profile updated', 'data' => $user->fresh()]);
     }

@@ -22,7 +22,10 @@ import {
   Clock3,
   Sliders,
   Play,
-  Briefcase
+  Briefcase,
+  Star,
+  MessageCircle,
+  Edit2
 } from 'lucide-react';
 import {
   getTrainerProfile,
@@ -187,6 +190,29 @@ const TrainerDashboard = () => {
           </div>
         </div>
 
+        {/* Edit Profile Button */}
+        <button
+          onClick={() => navigate('/trainer/profile/edit')}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px',
+            width: '100%',
+            padding: '12px 16px',
+            borderRadius: '12px',
+            background: 'rgba(139, 92, 246, 0.1)',
+            border: '1px solid rgba(139, 92, 246, 0.2)',
+            color: 'var(--accent-purple)',
+            fontWeight: 600,
+            fontSize: '0.85rem',
+            cursor: 'pointer',
+            transition: 'all 0.3s ease'
+          }}
+        >
+          <Edit2 size={16} /> Edit Profile
+        </button>
+
         {/* Sidebar Navigation Options */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: 1 }}>
           <button 
@@ -279,6 +305,29 @@ const TrainerDashboard = () => {
           >
             <DollarSign size={18} style={{ color: activeTab === 'ledger' ? 'var(--accent-cyan)' : 'inherit' }} />
             Payout & Escrow
+          </button>
+
+          <button 
+            onClick={() => setActiveTab('reviews')}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '14px',
+              width: '100%',
+              padding: '14px 18px',
+              borderRadius: '12px',
+              background: activeTab === 'reviews' ? 'linear-gradient(90deg, rgba(139, 92, 246, 0.15), rgba(6, 182, 212, 0.05))' : 'none',
+              border: activeTab === 'reviews' ? '1px solid rgba(139, 92, 246, 0.25)' : '1px solid transparent',
+              color: activeTab === 'reviews' ? 'white' : 'var(--text-secondary)',
+              fontWeight: 600,
+              fontSize: '0.95rem',
+              cursor: 'pointer',
+              textAlign: 'left',
+              transition: 'all 0.3s ease'
+            }}
+          >
+            <Star size={18} style={{ color: activeTab === 'reviews' ? '#eab308' : 'inherit' }} />
+            Reviews
           </button>
         </div>
 
@@ -786,7 +835,59 @@ const TrainerDashboard = () => {
                       </tr>
                     );
                   })}
+                </tbody>
               </table>
+            </div>
+          </div>
+        )}
+
+        {/* ==================== REVIEWS TAB ==================== */}
+        {activeTab === 'reviews' && (
+          <div className="glass-panel animate-fade-in" style={{ padding: '40px', borderRadius: '24px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+              <div>
+                <h3 style={{ fontSize: '1.6rem', margin: 0, color: 'white', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <Star style={{ color: '#eab308', fill: '#eab308' }} size={28} /> Student Reviews & Feedback
+                </h3>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', marginTop: '6px' }}>
+                  View ratings and feedback from completed sessions. Respond to reviews to build your reputation.
+                </p>
+              </div>
+              <span className="badge" style={{ background: 'rgba(234, 179, 8, 0.15)', color: '#eab308', border: '1px solid rgba(234,179,8,0.3)', padding: '6px 16px', fontSize: '0.85rem' }}>0 New Reviews</span>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginBottom: '32px' }}>
+              {/* Overall Rating */}
+              <div className="glass-panel" style={{ padding: '24px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)', textAlign: 'center' }}>
+                <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '12px' }}>Overall Rating</div>
+                <div style={{ fontSize: '2.5rem', fontWeight: 800, color: '#eab308' }}>—</div>
+                <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '8px' }}>from 0 reviews</div>
+              </div>
+
+              {/* Average Response Time */}
+              <div className="glass-panel" style={{ padding: '24px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)', textAlign: 'center' }}>
+                <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '12px' }}>Avg Response Time</div>
+                <div style={{ fontSize: '2.5rem', fontWeight: 800, color: 'var(--accent-cyan)' }}>—</div>
+                <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '8px' }}>hours</div>
+              </div>
+
+              {/* Review Response Rate */}
+              <div className="glass-panel" style={{ padding: '24px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)', textAlign: 'center' }}>
+                <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '12px' }}>Response Rate</div>
+                <div style={{ fontSize: '2.5rem', fontWeight: 800, color: '#22c55e' }}>0%</div>
+                <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '8px' }}>of reviews answered</div>
+              </div>
+            </div>
+
+            {/* Reviews List */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              <div style={{ padding: '32px', textAlign: 'center', borderRadius: '16px', background: 'rgba(255,255,255,0.01)', border: '1px solid rgba(255,255,255,0.05)' }}>
+                <Star size={48} style={{ color: 'rgba(234, 179, 8, 0.3)', margin: '0 auto 16px' }} />
+                <h4 style={{ color: 'white', fontSize: '1.2rem', margin: '0 0 8px 0' }}>No reviews yet</h4>
+                <p style={{ color: 'var(--text-secondary)', margin: 0, fontSize: '0.95rem' }}>
+                  Your reviews will appear here after you complete your first sessions. Excellent feedback helps attract more students!
+                </p>
+              </div>
             </div>
           </div>
         )}

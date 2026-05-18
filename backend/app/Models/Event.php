@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Event extends Model
 {
@@ -48,6 +49,21 @@ class Event extends Model
         'published_at' => 'datetime',
         'archived_at' => 'datetime',
     ];
+
+    public function trainer(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function slots(): HasMany
+    {
+        return $this->hasMany(EventSlot::class);
+    }
+
+    public function bookings(): HasMany
+    {
+        return $this->hasMany(Booking::class);
+    }
 
     public function scopeForTrainer($query, int $trainerId)
     {
