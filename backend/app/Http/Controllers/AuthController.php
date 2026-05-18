@@ -133,6 +133,14 @@ class AuthController extends Controller
             'phone' => 'nullable|string|max:20',
             'bio' => 'nullable|string|max:500',
             'profile_image' => 'nullable|image|max:2048',
+            'gender' => 'nullable|string|max:50',
+            'birthday' => 'nullable|date',
+            'academic_inst' => 'nullable|string|max:255',
+            'academic_degree' => 'nullable|string|max:255',
+            'academic_grad_year' => 'nullable|integer',
+            'interests' => 'nullable|string',
+            'goals' => 'nullable|string',
+            'career_goal' => 'nullable|string|max:255',
         ]);
 
         if ($request->hasFile('profile_image')) {
@@ -396,6 +404,14 @@ class AuthController extends Controller
             'is_active' => $user->is_active,
             'email_verified_at' => $user->email_verified_at,
             'profile_image' => $user->profile_image,
+            'gender' => $user->gender,
+            'birthday' => $user->birthday,
+            'academic_inst' => $user->academic_inst,
+            'academic_degree' => $user->academic_degree,
+            'academic_grad_year' => $user->academic_grad_year,
+            'interests' => $user->interests,
+            'goals' => $user->goals,
+            'career_goal' => $user->career_goal,
             'created_at' => $user->created_at,
         ];
     }
