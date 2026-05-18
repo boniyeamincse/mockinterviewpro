@@ -460,6 +460,7 @@ const TrainerDashboard = () => {
                       </div>
                     );
                   })}
+                </div>
               </div>
 
               {/* Monthly Revenue (BDT) */}
