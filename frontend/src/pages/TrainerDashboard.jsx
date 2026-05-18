@@ -28,6 +28,7 @@ import {
 const TrainerDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
   const [currentUser, setCurrentUser] = useState(null);
+  const [currentTime, setCurrentTime] = useState(new Date());
   const [sessionFeedback, setSessionFeedback] = useState({
     codingScore: 8,
     systemDesignScore: 9,
@@ -36,6 +37,31 @@ const TrainerDashboard = () => {
   });
   const [submittedFeedback, setSubmittedFeedback] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const formattedDateTime = currentTime.toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  }) + ' • ' + currentTime.toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true
+  });
+
+  const getGreeting = () => {
+    if (!currentUser) return 'Good morning, Rafiq';
+    const hr = currentTime.getHours();
+    const name = currentUser.name.includes('Michael') ? 'Rafiq' : currentUser.name.split(' ')[0];
+    if (hr < 12) return `Good morning, ${name}`;
+    if (hr < 17) return `Good afternoon, ${name}`;
+    return `Good evening, ${name}`;
+  };
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
@@ -282,18 +308,44 @@ const TrainerDashboard = () => {
               border: '1px solid rgba(139, 92, 246, 0.15)',
               boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
               position: 'relative',
-              overflow: 'hidden'
+              overflow: 'hidden',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '12px'
             }}>
               <div style={{ position: 'absolute', top: '-10%', right: '-5%', width: '300px', height: '300px', background: 'radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 70%)', filter: 'blur(50px)' }}></div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--accent-cyan)', fontSize: '0.8rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '12px' }}>
+              
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--accent-cyan)', fontSize: '0.8rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1.5px' }}>
                 <Sparkles size={14} /> Enterprise Operations Center
               </div>
-              <h2 style={{ fontSize: '2.2rem', margin: 0, fontWeight: 800, background: 'linear-gradient(to right, white, rgba(255,255,255,0.7))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                Trainer Management Portal
+              
+              <h2 style={{ fontSize: '2.6rem', margin: 0, fontWeight: 800, background: 'linear-gradient(to right, white, rgba(255,255,255,0.7))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                {getGreeting()}
               </h2>
-              <p style={{ color: 'var(--text-secondary)', margin: '12px 0 0 0', fontSize: '1rem', lineHeight: '1.6', maxWidth: '800px' }}>
-                Coordinate upcoming candidate matches, edit schedule availability, grade active mock system design frameworks, and directly audit your BKash / SSLCommerz escrow payouts.
+              
+              <p style={{ color: 'var(--text-secondary)', margin: 0, fontSize: '1.1rem', fontWeight: 550, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                You have <span style={{ color: 'white', background: 'linear-gradient(135deg, var(--accent-purple), var(--accent-cyan))', padding: '2px 10px', borderRadius: '8px', fontWeight: 800 }}>3</span> sessions today.
               </p>
+
+              {/* Dynamic Live Date & Time Indicator */}
+              <div style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '10px', 
+                color: 'rgba(255, 255, 255, 0.7)', 
+                fontSize: '0.9rem', 
+                fontWeight: 600, 
+                marginTop: '8px', 
+                background: 'rgba(255,255,255,0.03)', 
+                border: '1px solid rgba(255,255,255,0.05)', 
+                padding: '10px 20px', 
+                borderRadius: '100px', 
+                width: 'fit-content',
+                boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
+              }}>
+                <Calendar size={16} style={{ color: 'var(--accent-cyan)' }} />
+                <span>{formattedDateTime}</span>
+              </div>
             </div>
 
             {/* High-Fidelity Stats Grid (Matching screenshot exactly) */}
