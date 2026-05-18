@@ -74,7 +74,7 @@ const TrainerDashboard = () => {
       background: 'radial-gradient(circle at top left, #0d091a, #050508)', 
       color: 'white',
       fontFamily: 'var(--font-family)',
-      paddingTop: '80px' // Space for header
+      paddingTop: '0px'
     }}>
       
       {/* ==================== ENTERPRISE-GRADE LEFT SIDEBAR ==================== */}
@@ -88,7 +88,7 @@ const TrainerDashboard = () => {
         padding: '32px 20px',
         gap: '28px',
         position: 'fixed',
-        top: '80px',
+        top: '0px',
         bottom: 0,
         left: 0,
         zIndex: 10,

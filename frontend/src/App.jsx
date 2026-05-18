@@ -18,10 +18,10 @@ function App() {
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route path="dashboard" element={<Dashboard />} />
-          <Route path="trainer/dashboard" element={<TrainerDashboard />} />
           <Route path="trainers" element={<FindTrainer />} />
           <Route path="become-trainer" element={<BecomeTrainer />} />
         </Route>
+        <Route path="trainer/dashboard" element={<TrainerDashboard />} />
       </Routes>
     </Router>
   );
