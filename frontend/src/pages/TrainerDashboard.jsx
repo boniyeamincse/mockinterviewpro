@@ -5,20 +5,22 @@ import {
   Calendar, 
   DollarSign, 
   User, 
-  GraduationCap, 
+  Compass,
   Video, 
   Award, 
-  Briefcase, 
   Clock, 
   CheckCircle2, 
-  ChevronRight, 
   FileText, 
   Percent, 
-  AlertCircle 
+  AlertCircle,
+  ChevronRight,
+  LogOut,
+  ChevronLeft,
+  Briefcase
 } from 'lucide-react';
 
 const TrainerDashboard = () => {
-  const [activeTab, setActiveTab] = useState('docs');
+  const [activeTab, setActiveTab] = useState('overview');
   const [currentUser, setCurrentUser] = useState(null);
   const navigate = useNavigate();
 
@@ -27,7 +29,6 @@ const TrainerDashboard = () => {
     if (storedUser) {
       const parsed = JSON.parse(storedUser);
       if (parsed.role !== 'Trainer') {
-        // Safe redirect if a candidate tries to view trainer space
         navigate('/dashboard');
       } else {
         setCurrentUser(parsed);
@@ -37,279 +38,325 @@ const TrainerDashboard = () => {
     }
   }, [navigate]);
 
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    setCurrentUser(null);
+    navigate('/login');
+  };
+
   if (!currentUser) return null;
 
   return (
-    <div className="container" style={{ paddingTop: '40px', paddingBottom: '80px', fontFamily: 'var(--font-family)' }}>
-      {/* 1. PREMIUM GLASSMORPHIC HERO WELCOME BANNER */}
-      <div className="glass-panel animate-fade-in" style={{ 
-        padding: '32px', 
-        borderRadius: '24px', 
-        marginBottom: '32px',
-        background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.08), rgba(6, 182, 212, 0.03))',
-        border: '1px solid rgba(139, 92, 246, 0.15)',
+    <div style={{ 
+      display: 'flex', 
+      minHeight: '100vh', 
+      background: '#0a0a0c', 
+      color: 'white',
+      fontFamily: 'var(--font-family)',
+      paddingTop: '80px' // Spacer for the global header navbar
+    }}>
+      
+      {/* ==================== LEFT-SIDE MENU BAR (VERTICAL SIDEBAR) ==================== */}
+      <div style={{
+        width: '260px',
+        borderRight: '1px solid var(--border-light)',
+        background: 'rgba(10, 10, 12, 0.6)',
+        backdropFilter: 'blur(20px)',
         display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        flexWrap: 'wrap',
-        gap: '24px'
+        flexDirection: 'column',
+        padding: '24px 16px',
+        gap: '24px',
+        position: 'fixed',
+        top: '80px',
+        bottom: 0,
+        left: 0,
+        zIndex: 10
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-          <div style={{ position: 'relative' }}>
-            <div style={{
-              width: '80px',
-              height: '80px',
-              borderRadius: '20px',
-              background: 'linear-gradient(135deg, var(--accent-purple), var(--accent-cyan))',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontWeight: 800,
-              fontSize: '2rem',
-              color: 'white',
-              boxShadow: '0 8px 32px rgba(139, 92, 246, 0.3)'
-            }}>
-              MC
-            </div>
-            <div style={{
-              position: 'absolute',
-              bottom: '-4px',
-              right: '-4px',
-              background: '#22c55e',
-              width: '18px',
-              height: '18px',
-              borderRadius: '50%',
-              border: '3px solid #0a0a0c'
-            }}></div>
+        {/* Trainer Mini Profile */}
+        <div style={{ 
+          padding: '16px', 
+          borderRadius: '16px', 
+          background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.08), rgba(6, 182, 212, 0.03))',
+          border: '1px solid rgba(139, 92, 246, 0.15)',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          textAlign: 'center',
+          gap: '12px'
+        }}>
+          <div style={{
+            width: '64px',
+            height: '64px',
+            borderRadius: '16px',
+            background: 'linear-gradient(135deg, var(--accent-purple), var(--accent-cyan))',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontWeight: 800,
+            fontSize: '1.5rem',
+            color: 'white',
+            boxShadow: '0 4px 20px rgba(139, 92, 246, 0.2)'
+          }}>
+            MC
           </div>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <h1 style={{ fontSize: '2rem', margin: 0, fontWeight: 700 }}>Welcome back, Michael Chang!</h1>
-              <span className="badge" style={{ background: 'rgba(139, 92, 246, 0.15)', color: 'var(--accent-purple)', border: '1px solid rgba(139, 92, 246, 0.3)' }}>Verified Expert</span>
+            <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>Michael Chang</div>
+            <div style={{ fontSize: '0.75rem', color: 'var(--accent-cyan)', marginTop: '2px' }}>Verified Expert</div>
+          </div>
+        </div>
+
+        {/* Menu Items */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', flex: 1 }}>
+          <button 
+            onClick={() => setActiveTab('overview')}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              width: '100%',
+              padding: '12px 16px',
+              borderRadius: '8px',
+              background: activeTab === 'overview' ? 'rgba(139, 92, 246, 0.15)' : 'none',
+              border: activeTab === 'overview' ? '1px solid rgba(139, 92, 246, 0.3)' : '1px solid transparent',
+              color: activeTab === 'overview' ? 'white' : 'var(--text-secondary)',
+              fontWeight: 600,
+              fontSize: '0.9rem',
+              cursor: 'pointer',
+              textAlign: 'left',
+              transition: 'all 0.2s'
+            }}
+          >
+            <Compass size={18} style={{ color: activeTab === 'overview' ? 'var(--accent-purple)' : 'inherit' }} />
+            Dashboard Overview
+          </button>
+
+          <button 
+            onClick={() => setActiveTab('docs')}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              width: '100%',
+              padding: '12px 16px',
+              borderRadius: '8px',
+              background: activeTab === 'docs' ? 'rgba(139, 92, 246, 0.15)' : 'none',
+              border: activeTab === 'docs' ? '1px solid rgba(139, 92, 246, 0.3)' : '1px solid transparent',
+              color: activeTab === 'docs' ? 'white' : 'var(--text-secondary)',
+              fontWeight: 600,
+              fontSize: '0.9rem',
+              cursor: 'pointer',
+              textAlign: 'left',
+              transition: 'all 0.2s'
+            }}
+          >
+            <BookOpen size={18} style={{ color: activeTab === 'docs' ? 'var(--accent-purple)' : 'inherit' }} />
+            Guidelines & Docs
+          </button>
+
+          <button 
+            onClick={() => setActiveTab('availability')}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              width: '100%',
+              padding: '12px 16px',
+              borderRadius: '8px',
+              background: activeTab === 'availability' ? 'rgba(139, 92, 246, 0.15)' : 'none',
+              border: activeTab === 'availability' ? '1px solid rgba(139, 92, 246, 0.3)' : '1px solid transparent',
+              color: activeTab === 'availability' ? 'white' : 'var(--text-secondary)',
+              fontWeight: 600,
+              fontSize: '0.9rem',
+              cursor: 'pointer',
+              textAlign: 'left',
+              transition: 'all 0.2s'
+            }}
+          >
+            <Calendar size={18} style={{ color: activeTab === 'availability' ? 'var(--accent-purple)' : 'inherit' }} />
+            Availability Slots
+          </button>
+
+          <button 
+            onClick={() => setActiveTab('ledger')}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              width: '100%',
+              padding: '12px 16px',
+              borderRadius: '8px',
+              background: activeTab === 'ledger' ? 'rgba(139, 92, 246, 0.15)' : 'none',
+              border: activeTab === 'ledger' ? '1px solid rgba(139, 92, 246, 0.3)' : '1px solid transparent',
+              color: activeTab === 'ledger' ? 'white' : 'var(--text-secondary)',
+              fontWeight: 600,
+              fontSize: '0.9rem',
+              cursor: 'pointer',
+              textAlign: 'left',
+              transition: 'all 0.2s'
+            }}
+          >
+            <DollarSign size={18} style={{ color: activeTab === 'ledger' ? 'var(--accent-cyan)' : 'inherit' }} />
+            Payout & Commission
+          </button>
+        </div>
+
+        {/* Sidebar Footer Logout */}
+        <button 
+          onClick={handleLogout}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            width: '100%',
+            padding: '12px 16px',
+            borderRadius: '8px',
+            background: 'rgba(239, 68, 68, 0.05)',
+            border: '1px solid rgba(239, 68, 68, 0.2)',
+            color: '#ef4444',
+            fontWeight: 600,
+            fontSize: '0.9rem',
+            cursor: 'pointer',
+            textAlign: 'left',
+            transition: 'all 0.2s'
+          }}
+        >
+          <LogOut size={18} />
+          Sign Out
+        </button>
+      </div>
+
+      {/* ==================== RIGHT-SIDE MAIN CONTENT PORT ==================== */}
+      <div style={{ 
+        marginLeft: '260px', 
+        flex: 1, 
+        padding: '40px',
+        maxWidth: '1200px'
+      }}>
+        
+        {activeTab === 'overview' && (
+          <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+            {/* Glassmorphic Greeting */}
+            <div className="glass-panel" style={{ 
+              padding: '32px', 
+              borderRadius: '24px',
+              background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.05), rgba(6, 182, 212, 0.02))',
+              border: '1px solid rgba(139, 92, 246, 0.12)'
+            }}>
+              <h2 style={{ fontSize: '2rem', margin: 0, fontWeight: 700 }}>Expert Dashboard Workspace</h2>
+              <p style={{ color: 'var(--text-secondary)', margin: '8px 0 0 0', fontSize: '0.95rem' }}>
+                Welcome back, Michael! Use the left sidebar to coordinate available hours, check BDT escrow splits, and review FAANG mock guidelines.
+              </p>
             </div>
-            <p style={{ color: 'var(--text-secondary)', margin: '6px 0 0 0', fontSize: '0.95rem' }}>
-              Trainer Workspace — Guide top engineering candidates and track your escrow ledger payouts.
-            </p>
-          </div>
-        </div>
-      </div>
 
-      {/* 2. STATS GRID ROW */}
-      <div style={{ 
-        display: 'grid', 
-        gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', 
-        gap: '20px',
-        marginBottom: '40px'
-      }}>
-        <div className="glass-panel" style={{ padding: '24px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-            <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Completed Mock Sessions</span>
-            <CheckCircle2 size={20} style={{ color: '#22c55e' }} />
-          </div>
-          <div style={{ fontSize: '2rem', fontWeight: 700 }}>48</div>
-          <span style={{ fontSize: '0.8rem', color: '#22c55e' }}>+6 this week</span>
-        </div>
+            {/* Quick Stats Grid */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '20px' }}>
+              <div className="glass-panel" style={{ padding: '24px', borderRadius: '16px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                  <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>Total Session Hours</span>
+                  <Clock size={18} style={{ color: 'var(--accent-cyan)' }} />
+                </div>
+                <div style={{ fontSize: '1.8rem', fontWeight: 700 }}>72.5 hrs</div>
+              </div>
 
-        <div className="glass-panel" style={{ padding: '24px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-            <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Total Earned (85% Net)</span>
-            <DollarSign size={20} style={{ color: 'var(--accent-cyan)' }} />
-          </div>
-          <div style={{ fontSize: '2rem', fontWeight: 700 }}>$6,120.00</div>
-          <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Based on $150.00/hr base rate</span>
-        </div>
+              <div className="glass-panel" style={{ padding: '24px', borderRadius: '16px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                  <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>Commission Split</span>
+                  <Percent size={18} style={{ color: 'var(--accent-purple)' }} />
+                </div>
+                <div style={{ fontSize: '1.8rem', fontWeight: 700 }}>85 / 15 Net</div>
+              </div>
 
-        <div className="glass-panel" style={{ padding: '24px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-            <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Held in Platform Escrow</span>
-            <Percent size={20} style={{ color: 'var(--accent-purple)' }} />
-          </div>
-          <div style={{ fontSize: '2rem', fontWeight: 700 }}>$450.00</div>
-          <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Released immediately on complete</span>
-        </div>
-      </div>
+              <div className="glass-panel" style={{ padding: '24px', borderRadius: '16px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                  <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>Active Escrow Balance</span>
+                  <DollarSign size={18} style={{ color: '#22c55e' }} />
+                </div>
+                <div style={{ fontSize: '1.8rem', fontWeight: 700 }}>$450.00</div>
+              </div>
+            </div>
 
-      {/* 3. WORKSPACE TABS SELECTOR */}
-      <div style={{ 
-        display: 'flex', 
-        gap: '12px', 
-        borderBottom: '1px solid var(--border-light)', 
-        marginBottom: '32px',
-        paddingBottom: '8px'
-      }}>
-        <button 
-          onClick={() => setActiveTab('docs')}
-          style={{
-            background: 'none',
-            border: 'none',
-            padding: '10px 20px',
-            color: activeTab === 'docs' ? 'white' : 'var(--text-secondary)',
-            fontWeight: 600,
-            fontSize: '0.95rem',
-            borderBottom: activeTab === 'docs' ? '2px solid var(--accent-purple)' : 'none',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px'
-          }}
-        >
-          <BookOpen size={16} /> Documentation & Guidelines
-        </button>
-
-        <button 
-          onClick={() => setActiveTab('availability')}
-          style={{
-            background: 'none',
-            border: 'none',
-            padding: '10px 20px',
-            color: activeTab === 'availability' ? 'white' : 'var(--text-secondary)',
-            fontWeight: 600,
-            fontSize: '0.95rem',
-            borderBottom: activeTab === 'availability' ? '2px solid var(--accent-purple)' : 'none',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px'
-          }}
-        >
-          <Calendar size={16} /> Availability Scheduler
-        </button>
-
-        <button 
-          onClick={() => setActiveTab('ledger')}
-          style={{
-            background: 'none',
-            border: 'none',
-            padding: '10px 20px',
-            color: activeTab === 'ledger' ? 'white' : 'var(--text-secondary)',
-            fontWeight: 600,
-            fontSize: '0.95rem',
-            borderBottom: activeTab === 'ledger' ? '2px solid var(--accent-purple)' : 'none',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px'
-          }}
-        >
-          <DollarSign size={16} /> Commission & Escrow Payouts
-        </button>
-      </div>
-
-      {/* 4. TAB CONTENTS VIEWPORT */}
-      <div>
-        {activeTab === 'docs' && (
-          <div className="animate-fade-in" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '32px' }}>
-            {/* Left side: Detailed documentation */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-              <div className="glass-panel" style={{ padding: '32px', borderRadius: '16px' }}>
-                <h3 style={{ fontSize: '1.4rem', marginBottom: '20px', color: 'white', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <FileText style={{ color: 'var(--accent-purple)' }} /> Mock Loop Guidelines & Rubric
-                </h3>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: '1.6', marginBottom: '24px' }}>
-                  As an InterviewPro expert, you are expected to maintain the absolute highest standards of professional mentorship. Please review our standard grading rubrics before conducting mock loops.
-                </p>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                  <div style={{ padding: '16px', background: 'rgba(255,255,255,0.02)', borderRadius: '8px', borderLeft: '3px solid var(--accent-purple)' }}>
-                    <h4 style={{ margin: '0 0 6px 0', fontSize: '1.05rem', color: 'white' }}>1. Coding & Algorithms (45 Minutes)</h4>
-                    <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
-                      Assess algorithmic correctness, code optimization, readability, and communication of trade-offs. Ensure candidates speak through their solutions.
-                    </p>
+            {/* Matching Section with Boni Yeamin */}
+            <div className="glass-panel" style={{ padding: '32px', borderRadius: '20px' }}>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '20px', color: 'white' }}>Assigned Candidate Matching</h3>
+              <div style={{ 
+                padding: '24px', 
+                borderRadius: '16px', 
+                background: 'rgba(255,255,255,0.01)', 
+                border: '1px solid var(--border-light)',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                flexWrap: 'wrap',
+                gap: '24px'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                  <div style={{
+                    width: '56px',
+                    height: '56px',
+                    borderRadius: '50%',
+                    background: '#0ea5e9',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontWeight: 'bold',
+                    fontSize: '1.2rem',
+                    color: 'white'
+                  }}>
+                    BY
                   </div>
-
-                  <div style={{ padding: '16px', background: 'rgba(255,255,255,0.02)', borderRadius: '8px', borderLeft: '3px solid var(--accent-purple)' }}>
-                    <h4 style={{ margin: '0 0 6px 0', fontSize: '1.05rem', color: 'white' }}>2. System Design & Scalability (60 Minutes)</h4>
-                    <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
-                      Evaluate trade-off analysis, horizontal scaling, caching strategies, load balancing, database schemas, and microservice segregation.
-                    </p>
-                  </div>
-
-                  <div style={{ padding: '16px', background: 'rgba(255,255,255,0.02)', borderRadius: '8px', borderLeft: '3px solid var(--accent-purple)' }}>
-                    <h4 style={{ margin: '0 0 6px 0', fontSize: '1.05rem', color: 'white' }}>3. Behavioral & Soft Skills (30 Minutes)</h4>
-                    <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
-                      Audit STAR method responses, conflict resolution, leadership traits, and team alignment.
+                  <div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <h4 style={{ margin: 0, fontSize: '1.1rem', color: 'white' }}>Boni Yeamin</h4>
+                      <span className="badge" style={{ background: 'rgba(34, 197, 94, 0.15)', color: '#22c55e', border: '1px solid rgba(34, 197, 94, 0.3)' }}>BUET Graduate</span>
+                    </div>
+                    <p style={{ margin: '4px 0 0 0', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                      System Design & Scalability Mock loop — 100% Complete Profile
                     </p>
                   </div>
                 </div>
-              </div>
 
-              {/* Platform Payout Rules */}
-              <div className="glass-panel" style={{ padding: '32px', borderRadius: '16px' }}>
-                <h3 style={{ fontSize: '1.4rem', marginBottom: '20px', color: 'white', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <Award style={{ color: 'var(--accent-cyan)' }} /> Platform Escrow & Payout Agreement
-                </h3>
-                <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start', marginBottom: '20px' }}>
-                  <AlertCircle size={24} style={{ color: 'var(--accent-cyan)', flexShrink: 0 }} />
-                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.6', margin: 0 }}>
-                    InterviewPro enforces a secure escrow release system to protect both experts and candidates. When a candidate books a session, payment is securely captured. Upon completing the mock session and submitting feedback, the **85% commission split** is instantly deposited to your bank routing.
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                  <div style={{ textAlign: 'right' }}>
+                    <div style={{ fontSize: '0.9rem', fontWeight: 600, color: 'white' }}>Today at 4:00 PM</div>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Duration: 60 mins</div>
+                  </div>
+                  <button 
+                    onClick={() => alert('Launching active video conference...')}
+                    className="btn btn-primary"
+                    style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px' }}
+                  >
+                    <Video size={16} /> Start Session
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'docs' && (
+          <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+            <div className="glass-panel" style={{ padding: '32px', borderRadius: '16px' }}>
+              <h3 style={{ fontSize: '1.4rem', marginBottom: '20px', color: 'white', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <FileText style={{ color: 'var(--accent-purple)' }} /> Mock Loop Guidelines & Rubric
+              </h3>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: '1.6', marginBottom: '24px' }}>
+                Review our technical evaluation framework before grading candidates. You are expected to deliver constructive feedback within 12 hours of session completion.
+              </p>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <div style={{ padding: '16px', background: 'rgba(255,255,255,0.01)', borderRadius: '8px', borderLeft: '3px solid var(--accent-purple)' }}>
+                  <h4 style={{ margin: '0 0 6px 0', fontSize: '1.05rem', color: 'white' }}>1. Coding & Complexity Audit (45 min)</h4>
+                  <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
+                    Evaluate edge cases, dry-running, standard complexity metrics (Big O), and structural modularity.
                   </p>
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-                  <div style={{ padding: '16px', borderRadius: '8px', background: 'rgba(6, 182, 212, 0.05)', border: '1px solid rgba(6, 182, 212, 0.2)' }}>
-                    <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Platform Commission</div>
-                    <div style={{ fontSize: '1.8rem', fontWeight: 700, color: 'var(--accent-cyan)' }}>15%</div>
-                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Covers payment processing & hosting</div>
-                  </div>
-                  <div style={{ padding: '16px', borderRadius: '8px', background: 'rgba(139, 92, 246, 0.05)', border: '1px solid rgba(139, 92, 246, 0.2)' }}>
-                    <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Expert Net Payout</div>
-                    <div style={{ fontSize: '1.8rem', fontWeight: 700, color: 'var(--accent-purple)' }}>85%</div>
-                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Direct release to your ledger</div>
-                  </div>
+
+                <div style={{ padding: '16px', background: 'rgba(255,255,255,0.01)', borderRadius: '8px', borderLeft: '3px solid var(--accent-purple)' }}>
+                  <h4 style={{ margin: '0 0 6px 0', fontSize: '1.05rem', color: 'white' }}>2. System Architecture & Scale (60 min)</h4>
+                  <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
+                    Evaluate schema structures, relational vs non-relational database selection, fallback networks, failovers, and caching architectures.
+                  </p>
                 </div>
-              </div>
-            </div>
-
-            {/* Right side: Upcoming match with Boni */}
-            <div>
-              <div className="glass-panel" style={{ padding: '24px', borderRadius: '16px', position: 'sticky', top: '100px' }}>
-                <h4 style={{ fontSize: '1.1rem', marginBottom: '16px', color: 'white' }}>Next Upcoming Session</h4>
-                <div style={{ 
-                  padding: '16px', 
-                  borderRadius: '12px', 
-                  background: 'rgba(255,255,255,0.02)',
-                  border: '1px solid var(--border-light)',
-                  marginBottom: '20px'
-                }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                    <span style={{ fontSize: '0.75rem', padding: '4px 8px', borderRadius: '4px', background: 'rgba(139, 92, 246, 0.15)', color: 'var(--accent-purple)', fontWeight: 600 }}>SYSTEM DESIGN</span>
-                    <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={12} /> Today, 4:00 PM</span>
-                  </div>
-                  
-                  <h5 style={{ margin: '0 0 12px 0', fontSize: '1.05rem', color: 'white' }}>System Design & Scalability Loop</h5>
-
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 0', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-                    <div style={{
-                      width: '36px',
-                      height: '36px',
-                      borderRadius: '50%',
-                      background: '#0ea5e9',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontWeight: 'bold',
-                      fontSize: '0.85rem'
-                    }}>
-                      BY
-                    </div>
-                    <div>
-                      <div style={{ fontSize: '0.9rem', fontWeight: 600, color: 'white' }}>Boni Yeamin</div>
-                      <div style={{ fontSize: '0.75rem', color: 'var(--accent-cyan)' }}>BUET CSE Candidate</div>
-                    </div>
-                  </div>
-
-                  <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '10px' }}>
-                    <span style={{ fontSize: '0.7rem', padding: '2px 6px', borderRadius: '4px', background: 'rgba(255,255,255,0.05)', color: 'var(--text-secondary)' }}>BUET B.Sc</span>
-                    <span style={{ fontSize: '0.7rem', padding: '2px 6px', borderRadius: '4px', background: 'rgba(255,255,255,0.05)', color: 'var(--text-secondary)' }}>100% Strength</span>
-                  </div>
-                </div>
-
-                <button 
-                  onClick={() => alert('Launching video session workspace...')}
-                  className="btn btn-primary" 
-                  style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
-                >
-                  <Video size={16} /> Enter Video Room
-                </button>
               </div>
             </div>
           </div>
@@ -322,7 +369,7 @@ const TrainerDashboard = () => {
               Set your available calendar blocks. Candidates will select slots directly matching these hours.
             </p>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '12px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '12px' }}>
               {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => (
                 <div key={day} style={{ 
                   padding: '16px', 
@@ -333,8 +380,8 @@ const TrainerDashboard = () => {
                 }}>
                   <div style={{ fontWeight: 600, fontSize: '0.9rem', marginBottom: '12px', color: 'white' }}>{day}</div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    <span style={{ fontSize: '0.75rem', padding: '4px', borderRadius: '4px', background: 'rgba(34, 197, 94, 0.15)', color: '#22c55e' }}>4:00 PM - 6:00 PM</span>
-                    <span style={{ fontSize: '0.75rem', padding: '4px', borderRadius: '4px', background: 'rgba(34, 197, 94, 0.15)', color: '#22c55e' }}>7:00 PM - 9:00 PM</span>
+                    <span style={{ fontSize: '0.75rem', padding: '4px', borderRadius: '4px', background: 'rgba(34, 197, 94, 0.15)', color: '#22c55e', border: '1px solid rgba(34,197,94,0.3)' }}>4pm - 6pm</span>
+                    <span style={{ fontSize: '0.75rem', padding: '4px', borderRadius: '4px', background: 'rgba(34, 197, 94, 0.15)', color: '#22c55e', border: '1px solid rgba(34,197,94,0.3)' }}>7pm - 9pm</span>
                   </div>
                 </div>
               ))}
@@ -383,6 +430,7 @@ const TrainerDashboard = () => {
             </div>
           </div>
         )}
+
       </div>
     </div>
   );
