@@ -88,10 +88,6 @@ const Dashboard = () => {
     setIsEditing(false);
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('user');
-    window.location.href = '/login';
-  };
 
   return (
     <div className="container" style={{ paddingTop: '40px', paddingBottom: '80px', fontFamily: 'var(--font-family)' }}>
@@ -144,24 +140,7 @@ const Dashboard = () => {
             <User size={16} style={{ color: activeTab === 'profile' ? 'var(--accent-cyan)' : 'inherit' }} /> 
             {activeTab === 'profile' ? 'Back to Workspace' : 'Manage Profile'}
           </button>
-          <button 
-            onClick={handleLogout} 
-            className="btn" 
-            style={{ 
-              padding: '8px 16px', 
-              fontSize: '0.85rem', 
-              background: 'rgba(239, 68, 68, 0.1)', 
-              border: '1px solid rgba(239, 68, 68, 0.2)', 
-              color: '#ef4444',
-              cursor: 'pointer',
-              borderRadius: '8px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px'
-            }}
-          >
-            <LogOut size={16} /> Logout
-          </button>
+
         </div>
       </div>
 
