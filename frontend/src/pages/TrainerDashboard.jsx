@@ -296,88 +296,260 @@ const TrainerDashboard = () => {
               </p>
             </div>
 
-            {/* Enterprise Quick Stats Grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '24px' }}>
-              <div className="glass-panel" style={{ padding: '28px', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.05)', position: 'relative' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                  <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', fontWeight: 500 }}>Completed Reviews</span>
-                  <Activity size={20} style={{ color: 'var(--accent-purple)' }} />
+            {/* High-Fidelity Stats Grid (Matching screenshot exactly) */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px' }}>
+              
+              {/* Total Earned */}
+              <div className="glass-panel" style={{ padding: '24px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: '12px' }}>
+                  <TrendingUp size={16} style={{ color: 'var(--accent-purple)' }} />
+                  <span>Total earned</span>
                 </div>
-                <div style={{ fontSize: '2.2rem', fontWeight: 800 }}>48 Sessions</div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '12px', fontSize: '0.8rem', color: '#10b981' }}>
-                  <TrendingUp size={14} /> <span>15% increase vs last month</span>
-                </div>
-              </div>
-
-              <div className="glass-panel" style={{ padding: '28px', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                  <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', fontWeight: 500 }}>Ledger Net Earnings (85%)</span>
-                  <DollarSign size={20} style={{ color: '#22c55e' }} />
-                </div>
-                <div style={{ fontSize: '2.2rem', fontWeight: 800 }}>$6,120.00</div>
-                <div style={{ marginTop: '12px', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                  Platform flat fee (15% escrow commission split)
+                <div style={{ fontSize: '2rem', fontWeight: 800, color: 'white' }}>47,650 BDT</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '10px', fontSize: '0.8rem', color: '#10b981', fontWeight: 600 }}>
+                  <TrendingUp size={14} /> <span>+12% this month</span>
                 </div>
               </div>
 
-              <div className="glass-panel" style={{ padding: '28px', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                  <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', fontWeight: 500 }}>Escrow Holds Balance</span>
-                  <Award size={20} style={{ color: 'var(--accent-cyan)' }} />
+              {/* Sessions Done */}
+              <div className="glass-panel" style={{ padding: '24px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: '12px' }}>
+                  <Video size={16} style={{ color: 'var(--accent-cyan)' }} />
+                  <span>Sessions done</span>
                 </div>
-                <div style={{ fontSize: '2.2rem', fontWeight: 800 }}>$450.00</div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '12px', fontSize: '0.8rem', color: 'var(--accent-cyan)' }}>
-                  <AlertCircle size={14} /> <span>Released immediately on feedback lock</span>
+                <div style={{ fontSize: '2rem', fontWeight: 800, color: 'white' }}>63</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '10px', fontSize: '0.8rem', color: '#10b981', fontWeight: 600 }}>
+                  <TrendingUp size={14} /> <span>+8 this month</span>
                 </div>
               </div>
+
+              {/* Avg Rating */}
+              <div className="glass-panel" style={{ padding: '24px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: '12px' }}>
+                  <Award size={16} style={{ color: '#eab308' }} />
+                  <span>Avg rating</span>
+                </div>
+                <div style={{ fontSize: '2rem', fontWeight: 800, color: 'white' }}>4.8</div>
+                <div style={{ marginTop: '10px', fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 500 }}>
+                  from 51 reviews
+                </div>
+              </div>
+
+              {/* Upcoming */}
+              <div className="glass-panel" style={{ padding: '24px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: '12px' }}>
+                  <Clock size={16} style={{ color: 'var(--accent-cyan)' }} />
+                  <span>Upcoming</span>
+                </div>
+                <div style={{ fontSize: '2rem', fontWeight: 800, color: 'white' }}>7</div>
+                <div style={{ marginTop: '10px', fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 500 }}>
+                  next 7 days
+                </div>
+              </div>
+
             </div>
 
-            {/* Enterprise Analytical Line Chart Mockup */}
-            <div className="glass-panel" style={{ padding: '32px', borderRadius: '24px' }}>
-              <h3 style={{ fontSize: '1.25rem', marginBottom: '24px', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Activity size={18} style={{ color: 'var(--accent-cyan)' }} /> Session Completion & Earnings Trend
-              </h3>
-              {/* Custom CSS Chart Blocks */}
-              <div style={{ 
-                height: '180px', 
-                display: 'flex', 
-                alignItems: 'flex-end', 
-                justifyContent: 'space-between', 
-                gap: '20px',
-                padding: '20px 0',
-                borderBottom: '1px solid rgba(255,255,255,0.08)'
-              }}>
-                {[
-                  { month: 'Jan', count: 4, height: '30%', earnings: '$510' },
-                  { month: 'Feb', count: 6, height: '45%', earnings: '$765' },
-                  { month: 'Mar', count: 8, height: '60%', earnings: '$1,020' },
-                  { month: 'Apr', count: 12, height: '90%', earnings: '$1,530' },
-                  { month: 'May', count: 18, height: '100%', earnings: '$2,295' }
-                ].map((item, idx) => (
-                  <div key={idx} style={{ 
-                    flex: 1, 
+            {/* Split Columns: Today's sessions & Monthly revenue (BDT) */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '32px' }}>
+              
+              {/* Today's Sessions */}
+              <div className="glass-panel" style={{ padding: '32px', borderRadius: '24px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <Clock size={20} style={{ color: 'var(--accent-purple)' }} />
+                  <h3 style={{ fontSize: '1.25rem', margin: 0, fontWeight: 700 }}>Today's sessions</h3>
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
+                  {/* Tahmid Islam */}
+                  <div style={{ 
                     display: 'flex', 
-                    flexDirection: 'column', 
                     alignItems: 'center', 
-                    gap: '12px',
-                    height: '100%',
-                    justifyContent: 'flex-end'
+                    justifyContent: 'space-between',
+                    paddingBottom: '16px',
+                    borderBottom: '1px solid rgba(255, 255, 255, 0.05)'
                   }}>
-                    <div style={{ fontSize: '0.75rem', color: 'var(--accent-cyan)', fontWeight: 600 }}>{item.earnings}</div>
-                    <div style={{ 
-                      width: '100%', 
-                      height: item.height, 
-                      background: 'linear-gradient(to top, rgba(139, 92, 246, 0.4), rgba(6, 182, 212, 0.8))',
-                      borderRadius: '8px 8px 0 0',
-                      transition: 'all 0.3s ease',
-                      cursor: 'pointer',
-                      boxShadow: '0 0 15px rgba(6, 182, 212, 0.3)',
-                      position: 'relative'
-                    }} onMouseOver={e => e.target.style.opacity = 0.8} onMouseOut={e => e.target.style.opacity = 1}></div>
-                    <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 500 }}>{item.month} ({item.count} sessions)</div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                      <div style={{
+                        width: '44px',
+                        height: '44px',
+                        borderRadius: '50%',
+                        background: 'rgba(34, 197, 94, 0.1)',
+                        color: '#22c55e',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontWeight: 700,
+                        fontSize: '0.95rem'
+                      }}>
+                        TI
+                      </div>
+                      <div>
+                        <h4 style={{ margin: 0, fontSize: '1rem', color: 'white', fontWeight: 600 }}>Tahmid Islam</h4>
+                        <p style={{ margin: '4px 0 0 0', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
+                          10:00 AM • 60 min • Software Engineering
+                        </p>
+                      </div>
+                    </div>
+                    <span style={{ 
+                      fontSize: '0.75rem', 
+                      padding: '4px 12px', 
+                      borderRadius: '6px', 
+                      background: 'rgba(34, 197, 94, 0.12)', 
+                      color: '#22c55e', 
+                      border: '1px solid rgba(34, 197, 94, 0.2)',
+                      fontWeight: 600
+                    }}>
+                      Confirmed
+                    </span>
                   </div>
-                ))}
+
+                  {/* Nadia Sultana */}
+                  <div style={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'space-between',
+                    paddingBottom: '16px',
+                    borderBottom: '1px solid rgba(255, 255, 255, 0.05)'
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                      <div style={{
+                        width: '44px',
+                        height: '44px',
+                        borderRadius: '50%',
+                        background: 'rgba(14, 165, 233, 0.1)',
+                        color: 'var(--accent-cyan)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontWeight: 700,
+                        fontSize: '0.95rem'
+                      }}>
+                        NS
+                      </div>
+                      <div>
+                        <h4 style={{ margin: 0, fontSize: '1rem', color: 'white', fontWeight: 600 }}>Nadia Sultana</h4>
+                        <p style={{ margin: '4px 0 0 0', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
+                          2:30 PM • 45 min • Behavioural
+                        </p>
+                      </div>
+                    </div>
+                    <span style={{ 
+                      fontSize: '0.75rem', 
+                      padding: '4px 12px', 
+                      borderRadius: '6px', 
+                      background: 'rgba(34, 197, 94, 0.12)', 
+                      color: '#22c55e', 
+                      border: '1px solid rgba(34, 197, 94, 0.2)',
+                      fontWeight: 600
+                    }}>
+                      Confirmed
+                    </span>
+                  </div>
+
+                  {/* Mehedi Hasan */}
+                  <div style={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'space-between'
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                      <div style={{
+                        width: '44px',
+                        height: '44px',
+                        borderRadius: '50%',
+                        background: 'rgba(234, 179, 8, 0.1)',
+                        color: '#eab308',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontWeight: 700,
+                        fontSize: '0.95rem'
+                      }}>
+                        MH
+                      </div>
+                      <div>
+                        <h4 style={{ margin: 0, fontSize: '1rem', color: 'white', fontWeight: 600 }}>Mehedi Hasan</h4>
+                        <p style={{ margin: '4px 0 0 0', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
+                          5:00 PM • 60 min • Data Science
+                        </p>
+                      </div>
+                    </div>
+                    <span style={{ 
+                      fontSize: '0.75rem', 
+                      padding: '4px 12px', 
+                      borderRadius: '6px', 
+                      background: 'rgba(234, 179, 8, 0.12)', 
+                      color: '#eab308', 
+                      border: '1px solid rgba(234, 179, 8, 0.2)',
+                      fontWeight: 600
+                    }}>
+                      In 2 hrs
+                    </span>
+                  </div>
+                </div>
               </div>
+
+              {/* Monthly Revenue (BDT) */}
+              <div className="glass-panel" style={{ padding: '32px', borderRadius: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <TrendingUp size={20} style={{ color: 'var(--accent-cyan)' }} />
+                  <h3 style={{ fontSize: '1.25rem', margin: 0, fontWeight: 700 }}>Monthly revenue (BDT)</h3>
+                </div>
+
+                {/* Custom Gradient Bar Graph */}
+                <div style={{ 
+                  height: '140px', 
+                  display: 'flex', 
+                  alignItems: 'flex-end', 
+                  justifyContent: 'space-between', 
+                  gap: '12px',
+                  paddingBottom: '8px',
+                  borderBottom: '1px solid rgba(255,255,255,0.06)'
+                }}>
+                  {[
+                    { month: 'Jan', height: '35%', active: false },
+                    { month: 'Feb', height: '50%', active: false },
+                    { month: 'Mar', height: '42%', active: false },
+                    { month: 'Apr', height: '70%', active: false },
+                    { month: 'May', height: '58%', active: false },
+                    { month: 'Jun', height: '80%', active: false },
+                    { month: 'Jul', height: '95%', active: true } // Highlighted active month from screenshot
+                  ].map((item, idx) => (
+                    <div key={idx} style={{ 
+                      flex: 1, 
+                      display: 'flex', 
+                      flexDirection: 'column', 
+                      alignItems: 'center', 
+                      gap: '8px',
+                      height: '100%',
+                      justifyContent: 'flex-end'
+                    }}>
+                      <div style={{ 
+                        width: '100%', 
+                        height: item.height, 
+                        background: item.active 
+                          ? 'linear-gradient(to top, #3b82f6, #60a5fa)' 
+                          : 'linear-gradient(to top, rgba(59, 130, 246, 0.15), rgba(96, 165, 250, 0.45))',
+                        borderRadius: '4px',
+                        boxShadow: item.active ? '0 0 15px rgba(59, 130, 246, 0.4)' : 'none'
+                      }}></div>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', fontWeight: 500 }}>{item.month}</div>
+                    </div>
+                  ))}
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '16px', paddingTop: '10px' }}>
+                  <div>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 500 }}>This month</div>
+                    <div style={{ fontSize: '1.4rem', fontWeight: 850, color: 'white', marginTop: '4px' }}>9,350 BDT</div>
+                  </div>
+                  <div style={{ textAlign: 'right' }}>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 500 }}>Pending withdrawal</div>
+                    <div style={{ fontSize: '1.4rem', fontWeight: 850, color: '#22c55e', marginTop: '4px' }}>12,750 BDT</div>
+                  </div>
+                </div>
+              </div>
+
             </div>
 
             {/* Assigned Candidate Matching Section with Interactive Grading Form */}
