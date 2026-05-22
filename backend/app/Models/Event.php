@@ -22,6 +22,10 @@ class Event extends Model
         'process_overview',
         'language',
         'sample_questions',
+        'target_audience',
+        'meeting_type',
+        'difficulty_level',
+        'max_participants',
         'total_sessions',
         'duration_minutes',
         'price_bdt',
@@ -42,6 +46,7 @@ class Event extends Model
     protected $casts = [
         'topics_covered' => 'array',
         'sample_questions' => 'array',
+        'target_audience' => 'array',
         'available_slots' => 'array',
         'blocked_dates' => 'array',
         'starts_at' => 'datetime',

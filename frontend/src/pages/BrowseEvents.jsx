@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, Filter, Star, Users, Clock, Calendar, DollarSign, ChevronRight, Loader } from 'lucide-react';
-import { request } from '../lib/api';
+import { searchEvents } from '../lib/api';
 
 export default function BrowseEvents() {
   const navigate = useNavigate();
@@ -34,7 +34,7 @@ export default function BrowseEvents() {
   const fetchEvents = async () => {
     try {
       setLoading(true);
-      const res = await request('GET', '/api/events');
+      const res = await searchEvents();
       if (res.success) {
         setEvents(res.data?.data || []);
       }
@@ -282,7 +282,7 @@ export default function BrowseEvents() {
                 {/* Trainer */}
                 <div style={{ marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px', color: '#cbd5e1', fontSize: '14px' }}>
                   <Users style={{ width: '16px', height: '16px' }} />
-                  <span>By {event.trainer?.name || 'Trainer'}</span>
+                  <span>By {event.user?.name || 'Trainer'}</span>
                 </div>
 
                 {/* Duration */}
