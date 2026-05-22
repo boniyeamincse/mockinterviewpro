@@ -25,7 +25,13 @@ import {
   Briefcase,
   Star,
   MessageCircle,
-  Edit2
+  Edit2,
+  Plus,
+  Trash2,
+  Eye,
+  EyeOff,
+  ExternalLink,
+  Users
 } from 'lucide-react';
 import {
   getTrainerProfile,
@@ -33,6 +39,10 @@ import {
   getTrainerBookingsToday,
   getTrainerWallet,
   getTrainerWalletTransactions,
+  getTrainerEvents,
+  deleteTrainerEvent,
+  publishTrainerEvent,
+  unpublishTrainerEvent,
   logoutUser,
 } from '../lib/api';
 
@@ -51,6 +61,8 @@ const TrainerDashboard = () => {
   const [todayBookings, setTodayBookings] = useState([]);
   const [wallet, setWallet] = useState(null);
   const [transactions, setTransactions] = useState([]);
+  const [trainerEvents, setTrainerEvents] = useState([]);
+  const [eventsLoading, setEventsLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -91,6 +103,7 @@ const TrainerDashboard = () => {
         getTrainerAnalyticsOverview().then(res => res?.data && setAnalytics(res.data)).catch(() => {});
         getTrainerBookingsToday().then(res => res?.data && setTodayBookings(Array.isArray(res.data) ? res.data : [])).catch(() => {});
         getTrainerWallet().then(res => res?.data && setWallet(res.data)).catch(() => {});
+        fetchTrainerEvents();
         getTrainerWalletTransactions().then(res => res?.data?.data && setTransactions(res.data.data)).catch(() => {});
       }
     } else {
@@ -112,6 +125,48 @@ const TrainerDashboard = () => {
     setTimeout(() => {
       alert('Feedback report generated and locked to Candidate profile ledger successfully!');
     }, 200);
+  };
+
+  const fetchTrainerEvents = async () => {
+    setEventsLoading(true);
+    try {
+      const res = await getTrainerEvents();
+      if (res?.data) {
+        setTrainerEvents(Array.isArray(res.data) ? res.data : (res.data.data || []));
+      }
+    } catch (err) {
+      console.error('Failed to fetch events', err);
+    } finally {
+      setEventsLoading(false);
+    }
+  };
+
+  const handlePublishEvent = async (eventId) => {
+    try {
+      await publishTrainerEvent(eventId);
+      fetchTrainerEvents();
+    } catch (err) {
+      alert(err.message || 'Failed to publish');
+    }
+  };
+
+  const handleUnpublishEvent = async (eventId) => {
+    try {
+      await unpublishTrainerEvent(eventId);
+      fetchTrainerEvents();
+    } catch (err) {
+      alert(err.message || 'Failed to unpublish');
+    }
+  };
+
+  const handleDeleteEvent = async (eventId) => {
+    if (!window.confirm('Are you sure you want to delete this session?')) return;
+    try {
+      await deleteTrainerEvent(eventId);
+      fetchTrainerEvents();
+    } catch (err) {
+      alert(err.message || 'Failed to delete');
+    }
   };
 
   if (!currentUser) return null;
@@ -236,6 +291,57 @@ const TrainerDashboard = () => {
           >
             <Compass size={18} style={{ color: activeTab === 'overview' ? 'var(--accent-purple)' : 'inherit' }} />
             Dashboard Overview
+          </button>
+
+          {/* Sessions Menu Header */}
+          <div style={{ marginTop: '12px', marginBottom: '4px', padding: '4px 18px', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', color: 'rgba(139, 92, 246, 0.7)' }}>
+            Sessions
+          </div>
+
+          <button 
+            onClick={() => navigate('/trainer/create-event')}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '14px',
+              width: '100%',
+              padding: '14px 18px',
+              borderRadius: '12px',
+              background: 'none',
+              border: '1px solid transparent',
+              color: 'var(--text-secondary)',
+              fontWeight: 600,
+              fontSize: '0.95rem',
+              cursor: 'pointer',
+              textAlign: 'left',
+              transition: 'all 0.3s ease'
+            }}
+          >
+            <Plus size={18} style={{ color: '#22c55e' }} />
+            Create Session
+          </button>
+
+          <button 
+            onClick={() => { setActiveTab('sessions'); fetchTrainerEvents(); }}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '14px',
+              width: '100%',
+              padding: '14px 18px',
+              borderRadius: '12px',
+              background: activeTab === 'sessions' ? 'linear-gradient(90deg, rgba(139, 92, 246, 0.15), rgba(6, 182, 212, 0.05))' : 'none',
+              border: activeTab === 'sessions' ? '1px solid rgba(139, 92, 246, 0.25)' : '1px solid transparent',
+              color: activeTab === 'sessions' ? 'white' : 'var(--text-secondary)',
+              fontWeight: 600,
+              fontSize: '0.95rem',
+              cursor: 'pointer',
+              textAlign: 'left',
+              transition: 'all 0.3s ease'
+            }}
+          >
+            <Layers size={18} style={{ color: activeTab === 'sessions' ? 'var(--accent-cyan)' : 'inherit' }} />
+            My Sessions
           </button>
 
           <button 
@@ -971,6 +1077,206 @@ const TrainerDashboard = () => {
                 </p>
               </div>
             </div>
+          </div>
+        )}
+
+        {/* ==================== SESSIONS TAB ==================== */}
+        {activeTab === 'sessions' && (
+          <div className="animate-fade-in">
+            {/* Header */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '28px' }}>
+              <div>
+                <h3 style={{ fontSize: '1.6rem', margin: 0, color: 'white', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <Layers style={{ color: 'var(--accent-cyan)' }} size={28} /> My Sessions
+                </h3>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', marginTop: '6px' }}>
+                  Manage all your interview sessions — publish, edit, or remove.
+                </p>
+              </div>
+              <button 
+                onClick={() => navigate('/trainer/create-event')}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: '8px',
+                  padding: '12px 24px', borderRadius: '12px', border: 'none',
+                  background: 'linear-gradient(135deg, #8b5cf6, #06b6d4)',
+                  color: 'white', fontWeight: 700, fontSize: '0.95rem', cursor: 'pointer',
+                  boxShadow: '0 0 20px rgba(139,92,246,0.3)', transition: 'all 0.2s ease'
+                }}
+                onMouseOver={e => e.currentTarget.style.transform = 'translateY(-2px)'}
+                onMouseOut={e => e.currentTarget.style.transform = 'translateY(0)'}
+              >
+                <Plus size={18} /> Create New Session
+              </button>
+            </div>
+
+            {/* Summary badges */}
+            <div style={{ display: 'flex', gap: '16px', marginBottom: '28px', flexWrap: 'wrap' }}>
+              <span style={{ padding: '8px 18px', borderRadius: '100px', background: 'rgba(139,92,246,0.1)', border: '1px solid rgba(139,92,246,0.25)', color: '#a78bfa', fontSize: '0.85rem', fontWeight: 600 }}>
+                Total: {trainerEvents.length}
+              </span>
+              <span style={{ padding: '8px 18px', borderRadius: '100px', background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.25)', color: '#22c55e', fontSize: '0.85rem', fontWeight: 600 }}>
+                Published: {trainerEvents.filter(e => e.status === 'published').length}
+              </span>
+              <span style={{ padding: '8px 18px', borderRadius: '100px', background: 'rgba(234,179,8,0.1)', border: '1px solid rgba(234,179,8,0.25)', color: '#eab308', fontSize: '0.85rem', fontWeight: 600 }}>
+                Draft: {trainerEvents.filter(e => e.status === 'draft').length}
+              </span>
+            </div>
+
+            {eventsLoading ? (
+              <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--text-secondary)' }}>
+                <Clock3 size={40} style={{ marginBottom: '16px', opacity: 0.5, animation: 'spin 2s linear infinite' }} />
+                <p>Loading sessions...</p>
+              </div>
+            ) : trainerEvents.length === 0 ? (
+              <div className="glass-panel" style={{ padding: '60px 32px', textAlign: 'center', borderRadius: '24px', border: '1px solid rgba(255,255,255,0.06)' }}>
+                <Layers size={56} style={{ color: 'rgba(139,92,246,0.3)', marginBottom: '20px' }} />
+                <h4 style={{ color: 'white', fontSize: '1.3rem', margin: '0 0 12px 0' }}>No sessions yet</h4>
+                <p style={{ color: 'var(--text-secondary)', margin: '0 0 28px 0', fontSize: '0.95rem', maxWidth: '420px', marginLeft: 'auto', marginRight: 'auto' }}>
+                  Create your first interview session and start helping students prepare for their dream jobs.
+                </p>
+                <button 
+                  onClick={() => navigate('/trainer/create-event')}
+                  style={{
+                    display: 'inline-flex', alignItems: 'center', gap: '8px',
+                    padding: '14px 32px', borderRadius: '12px', border: 'none',
+                    background: 'linear-gradient(135deg, #8b5cf6, #06b6d4)',
+                    color: 'white', fontWeight: 700, fontSize: '1rem', cursor: 'pointer',
+                    boxShadow: '0 0 24px rgba(139,92,246,0.4)'
+                  }}
+                >
+                  <Plus size={20} /> Create Your First Session
+                </button>
+              </div>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                {trainerEvents.map(ev => {
+                  const isPublished = ev.status === 'published';
+                  const isDraft = ev.status === 'draft';
+                  const isArchived = ev.status === 'archived';
+                  return (
+                    <div 
+                      key={ev.id}
+                      className="glass-panel"
+                      style={{ 
+                        padding: '28px 32px', borderRadius: '20px',
+                        border: isPublished ? '1px solid rgba(34,197,94,0.15)' : '1px solid rgba(255,255,255,0.06)',
+                        transition: 'all 0.3s ease'
+                      }}
+                      onMouseOver={e => e.currentTarget.style.transform = 'translateY(-2px)'}
+                      onMouseOut={e => e.currentTarget.style.transform = 'translateY(0)'}
+                    >
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '24px' }}>
+                        {/* Left: Info */}
+                        <div style={{ flex: 1 }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '10px', flexWrap: 'wrap' }}>
+                            <h4 style={{ margin: 0, color: 'white', fontSize: '1.2rem', fontWeight: 700 }}>{ev.title}</h4>
+                            <span style={{ 
+                              padding: '3px 12px', borderRadius: '100px', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.5px', textTransform: 'uppercase',
+                              background: isPublished ? 'rgba(34,197,94,0.15)' : isDraft ? 'rgba(234,179,8,0.15)' : 'rgba(107,114,128,0.15)',
+                              color: isPublished ? '#22c55e' : isDraft ? '#eab308' : '#9ca3af',
+                              border: `1px solid ${isPublished ? 'rgba(34,197,94,0.3)' : isDraft ? 'rgba(234,179,8,0.3)' : 'rgba(107,114,128,0.3)'}`
+                            }}>
+                              {ev.status}
+                            </span>
+                          </div>
+                          <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', margin: '0 0 14px 0', lineHeight: '1.5', maxWidth: '600px' }}>
+                            {ev.description ? (ev.description.length > 150 ? ev.description.slice(0, 150) + '...' : ev.description) : 'No description'}
+                          </p>
+                          <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
+                            {ev.category && (
+                              <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                <Briefcase size={14} style={{ color: 'var(--accent-purple)' }} />
+                                {ev.category}
+                              </span>
+                            )}
+                            {ev.duration_minutes && (
+                              <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                <Clock size={14} style={{ color: 'var(--accent-cyan)' }} />
+                                {ev.duration_minutes} min
+                              </span>
+                            )}
+                            {ev.price_bdt != null && (
+                              <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                <DollarSign size={14} style={{ color: '#22c55e' }} />
+                                {Number(ev.price_bdt).toLocaleString()} BDT
+                              </span>
+                            )}
+                            {ev.total_sessions && (
+                              <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                <Users size={14} style={{ color: '#eab308' }} />
+                                {ev.total_sessions} session{ev.total_sessions > 1 ? 's' : ''}
+                              </span>
+                            )}
+                          </div>
+                          {/* Tags */}
+                          {ev.topics_covered && (() => {
+                            let topics = ev.topics_covered;
+                            if (typeof topics === 'string') { try { topics = JSON.parse(topics); } catch { topics = []; } }
+                            if (!Array.isArray(topics) || topics.length === 0) return null;
+                            return (
+                              <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: '12px' }}>
+                                {topics.map((t, i) => (
+                                  <span key={i} style={{ padding: '4px 10px', borderRadius: '6px', fontSize: '0.72rem', fontWeight: 600, background: 'rgba(139,92,246,0.12)', color: '#a78bfa', border: '1px solid rgba(139,92,246,0.2)' }}>
+                                    {t}
+                                  </span>
+                                ))}
+                              </div>
+                            );
+                          })()}
+                        </div>
+
+                        {/* Right: Action Buttons */}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', minWidth: '140px' }}>
+                          {isDraft && (
+                            <button
+                              onClick={() => handlePublishEvent(ev.id)}
+                              style={{
+                                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+                                padding: '10px 16px', borderRadius: '10px', border: 'none',
+                                background: 'rgba(34,197,94,0.15)', color: '#22c55e',
+                                fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', transition: 'all 0.2s'
+                              }}
+                              onMouseOver={e => e.currentTarget.style.background = 'rgba(34,197,94,0.25)'}
+                              onMouseOut={e => e.currentTarget.style.background = 'rgba(34,197,94,0.15)'}
+                            >
+                              <Eye size={15} /> Publish
+                            </button>
+                          )}
+                          {isPublished && (
+                            <button
+                              onClick={() => handleUnpublishEvent(ev.id)}
+                              style={{
+                                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+                                padding: '10px 16px', borderRadius: '10px', border: 'none',
+                                background: 'rgba(234,179,8,0.12)', color: '#eab308',
+                                fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', transition: 'all 0.2s'
+                              }}
+                              onMouseOver={e => e.currentTarget.style.background = 'rgba(234,179,8,0.22)'}
+                              onMouseOut={e => e.currentTarget.style.background = 'rgba(234,179,8,0.12)'}
+                            >
+                              <EyeOff size={15} /> Unpublish
+                            </button>
+                          )}
+                          <button
+                            onClick={() => handleDeleteEvent(ev.id)}
+                            style={{
+                              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+                              padding: '10px 16px', borderRadius: '10px', border: 'none',
+                              background: 'rgba(239,68,68,0.1)', color: '#f87171',
+                              fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', transition: 'all 0.2s'
+                            }}
+                            onMouseOver={e => e.currentTarget.style.background = 'rgba(239,68,68,0.2)'}
+                            onMouseOut={e => e.currentTarget.style.background = 'rgba(239,68,68,0.1)'}
+                          >
+                            <Trash2 size={15} /> Delete
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         )}
 

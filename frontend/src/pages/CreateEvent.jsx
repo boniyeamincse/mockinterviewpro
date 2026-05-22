@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Plus, X, AlertCircle, CheckCircle, Loader } from 'lucide-react';
-import { request } from '../lib/api';
+import { createTrainerEvent } from '../lib/api';
 
 export default function CreateEvent() {
   const navigate = useNavigate();
@@ -84,7 +84,7 @@ export default function CreateEvent() {
 
     try {
       setLoading(true);
-      const res = await request('POST', '/api/trainer/events', formData);
+      const res = await createTrainerEvent(formData);
 
       if (res.success) {
         setMessage({ type: 'success', text: 'Event created successfully! Redirecting...' });
