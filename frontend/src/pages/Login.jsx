@@ -137,6 +137,42 @@ const Login = () => {
         <p style={{ color: 'var(--text-secondary)', textAlign: 'center', marginTop: '24px', fontSize: '0.85rem' }}>
           Don't have an account? <Link to="/register" style={{ color: 'var(--accent-cyan)', textDecoration: 'none', fontWeight: 600 }}>Create Account</Link>
         </p>
+
+        {/* Development Quick Login Pills */}
+        <div style={{ marginTop: '28px', borderTop: '1px solid var(--border-light)', paddingTop: '20px' }}>
+          <span style={{ display: 'block', fontSize: '0.75rem', color: 'var(--text-muted)', textAlign: 'center', marginBottom: '12px', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+            ⚡ Developer Quick Login (Testing Only)
+          </span>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
+            <button
+              type="button"
+              onClick={() => { setEmail('admin@interviewpro.com'); setPassword('test@1234'); }}
+              style={{ padding: '8px 4px', fontSize: '0.72rem', borderRadius: '8px', background: 'rgba(6,182,212,0.06)', border: '1px solid rgba(6,182,212,0.2)', color: 'var(--accent-cyan)', cursor: 'pointer', transition: 'all 0.15s', fontWeight: 600 }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(6,182,212,0.12)'; e.currentTarget.style.borderColor = 'rgba(6,182,212,0.4)'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'rgba(6,182,212,0.06)'; e.currentTarget.style.borderColor = 'rgba(6,182,212,0.2)'; }}
+            >
+              Admin
+            </button>
+            <button
+              type="button"
+              onClick={() => { setEmail('boniyeamin.cse1@gmail.com'); setPassword('test@1234'); }}
+              style={{ padding: '8px 4px', fontSize: '0.72rem', borderRadius: '8px', background: 'rgba(16,185,129,0.06)', border: '1px solid rgba(16,185,129,0.2)', color: '#10b981', cursor: 'pointer', transition: 'all 0.15s', fontWeight: 600 }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(16,185,129,0.12)'; e.currentTarget.style.borderColor = 'rgba(16,185,129,0.4)'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'rgba(16,185,129,0.06)'; e.currentTarget.style.borderColor = 'rgba(16,185,129,0.2)'; }}
+            >
+              Candidate
+            </button>
+            <button
+              type="button"
+              onClick={() => { setEmail('trainer@interviewpro.com'); setPassword('test@1234'); }}
+              style={{ padding: '8px 4px', fontSize: '0.72rem', borderRadius: '8px', background: 'rgba(139,92,246,0.06)', border: '1px solid rgba(139,92,246,0.2)', color: 'var(--accent-purple)', cursor: 'pointer', transition: 'all 0.15s', fontWeight: 600 }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(139,92,246,0.12)'; e.currentTarget.style.borderColor = 'rgba(139,92,246,0.4)'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'rgba(139,92,246,0.06)'; e.currentTarget.style.borderColor = 'rgba(139,92,246,0.2)'; }}
+            >
+              Trainer
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

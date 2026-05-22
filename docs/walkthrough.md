@@ -25,7 +25,16 @@ To align the React frontend's extensive profile edit form with the database stat
 
 We verified the frontend flow end-to-end using an automated browser subagent, confirming that page layouts load instantly and navigate flawlessly.
 
-### 1. Dynamic Reactive Header Navbar
+### 1. Developer Quick-Login Utility (Testing Mode Only)
+As requested, I added a highly convenient, glassmorphic testing panel at the bottom of the Login Card:
+* **One-Click Population**: Clicking **Admin**, **Candidate**, or **Trainer** immediately sets the inputs with the respective seed credentials.
+* **Instant Submission**: Promotes rapid cross-role validation during your development checks without manually typing passwords.
+
+![Developer Quick Login Utility](/home/boni/.gemini/antigravity/brain/8b3dcef3-0fcd-46ff-ad56-3fb764913389/dev_quick_login.png)
+
+---
+
+### 2. Dynamic Reactive Header Navbar
 Detects user login state in real-time, swapping out guest options with custom user features (Workspace shortcuts, greetings, and dynamic global logouts).
 
 ---
