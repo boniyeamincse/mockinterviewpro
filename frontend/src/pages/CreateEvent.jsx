@@ -17,7 +17,7 @@ export default function CreateEvent() {
     language: 'Bangla + English',
     sample_questions: [],
     target_audience: [],
-    meeting_type: 'online',
+    meeting_type: 'google_meet',
     difficulty_level: 'beginner',
     max_participants: 10,
     total_sessions: 1,
@@ -43,9 +43,10 @@ export default function CreateEvent() {
   ];
   const interviewTypes = ['Technical', 'Behavioral', 'System Design', 'Mixed'];
   const meetingTypes = [
-    { value: 'online', label: '🌐 Online (Video Call)' },
-    { value: 'in-person', label: '🏢 In-Person' },
-    { value: 'hybrid', label: '🔄 Hybrid' },
+    { value: 'google_meet', label: '📹 Google Meet' },
+    { value: 'zoom', label: '🎥 Zoom' },
+    { value: 'platform_video', label: '🖥️ Platform Video (Built-in)' },
+    { value: 'own_system', label: '🔗 Own System (Custom Link)' },
   ];
   const difficultyLevels = [
     { value: 'beginner', label: '🟢 Beginner' },
@@ -304,6 +305,7 @@ export default function CreateEvent() {
               {scheduleSlots.map((slot, i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 18px', borderRadius: '12px', background: 'rgba(139,92,246,0.06)', border: '1px solid rgba(139,92,246,0.15)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '16px', color: 'white', fontSize: '0.95rem' }}>
+                    <span style={{ background: 'rgba(139,92,246,0.2)', border: '1px solid rgba(139,92,246,0.35)', padding: '2px 10px', borderRadius: '6px', fontSize: '0.78rem', fontWeight: 700, color: '#a78bfa', minWidth: '52px', textAlign: 'center' }}>Day {i + 1}</span>
                     <Calendar size={16} style={{ color: '#8b5cf6' }} />
                     <span style={{ fontWeight: 600 }}>{new Date(slot.date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' })}</span>
                     <span style={{ color: '#94a3b8' }}>|</span>
