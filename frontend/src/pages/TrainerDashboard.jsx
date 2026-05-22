@@ -421,50 +421,97 @@ const TrainerDashboard = () => {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px' }}>
               
               {/* Total Earned */}
-              <div className="glass-panel" style={{ padding: '24px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: '12px' }}>
-                  <TrendingUp size={16} style={{ color: 'var(--accent-purple)' }} />
+              <div className="glass-panel" style={{ 
+                padding: '28px 24px', 
+                borderRadius: '20px', 
+                border: '1px solid rgba(16, 185, 129, 0.15)',
+                background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.04), rgba(5, 5, 8, 0.6))',
+                boxShadow: '0 8px 32px rgba(16, 185, 129, 0.05)',
+                transition: 'all 0.3s ease',
+                position: 'relative',
+                overflow: 'hidden'
+              }}
+              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.borderColor = 'rgba(16, 185, 129, 0.4)'; e.currentTarget.style.boxShadow = '0 12px 40px rgba(16, 185, 129, 0.15)'; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.borderColor = 'rgba(16, 185, 129, 0.15)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(16, 185, 129, 0.05)'; }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#10b981', fontSize: '0.85rem', marginBottom: '16px', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                  <TrendingUp size={16} />
                   <span>Total earned</span>
                 </div>
-                <div style={{ fontSize: '2rem', fontWeight: 800, color: 'white' }}>{analytics ? `${Number(analytics.total_earnings_bdt || 0).toLocaleString()} BDT` : '— BDT'}</div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '10px', fontSize: '0.8rem', color: '#10b981', fontWeight: 600 }}>
+                <div style={{ fontSize: '2.2rem', fontWeight: 800, color: 'white', letterSpacing: '-0.5px' }}>{analytics ? `${Number(analytics.total_earnings_bdt || 0).toLocaleString()} BDT` : '— BDT'}</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '14px', fontSize: '0.8rem', color: '#10b981', fontWeight: 700, background: 'rgba(16, 185, 129, 0.1)', padding: '4px 10px', borderRadius: '100px', width: 'fit-content' }}>
                   <TrendingUp size={14} /> <span>+12% this month</span>
                 </div>
               </div>
 
               {/* Sessions Done */}
-              <div className="glass-panel" style={{ padding: '24px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: '12px' }}>
-                  <Video size={16} style={{ color: 'var(--accent-cyan)' }} />
+              <div className="glass-panel" style={{ 
+                padding: '28px 24px', 
+                borderRadius: '20px', 
+                border: '1px solid rgba(6, 182, 212, 0.15)',
+                background: 'linear-gradient(135deg, rgba(6, 182, 212, 0.04), rgba(5, 5, 8, 0.6))',
+                boxShadow: '0 8px 32px rgba(6, 182, 212, 0.05)',
+                transition: 'all 0.3s ease',
+                position: 'relative',
+                overflow: 'hidden'
+              }}
+              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.borderColor = 'rgba(6, 182, 212, 0.4)'; e.currentTarget.style.boxShadow = '0 12px 40px rgba(6, 182, 212, 0.15)'; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.borderColor = 'rgba(6, 182, 212, 0.15)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(6, 182, 212, 0.05)'; }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--accent-cyan)', fontSize: '0.85rem', marginBottom: '16px', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                  <Video size={16} />
                   <span>Sessions done</span>
                 </div>
-                <div style={{ fontSize: '2rem', fontWeight: 800, color: 'white' }}>{analytics ? analytics.completed_sessions ?? '—' : '—'}</div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '10px', fontSize: '0.8rem', color: '#10b981', fontWeight: 600 }}>
-                  <TrendingUp size={14} /> <span>completion rate: {analytics?.completion_rate ?? '—'}%</span>
+                <div style={{ fontSize: '2.2rem', fontWeight: 800, color: 'white', letterSpacing: '-0.5px' }}>{analytics ? analytics.completed_sessions ?? '—' : '—'}</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '14px', fontSize: '0.8rem', color: 'var(--accent-cyan)', fontWeight: 700, background: 'rgba(6, 182, 212, 0.1)', padding: '4px 10px', borderRadius: '100px', width: 'fit-content' }}>
+                  <Activity size={14} /> <span>completion rate: {analytics?.completion_rate ?? '—'}%</span>
                 </div>
               </div>
 
               {/* Avg Rating */}
-              <div className="glass-panel" style={{ padding: '24px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: '12px' }}>
-                  <Award size={16} style={{ color: '#eab308' }} />
+              <div className="glass-panel" style={{ 
+                padding: '28px 24px', 
+                borderRadius: '20px', 
+                border: '1px solid rgba(234, 179, 8, 0.15)',
+                background: 'linear-gradient(135deg, rgba(234, 179, 8, 0.04), rgba(5, 5, 8, 0.6))',
+                boxShadow: '0 8px 32px rgba(234, 179, 8, 0.05)',
+                transition: 'all 0.3s ease',
+                position: 'relative',
+                overflow: 'hidden'
+              }}
+              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.borderColor = 'rgba(234, 179, 8, 0.4)'; e.currentTarget.style.boxShadow = '0 12px 40px rgba(234, 179, 8, 0.15)'; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.borderColor = 'rgba(234, 179, 8, 0.15)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(234, 179, 8, 0.05)'; }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#eab308', fontSize: '0.85rem', marginBottom: '16px', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                  <Award size={16} />
                   <span>Avg rating</span>
                 </div>
-                <div style={{ fontSize: '2rem', fontWeight: 800, color: 'white' }}>{analytics?.avg_rating ?? '—'}</div>
-                <div style={{ marginTop: '10px', fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 500 }}>
+                <div style={{ fontSize: '2.2rem', fontWeight: 800, color: 'white', letterSpacing: '-0.5px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  {analytics?.avg_rating ?? '—'}
+                  <Star size={24} style={{ fill: '#eab308', color: '#eab308' }} />
+                </div>
+                <div style={{ marginTop: '18px', fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 600 }}>
                   from {analytics?.total_sessions ?? '—'} total sessions
                 </div>
               </div>
 
               {/* Upcoming */}
-              <div className="glass-panel" style={{ padding: '24px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: '12px' }}>
-                  <Clock size={16} style={{ color: 'var(--accent-cyan)' }} />
+              <div className="glass-panel" style={{ 
+                padding: '28px 24px', 
+                borderRadius: '20px', 
+                border: '1px solid rgba(139, 92, 246, 0.15)',
+                background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.04), rgba(5, 5, 8, 0.6))',
+                boxShadow: '0 8px 32px rgba(139, 92, 246, 0.05)',
+                transition: 'all 0.3s ease',
+                position: 'relative',
+                overflow: 'hidden'
+              }}
+              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.borderColor = 'rgba(139, 92, 246, 0.4)'; e.currentTarget.style.boxShadow = '0 12px 40px rgba(139, 92, 246, 0.15)'; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.borderColor = 'rgba(139, 92, 246, 0.15)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(139, 92, 246, 0.05)'; }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--accent-purple)', fontSize: '0.85rem', marginBottom: '16px', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                  <Clock size={16} />
                   <span>Upcoming</span>
                 </div>
-                <div style={{ fontSize: '2rem', fontWeight: 800, color: 'white' }}>{todayBookings.length}</div>
-                <div style={{ marginTop: '10px', fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 500 }}>
-                  next 7 days
+                <div style={{ fontSize: '2.2rem', fontWeight: 800, color: 'white', letterSpacing: '-0.5px' }}>{todayBookings.length}</div>
+                <div style={{ marginTop: '18px', fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 600 }}>
+                  scheduled today
                 </div>
               </div>
 
@@ -474,36 +521,43 @@ const TrainerDashboard = () => {
             <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '32px' }}>
               
               {/* Today's Sessions */}
-              <div className="glass-panel" style={{ padding: '32px', borderRadius: '24px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+              <div className="glass-panel" style={{ 
+                padding: '36px', 
+                borderRadius: '24px', 
+                display: 'flex', 
+                flexDirection: 'column', 
+                gap: '24px',
+                border: '1px solid rgba(255,255,255,0.06)'
+              }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                   <Clock size={20} style={{ color: 'var(--accent-purple)' }} />
-                  <h3 style={{ fontSize: '1.25rem', margin: 0, fontWeight: 700 }}>Today's sessions</h3>
+                  <h3 style={{ fontSize: '1.35rem', margin: 0, fontWeight: 700, letterSpacing: '-0.3px' }}>Today's sessions</h3>
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
                   {todayBookings.length === 0 ? (
-                    <p style={{ color: 'var(--text-secondary)', textAlign: 'center', margin: '16px 0' }}>No sessions scheduled for today.</p>
+                    <p style={{ color: 'var(--text-secondary)', textAlign: 'center', margin: '16px 0', fontSize: '0.95rem' }}>No sessions scheduled for today.</p>
                   ) : todayBookings.map((booking, idx) => {
                     const initials = (booking.student_name || booking.user_name || 'ST').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
-                    const colors = ['rgba(34, 197, 94, 0.1)', 'rgba(14, 165, 233, 0.1)', 'rgba(234, 179, 8, 0.1)'];
+                    const colors = ['rgba(34, 197, 94, 0.08)', 'rgba(14, 165, 233, 0.08)', 'rgba(234, 179, 8, 0.08)'];
                     const textColors = ['#22c55e', 'var(--accent-cyan)', '#eab308'];
                     const color = colors[idx % colors.length];
                     const textColor = textColors[idx % textColors.length];
                     const time = booking.scheduled_at ? new Date(booking.scheduled_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }) : '—';
                     return (
-                      <div key={booking.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '16px', borderBottom: idx < todayBookings.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none' }}>
+                      <div key={booking.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '18px', borderBottom: idx < todayBookings.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                          <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: color, color: textColor, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '0.95rem' }}>
+                          <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: color, border: `1px solid ${textColor}33`, color: textColor, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '1rem' }}>
                             {initials}
                           </div>
                           <div>
-                            <h4 style={{ margin: 0, fontSize: '1rem', color: 'white', fontWeight: 600 }}>{booking.student_name || booking.user_name || 'Student'}</h4>
-                            <p style={{ margin: '4px 0 0 0', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
+                            <h4 style={{ margin: 0, fontSize: '1.05rem', color: 'white', fontWeight: 600 }}>{booking.student_name || booking.user_name || 'Student'}</h4>
+                            <p style={{ margin: '4px 0 0 0', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
                               {time} • {booking.duration_minutes || 60} min
                             </p>
                           </div>
                         </div>
-                        <span style={{ fontSize: '0.75rem', padding: '4px 12px', borderRadius: '6px', background: 'rgba(34, 197, 94, 0.12)', color: '#22c55e', border: '1px solid rgba(34, 197, 94, 0.2)', fontWeight: 600 }}>
+                        <span style={{ fontSize: '0.75rem', padding: '4px 12px', borderRadius: '100px', background: 'rgba(34, 197, 94, 0.12)', color: '#22c55e', border: '1px solid rgba(34, 197, 94, 0.2)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                           {booking.status || 'Confirmed'}
                         </span>
                       </div>
@@ -513,10 +567,17 @@ const TrainerDashboard = () => {
               </div>
 
               {/* Monthly Revenue (BDT) */}
-              <div className="glass-panel" style={{ padding: '32px', borderRadius: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              <div className="glass-panel" style={{ 
+                padding: '36px', 
+                borderRadius: '24px', 
+                display: 'flex', 
+                flexDirection: 'column', 
+                gap: '24px',
+                border: '1px solid rgba(255,255,255,0.06)'
+              }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                   <TrendingUp size={20} style={{ color: 'var(--accent-cyan)' }} />
-                  <h3 style={{ fontSize: '1.25rem', margin: 0, fontWeight: 700 }}>Monthly revenue (BDT)</h3>
+                  <h3 style={{ fontSize: '1.35rem', margin: 0, fontWeight: 700, letterSpacing: '-0.3px' }}>Monthly revenue (BDT)</h3>
                 </div>
 
                 {/* Custom Gradient Bar Graph */}
@@ -556,19 +617,19 @@ const TrainerDashboard = () => {
                         borderRadius: '4px',
                         boxShadow: item.active ? '0 0 15px rgba(59, 130, 246, 0.4)' : 'none'
                       }}></div>
-                      <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', fontWeight: 500 }}>{item.month}</div>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', fontWeight: 600 }}>{item.month}</div>
                     </div>
                   ))}
                 </div>
 
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '16px', paddingTop: '10px' }}>
                   <div>
-                    <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 500 }}>This month</div>
-                    <div style={{ fontSize: '1.4rem', fontWeight: 850, color: 'white', marginTop: '4px' }}>{wallet ? `${Number(wallet.available_balance_bdt || 0).toLocaleString()} BDT` : '— BDT'}</div>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 600 }}>This month</div>
+                    <div style={{ fontSize: '1.5rem', fontWeight: 850, color: 'white', marginTop: '4px', letterSpacing: '-0.3px' }}>{wallet ? `${Number(wallet.available_balance_bdt || 0).toLocaleString()} BDT` : '— BDT'}</div>
                   </div>
                   <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 500 }}>Pending withdrawal</div>
-                    <div style={{ fontSize: '1.4rem', fontWeight: 850, color: '#22c55e', marginTop: '4px' }}>{wallet ? `${Number(wallet.pending_withdrawal_bdt || 0).toLocaleString()} BDT` : '— BDT'}</div>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 600 }}>Pending withdrawal</div>
+                    <div style={{ fontSize: '1.5rem', fontWeight: 850, color: '#22c55e', marginTop: '4px', letterSpacing: '-0.3px' }}>{wallet ? `${Number(wallet.pending_withdrawal_bdt || 0).toLocaleString()} BDT` : '— BDT'}</div>
                   </div>
                 </div>
               </div>
@@ -579,56 +640,65 @@ const TrainerDashboard = () => {
             <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '32px' }}>
               
               {/* Upcoming Session Details Card */}
-              <div className="glass-panel" style={{ padding: '32px', borderRadius: '24px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+              <div className="glass-panel" style={{ 
+                padding: '36px', 
+                borderRadius: '24px', 
+                display: 'flex', 
+                flexDirection: 'column', 
+                gap: '24px',
+                border: '1px solid rgba(255,255,255,0.06)'
+              }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <h3 style={{ fontSize: '1.25rem', margin: 0, fontWeight: 700 }}>Assigned Candidate Match</h3>
-                  <span className="badge" style={{ background: 'rgba(34, 197, 94, 0.12)', color: '#10b981', border: '1px solid rgba(34,197,94,0.2)' }}>Live Pulse</span>
+                  <h3 style={{ fontSize: '1.35rem', margin: 0, fontWeight: 700, letterSpacing: '-0.3px' }}>Assigned Candidate Match</h3>
+                  <span className="badge animate-pulse" style={{ background: 'rgba(34, 197, 94, 0.12)', color: '#10b981', border: '1px solid rgba(34,197,94,0.3)', padding: '4px 12px', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase' }}>Live Pulse</span>
                 </div>
 
                 <div style={{ 
                   padding: '24px', 
                   borderRadius: '20px', 
-                  background: 'rgba(255,255,255,0.01)', 
-                  border: '1px solid var(--border-light)',
+                  background: 'linear-gradient(135deg, rgba(255,255,255,0.01), rgba(255,255,255,0.03))', 
+                  border: '1px solid rgba(255,255,255,0.08)',
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: '20px'
+                  gap: '20px',
+                  boxShadow: '0 8px 32px rgba(0,0,0,0.1)'
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                     <div style={{
-                      width: '60px',
-                      height: '60px',
+                      width: '64px',
+                      height: '64px',
                       borderRadius: '16px',
                       background: 'linear-gradient(135deg, #0ea5e9, #0284c7)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       fontWeight: 800,
-                      fontSize: '1.3rem',
+                      fontSize: '1.4rem',
                       color: 'white',
-                      boxShadow: '0 4px 15px rgba(14, 165, 233, 0.3)'
+                      boxShadow: '0 4px 15px rgba(14, 165, 233, 0.3)',
+                      border: '1px solid rgba(255,255,255,0.1)'
                     }}>
                       BY
                     </div>
                     <div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <h4 style={{ margin: 0, fontSize: '1.15rem', color: 'white' }}>Boni Yeamin</h4>
-                        <span style={{ fontSize: '0.75rem', padding: '2px 8px', borderRadius: '100px', background: 'rgba(139, 92, 246, 0.15)', color: 'var(--accent-purple)', fontWeight: 600 }}>100% Strength</span>
+                        <h4 style={{ margin: 0, fontSize: '1.2rem', color: 'white', fontWeight: 700 }}>Boni Yeamin</h4>
+                        <span style={{ fontSize: '0.75rem', padding: '3px 10px', borderRadius: '100px', background: 'rgba(139, 92, 246, 0.15)', color: 'var(--accent-purple)', fontWeight: 700, border: '1px solid rgba(139,92,246,0.3)' }}>100% Strength</span>
                       </div>
-                      <p style={{ margin: '4px 0 0 0', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                      <p style={{ margin: '6px 0 0 0', fontSize: '0.9rem', color: 'var(--text-secondary)', fontWeight: 500 }}>
                         BUET CSE Graduate • React/Go Engineer
                       </p>
                     </div>
                   </div>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', padding: '16px 0', borderTop: '1px solid rgba(255,255,255,0.05)', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', padding: '20px 0', borderTop: '1px solid rgba(255,255,255,0.06)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
                     <div>
-                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>TOPIC TYPE</div>
-                      <div style={{ fontSize: '0.9rem', fontWeight: 600, color: 'white', marginTop: '2px' }}>System Design & Scalability</div>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 600, letterSpacing: '0.5px' }}>TOPIC TYPE</div>
+                      <div style={{ fontSize: '0.95rem', fontWeight: 700, color: 'white', marginTop: '4px' }}>System Design & Scalability</div>
                     </div>
                     <div>
-                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>SCHEDULE TIME</div>
-                      <div style={{ fontSize: '0.9rem', fontWeight: 600, color: 'white', marginTop: '2px' }}>Today at 4:00 PM</div>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 600, letterSpacing: '0.5px' }}>SCHEDULE TIME</div>
+                      <div style={{ fontSize: '0.95rem', fontWeight: 700, color: 'white', marginTop: '4px' }}>Today at 4:00 PM</div>
                     </div>
                   </div>
 
@@ -642,14 +712,16 @@ const TrainerDashboard = () => {
                         alignItems: 'center', 
                         justifyContent: 'center', 
                         gap: '8px', 
-                        padding: '12px',
+                        padding: '14px',
                         background: 'linear-gradient(135deg, var(--accent-purple), var(--accent-cyan))',
                         border: 'none',
                         color: 'white',
-                        fontWeight: 700,
-                        borderRadius: '10px',
+                        fontWeight: 800,
+                        borderRadius: '12px',
                         cursor: 'pointer',
-                        boxShadow: '0 0 20px rgba(139,92,246,0.4)'
+                        boxShadow: '0 0 20px rgba(139,92,246,0.4)',
+                        fontSize: '0.95rem',
+                        transition: 'all 0.2s ease'
                       }}
                     >
                       <Video size={18} /> Join Live Video Room
@@ -659,61 +731,71 @@ const TrainerDashboard = () => {
               </div>
 
               {/* Enterprise Grading Rubric Input Card */}
-              <div className="glass-panel" style={{ padding: '32px', borderRadius: '24px' }}>
-                <h3 style={{ fontSize: '1.25rem', marginBottom: '20px', fontWeight: 700 }}>Submit Candidate Evaluation</h3>
+              <div className="glass-panel" style={{ 
+                padding: '36px', 
+                borderRadius: '24px',
+                border: '1px solid rgba(255,255,255,0.06)'
+              }}>
+                <h3 style={{ fontSize: '1.35rem', marginBottom: '24px', fontWeight: 700, letterSpacing: '-0.3px' }}>Submit Candidate Evaluation</h3>
                 {submittedFeedback ? (
                   <div style={{ 
-                    padding: '24px', 
-                    borderRadius: '16px', 
+                    padding: '32px 24px', 
+                    borderRadius: '20px', 
                     background: 'rgba(34, 197, 94, 0.05)', 
                     border: '1px solid rgba(34, 197, 94, 0.2)',
                     textAlign: 'center',
                     color: '#22c55e'
                   }}>
-                    <CheckCircle size={32} style={{ marginBottom: '12px' }} />
-                    <div style={{ fontWeight: 700 }}>Feedback Report Locked</div>
-                    <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', margin: '6px 0 0 0' }}>
+                    <CheckCircle size={36} style={{ marginBottom: '16px' }} />
+                    <div style={{ fontWeight: 800, fontSize: '1.15rem' }}>Feedback Report Locked</div>
+                    <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', margin: '8px 0 0 0', lineHeight: '1.5' }}>
                       Evaluation metrics successfully saved to Boni Yeamin's Candidate Ledger Profile.
                     </p>
                   </div>
                 ) : (
-                  <form onSubmit={handleFeedbackSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                      <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Coding & Algorithms Score (1-10)</label>
+                  <form onSubmit={handleFeedbackSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                      <label style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 600 }}>Coding & Algorithms Score (1-10)</label>
                       <input 
                         type="number" 
                         min="1" 
                         max="10" 
                         value={sessionFeedback.codingScore} 
                         onChange={e => setSessionFeedback({...sessionFeedback, codingScore: e.target.value})}
-                        style={{ padding: '10px', borderRadius: '8px', border: '1px solid var(--border-light)', background: 'rgba(255,255,255,0.02)', color: 'white' }}
+                        style={{ padding: '12px 14px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.02)', color: 'white', outline: 'none', transition: 'border-color 0.2s', fontSize: '0.95rem' }}
+                        onFocus={e => e.target.style.borderColor = 'var(--accent-cyan)'}
+                        onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
                         required
                       />
                     </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                      <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>System Design & Scalability Score (1-10)</label>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                      <label style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 600 }}>System Design & Scalability Score (1-10)</label>
                       <input 
                         type="number" 
                         min="1" 
                         max="10" 
                         value={sessionFeedback.systemDesignScore} 
                         onChange={e => setSessionFeedback({...sessionFeedback, systemDesignScore: e.target.value})}
-                        style={{ padding: '10px', borderRadius: '8px', border: '1px solid var(--border-light)', background: 'rgba(255,255,255,0.02)', color: 'white' }}
+                        style={{ padding: '12px 14px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.02)', color: 'white', outline: 'none', transition: 'border-color 0.2s', fontSize: '0.95rem' }}
+                        onFocus={e => e.target.style.borderColor = 'var(--accent-cyan)'}
+                        onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
                         required
                       />
                     </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                      <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Technical Notes & Recommendations</label>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                      <label style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 600 }}>Technical Notes & Recommendations</label>
                       <textarea 
                         rows="3" 
                         placeholder="Type scaling suggestions or algorithmic recommendations here..."
                         value={sessionFeedback.writtenNotes}
                         onChange={e => setSessionFeedback({...sessionFeedback, writtenNotes: e.target.value})}
-                        style={{ padding: '10px', borderRadius: '8px', border: '1px solid var(--border-light)', background: 'rgba(255,255,255,0.02)', color: 'white', fontFamily: 'inherit', resize: 'none' }}
+                        style={{ padding: '12px 14px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.02)', color: 'white', fontFamily: 'inherit', resize: 'none', outline: 'none', transition: 'border-color 0.2s', fontSize: '0.95rem', lineHeight: '1.5' }}
+                        onFocus={e => e.target.style.borderColor = 'var(--accent-cyan)'}
+                        onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
                         required
                       />
                     </div>
-                    <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '8px' }}>
+                    <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '10px', padding: '14px', fontWeight: 800, borderRadius: '12px', fontSize: '0.95rem' }}>
                       Lock & Publish Evaluation
                     </button>
                   </form>
