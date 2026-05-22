@@ -107,6 +107,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Student profile endpoints
     Route::get('student/profile', [StudentProfileController::class, 'show']);
     Route::put('student/profile', [StudentProfileController::class, 'update']);
+    Route::post('student/profile', [StudentProfileController::class, 'update']);
     Route::patch('student/profile/password', [StudentProfileController::class, 'changePassword']);
 
     // Student discovery and wishlist

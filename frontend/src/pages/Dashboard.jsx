@@ -73,12 +73,28 @@ const defaultProfile = {
   careerGoal: '',
   bio: '',
   phone: '',
+  skills: '',
+  experienceLevel: 'Entry Level',
+  resumePath: '',
+  portfolioLinks: '',
+  githubProfile: '',
+  linkedinProfile: '',
+  certificates: '',
+  earnedBadges: '',
+  points: 0,
+  rank: 'Novice',
+  completedSessionsCount: 0,
+  interviewHistory: [],
+  reviewsGiven: [],
 };
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('workspace');
+  const [subTab, setSubTab] = useState('personal');
   const [isEditing, setIsEditing] = useState(false);
   const [profile, setProfile] = useState(defaultProfile);
+  const [photoFile, setPhotoFile] = useState(null);
+  const [resumeFile, setResumeFile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
@@ -157,12 +173,13 @@ const Dashboard = () => {
     let score = 0;
     if (profile.name) score += 10;
     if (profile.email) score += 10;
-    if (profile.photo) score += 10;
-    if (profile.gender) score += 10;
-    if (profile.birthday) score += 10;
-    if (profile.academicInst || profile.academicDegree) score += 20;
-    if (profile.interests) score += 15;
-    if (profile.goals || profile.careerGoal) score += 15;
+    if (profile.photo || profile.profile_image) score += 15;
+    if (profile.phone) score += 5;
+    if (profile.bio) score += 10;
+    if (profile.academicInst || profile.academicDegree) score += 15;
+    if (profile.skills) score += 15;
+    if (profile.resumePath) score += 10;
+    if (profile.githubProfile || profile.linkedinProfile) score += 10;
     return score;
   }, [profile]);
 
@@ -183,31 +200,61 @@ const Dashboard = () => {
   const handlePhotoUpload = (event) => {
     const file = event.target.files[0];
     if (!file) return;
+    setPhotoFile(file);
     const url = URL.createObjectURL(file);
     setProfile((prev) => ({ ...prev, photo: url }));
   };
 
+  const handleResumeUpload = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+    setResumeFile(file);
+    setProfile((prev) => ({ ...prev, resumePath: file.name }));
+  };
+
   const handleSaveProfile = async (event) => {
-    event.preventDefault();
+    if (event) event.preventDefault();
     setSaving(true);
     setError('');
     try {
-      const response = await updateStudentProfile({
-        name: profile.name,
-        phone: profile.phone,
-        bio: profile.bio,
-        goals: profile.goals,
-        career_goal: profile.careerGoal,
-        interests: profile.interests,
-        academic_inst: profile.academicInst,
-        academic_degree: profile.academicDegree,
-        academic_grad_year: profile.academicGradYear || null,
-      });
+      const formData = new FormData();
+      formData.append('name', profile.name || '');
+      formData.append('phone', profile.phone || '');
+      formData.append('bio', profile.bio || '');
+      formData.append('goals', profile.goals || '');
+      formData.append('career_goal', profile.careerGoal || '');
+      formData.append('interests', profile.interests || '');
+      formData.append('academic_inst', profile.academicInst || '');
+      formData.append('academic_degree', profile.academicDegree || '');
+      formData.append('academic_grad_year', profile.academicGradYear || '');
+      formData.append('gender', profile.gender || '');
+      formData.append('birthday', profile.birthday || '');
+      
+      formData.append('skills', profile.skills || '');
+      formData.append('experience_level', profile.experienceLevel || '');
+      formData.append('portfolio_links', profile.portfolioLinks || '');
+      formData.append('github_profile', profile.githubProfile || '');
+      formData.append('linkedin_profile', profile.linkedinProfile || '');
+      formData.append('certificates', profile.certificates || '');
+      formData.append('earned_badges', profile.earnedBadges || '');
+      formData.append('points', Number(profile.points || 0));
+      formData.append('rank', profile.rank || 'Novice');
+
+      if (photoFile) {
+        formData.append('profile_image', photoFile);
+      }
+      if (resumeFile) {
+        formData.append('resume_file', resumeFile);
+      }
+
+      const response = await updateStudentProfile(formData);
       const nextUser = api.normalizeUser(response?.data);
       if (nextUser) {
         localStorage.setItem('user', JSON.stringify(nextUser));
         setProfile((prev) => ({ ...prev, ...nextUser }));
       }
+      setPhotoFile(null);
+      setResumeFile(null);
       setIsEditing(false);
     } catch (err) {
       setError(err?.payload?.message || err.message || 'Unable to save profile');
@@ -503,73 +550,261 @@ const Dashboard = () => {
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', marginBottom: '4px' }}><span style={{ color: 'var(--text-secondary)' }}>Completeness</span><span style={{ color: 'var(--accent-cyan)', fontWeight: 600 }}>{completeness}%</span></div>
                 <div style={{ width: '150px', height: '6px', background: 'rgba(255,255,255,0.05)', borderRadius: '10px', overflow: 'hidden' }}><div style={{ width: `${completeness}%`, height: '100%', background: 'linear-gradient(90deg, var(--accent-cyan), var(--accent-purple))' }} /></div>
               </div>
-              <button onClick={handleSaveProfile} className="btn btn-primary" style={{ padding: '8px 16px', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                {saving ? 'Saving...' : <><Save size={16} /> Save Changes</>}
-              </button>
+              {!isEditing ? (
+                <button type="button" onClick={() => setIsEditing(true)} className="btn btn-secondary" style={{ padding: '8px 16px', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '8px', border: '1px solid var(--accent-cyan)' }}>
+                  <Edit3 size={16} /> Edit Profile
+                </button>
+              ) : (
+                <div style={{ display: 'flex', gap: '12px' }}>
+                  <button type="button" onClick={() => { setIsEditing(false); setPhotoFile(null); setResumeFile(null); }} className="btn btn-secondary" style={{ padding: '8px 16px', fontSize: '0.85rem' }}>
+                    Cancel
+                  </button>
+                  <button onClick={handleSaveProfile} className="btn btn-primary" style={{ padding: '8px 16px', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    {saving ? 'Saving...' : <><Save size={16} /> Save Changes</>}
+                  </button>
+                </div>
+              )}
             </div>
           </div>
 
           <form onSubmit={handleSaveProfile} style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '48px', alignItems: 'start' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '24px' }}>
-              <div style={{ position: 'relative', width: '130px', height: '130px' }}>
-                <img src={profile.photo || studentImg} alt="Avatar" style={{ width: '100%', height: '100%', borderRadius: '16px', objectFit: 'cover', border: '2px solid var(--border-light)' }} />
-                {isEditing && (
-                  <label style={{ position: 'absolute', bottom: '-8px', right: '-8px', width: '36px', height: '36px', borderRadius: '50%', background: 'var(--accent-cyan)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 4px 10px rgba(0,0,0,0.3)', color: 'black' }}>
-                    <Camera size={16} />
-                    <input type="file" accept="image/*" onChange={handlePhotoUpload} style={{ display: 'none' }} />
-                  </label>
-                )}
+            {/* LEFT SIDEBAR: AVATAR, BADGES, RESUME UPLOADER */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', background: 'rgba(255,255,255,0.02)', padding: '24px', borderRadius: '16px', border: '1px solid var(--border-light)' }}>
+              
+              {/* Profile Image & Meta */}
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
+                <div style={{ position: 'relative', width: '130px', height: '130px' }}>
+                  <img src={profile.photo || profile.profile_image ? (profile.photo.startsWith('blob:') || profile.photo.startsWith('data:') ? profile.photo : `${import.meta.env.VITE_API_BASE_URL || '/api'}/../storage/${profile.profile_image || profile.photo}`) : studentImg} alt="Avatar" style={{ width: '100%', height: '100%', borderRadius: '16px', objectFit: 'cover', border: '2px solid var(--border-light)' }} />
+                  {isEditing && (
+                    <label style={{ position: 'absolute', bottom: '-8px', right: '-8px', width: '36px', height: '36px', borderRadius: '50%', background: 'var(--accent-cyan)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 4px 10px rgba(0,0,0,0.3)', color: 'black' }}>
+                      <Camera size={16} />
+                      <input type="file" accept="image/*" onChange={handlePhotoUpload} style={{ display: 'none' }} />
+                    </label>
+                  )}
+                </div>
+                <div style={{ textAlign: 'center', width: '100%' }}>
+                  <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'white' }}>{profile.name}</h3>
+                  <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'block', marginTop: '4px' }}>{profile.role}</span>
+                </div>
               </div>
-              <div style={{ textAlign: 'center', width: '100%' }}>
-                <h3 style={{ fontSize: '1.2rem', fontWeight: 600, color: 'white' }}>{profile.name}</h3>
-                <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block', marginTop: '4px' }}>{profile.role}</span>
-                <span style={{ display: 'inline-block', marginTop: '12px', fontSize: '0.75rem', fontWeight: 600, color: completeness >= 75 ? '#10b981' : '#f59e0b', background: completeness >= 75 ? 'rgba(16, 185, 129, 0.1)' : 'rgba(245, 158, 11, 0.1)', padding: '4px 14px', borderRadius: '100px', border: completeness >= 75 ? '1px solid rgba(16, 185, 129, 0.2)' : '1px solid rgba(245, 158, 11, 0.2)' }}>{completeness >= 75 ? 'Verified Profile Strong' : 'Profile Needs Completion'}</span>
+
+              {/* XP / Rank Badges */}
+              <div style={{ background: 'linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(139, 92, 246, 0.15))', padding: '16px', borderRadius: '12px', border: '1px solid rgba(6, 182, 212, 0.3)', textAlign: 'center' }}>
+                <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 600 }}>Gamification Status</div>
+                <div style={{ fontSize: '1.4rem', fontWeight: 800, color: 'white', marginTop: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                  <Sparkles size={18} style={{ color: 'var(--accent-cyan)' }} />
+                  {profile.points || 0} XP
+                </div>
+                <span style={{ display: 'inline-block', marginTop: '8px', padding: '3px 12px', borderRadius: '100px', fontSize: '0.75rem', fontWeight: 700, background: 'rgba(255,255,255,0.08)', color: 'var(--accent-cyan)' }}>
+                  🏆 {profile.rank || 'Novice'} Rank
+                </span>
+              </div>
+
+              {/* Earned Badges */}
+              <div>
+                <div style={{ fontSize: '0.9rem', fontWeight: 600, color: 'white', marginBottom: '12px' }}>Earned Badges</div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                  {(() => {
+                    const parsedBadges = profile.earnedBadges ? profile.earnedBadges.split(',').map(s => s.trim()).filter(Boolean) : [];
+                    const displayBadges = parsedBadges.length ? parsedBadges : ['🚀 First Booking', '💡 Prep Warrior', '🎓 Novice Scholar'];
+                    return displayBadges.map((badge, idx) => (
+                      <span key={idx} style={{ padding: '6px 12px', borderRadius: '8px', fontSize: '0.75rem', background: 'rgba(139, 92, 246, 0.08)', border: '1px solid rgba(139, 92, 246, 0.2)', color: 'white', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <Award size={12} style={{ color: 'var(--accent-purple)' }} /> {badge}
+                      </span>
+                    ));
+                  })()}
+                </div>
+              </div>
+
+              {/* Resume / CV Upload */}
+              <div style={{ borderTop: '1px solid var(--border-light)', paddingTop: '20px' }}>
+                <div style={{ fontSize: '0.9rem', fontWeight: 600, color: 'white', marginBottom: '8px' }}>Resume / CV Upload</div>
+                
+                {profile.resumePath ? (
+                  <a href={`${import.meta.env.VITE_API_BASE_URL || '/api'}/../storage/${profile.resumePath}`} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px', borderRadius: '10px', background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-light)', color: 'var(--accent-cyan)', textDecoration: 'none', fontSize: '0.8rem', marginBottom: '12px' }}>
+                    <BookOpen size={16} />
+                    <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }}>{profile.resumePath.split('/').pop()}</span>
+                    <Sparkles size={14} />
+                  </a>
+                ) : (
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '12px' }}>No CV / Resume uploaded yet.</div>
+                )}
+
+                {isEditing && (
+                  <div style={{ position: 'relative' }}>
+                    <input type="file" accept=".pdf,.doc,.docx" onChange={handleResumeUpload} style={{ display: 'none' }} id="resume-file-input" />
+                    <label htmlFor="resume-file-input" className="btn btn-secondary" style={{ padding: '8px 12px', fontSize: '0.8rem', width: '100%', textAlign: 'center', cursor: 'pointer', borderStyle: 'dashed' }}>
+                      {resumeFile ? `Selected: ${resumeFile.name}` : 'Upload PDF/Doc'}
+                    </label>
+                  </div>
+                )}
               </div>
             </div>
 
+            {/* RIGHT WORKSPACE: SUB-TABS (Personal, Academic, Professional, History) */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
-              <div>
-                <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: 'white', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}><User size={18} style={{ color: 'var(--accent-cyan)' }} /> Personal Information</h3>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                  <input name="name" value={profile.name} onChange={handleProfileChange} disabled={!isEditing} style={fieldStyle(isEditing)} />
-                  <input name="email" value={profile.email} onChange={handleProfileChange} disabled={!isEditing} style={fieldStyle(isEditing)} />
-                  <input name="phone" value={profile.phone || ''} onChange={handleProfileChange} disabled={!isEditing} placeholder="Phone" style={fieldStyle(isEditing)} />
-                  <select name="gender" value={profile.gender || ''} onChange={handleProfileChange} disabled={!isEditing} style={fieldStyle(isEditing)}>
-                    <option value="">Select Gender</option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                    <option value="Other">Other</option>
-                  </select>
-                </div>
+              
+              {/* Sub-tab Navigation */}
+              <div style={{ display: 'flex', gap: '8px', borderBottom: '1px solid var(--border-light)', paddingBottom: '12px' }}>
+                {['personal', 'academic', 'professional', 'history'].map((tab) => (
+                  <button key={tab} type="button" onClick={() => setSubTab(tab)} style={{ background: subTab === tab ? 'rgba(6, 182, 212, 0.1)' : 'transparent', border: subTab === tab ? '1px solid var(--accent-cyan)' : '1px solid transparent', color: subTab === tab ? 'white' : 'var(--text-secondary)', padding: '8px 16px', borderRadius: '8px', fontSize: '0.85rem', cursor: 'pointer', transition: 'all 0.2s', textTransform: 'capitalize', fontWeight: subTab === tab ? 600 : 400 }}>
+                    {tab === 'history' ? 'History & Reviews' : tab}
+                  </button>
+                ))}
               </div>
 
-              <div>
-                <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: 'white', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}><GraduationCap size={18} style={{ color: 'var(--accent-purple)' }} /> Academic Information</h3>
-                <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '16px', marginBottom: '16px' }}>
-                  <input name="academicInst" value={profile.academicInst || ''} onChange={handleProfileChange} disabled={!isEditing} placeholder="University / College" style={fieldStyle(isEditing)} />
-                  <input name="academicGradYear" value={profile.academicGradYear || ''} onChange={handleProfileChange} disabled={!isEditing} placeholder="Graduation Year" style={fieldStyle(isEditing)} />
+              {/* Sub-tab Content Panels */}
+              {subTab === 'personal' && (
+                <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                  <h3 style={{ fontSize: '1.15rem', fontWeight: 600, color: 'white', display: 'flex', alignItems: 'center', gap: '8px' }}><User size={18} style={{ color: 'var(--accent-cyan)' }} /> Personal & About</h3>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                    <div><label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>Full Name</label><input name="name" value={profile.name || ''} onChange={handleProfileChange} disabled={!isEditing} style={fieldStyle(isEditing)} /></div>
+                    <div><label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>Email Address</label><input name="email" value={profile.email || ''} onChange={handleProfileChange} disabled style={{ ...fieldStyle(false), opacity: 0.6 }} /></div>
+                    <div><label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>Phone Number</label><input name="phone" value={profile.phone || ''} onChange={handleProfileChange} disabled={!isEditing} placeholder="+88017XXXXXXXX" style={fieldStyle(isEditing)} /></div>
+                    <div><label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>Gender</label>
+                      <select name="gender" value={profile.gender || ''} onChange={handleProfileChange} disabled={!isEditing} style={{ ...fieldStyle(isEditing), width: '100%' }}>
+                        <option value="">Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div>
+                    <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>Bio / About me</label>
+                    <textarea name="bio" rows="4" value={profile.bio || ''} onChange={handleProfileChange} disabled={!isEditing} placeholder="Tell trainers about your experience and career aspirations..." style={{ ...fieldStyle(isEditing), width: '100%', resize: 'none' }} />
+                  </div>
                 </div>
-                <input name="academicDegree" value={profile.academicDegree || ''} onChange={handleProfileChange} disabled={!isEditing} placeholder="Degree / Program" style={fieldStyle(isEditing)} />
+              )}
+
+              {subTab === 'academic' && (
+                <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                  <h3 style={{ fontSize: '1.15rem', fontWeight: 600, color: 'white', display: 'flex', alignItems: 'center', gap: '8px' }}><GraduationCap size={18} style={{ color: 'var(--accent-purple)' }} /> Academic Details</h3>
+                  <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '16px' }}>
+                    <div><label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>University / School</label><input name="academicInst" value={profile.academicInst || ''} onChange={handleProfileChange} disabled={!isEditing} placeholder="e.g. Dhaka University" style={fieldStyle(isEditing)} /></div>
+                    <div><label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>Graduation Year</label><input name="academicGradYear" value={profile.academicGradYear || ''} onChange={handleProfileChange} disabled={!isEditing} placeholder="2026" style={fieldStyle(isEditing)} /></div>
+                  </div>
+                  <div><label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>Academic Degree / Program</label><input name="academicDegree" value={profile.academicDegree || ''} onChange={handleProfileChange} disabled={!isEditing} placeholder="B.Sc. in Computer Science" style={{ ...fieldStyle(isEditing), width: '100%' }} /></div>
+                  <div>
+                    <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>Preparation Focus & Goals</label>
+                    <textarea name="goals" rows="3" value={profile.goals || ''} onChange={handleProfileChange} disabled={!isEditing} placeholder="What do you want to accomplish in your mock interviews?" style={{ ...fieldStyle(isEditing), width: '100%', resize: 'none' }} />
+                  </div>
+                </div>
+              )}
+
+              {subTab === 'professional' && (
+                <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                  <h3 style={{ fontSize: '1.15rem', fontWeight: 600, color: 'white', display: 'flex', alignItems: 'center', gap: '8px' }}><Target size={18} style={{ color: 'var(--accent-cyan)' }} /> Skills & Experience Focus</h3>
+                  
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                    <div>
+                      <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>Skills (comma-separated tags)</label>
+                      <input name="skills" value={profile.skills || ''} onChange={handleProfileChange} disabled={!isEditing} placeholder="React, Node.js, DSA, Algorithms" style={fieldStyle(isEditing)} />
+                    </div>
+                    <div>
+                      <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>Experience Level</label>
+                      <select name="experienceLevel" value={profile.experienceLevel || 'Entry Level'} onChange={handleProfileChange} disabled={!isEditing} style={{ ...fieldStyle(isEditing), width: '100%' }}>
+                        <option value="Entry Level">Entry Level (0-1 yrs)</option>
+                        <option value="Mid Level">Mid Level (2-4 yrs)</option>
+                        <option value="Senior Level">Senior Level (5+ yrs)</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                    <div>
+                      <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>Career Target / Role</label>
+                      <input name="careerGoal" value={profile.careerGoal || ''} onChange={handleProfileChange} disabled={!isEditing} placeholder="e.g. Senior Frontend Architect" style={fieldStyle(isEditing)} />
+                    </div>
+                    <div>
+                      <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>Portfolio / Website URL</label>
+                      <input name="portfolioLinks" value={profile.portfolioLinks || ''} onChange={handleProfileChange} disabled={!isEditing} placeholder="https://myportfolio.com" style={fieldStyle(isEditing)} />
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                    <div>
+                      <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>GitHub Profile Link</label>
+                      <input name="githubProfile" value={profile.githubProfile || ''} onChange={handleProfileChange} disabled={!isEditing} placeholder="https://github.com/username" style={fieldStyle(isEditing)} />
+                    </div>
+                    <div>
+                      <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>LinkedIn Profile Link</label>
+                      <input name="linkedinProfile" value={profile.linkedinProfile || ''} onChange={handleProfileChange} disabled={!isEditing} placeholder="https://linkedin.com/in/username" style={fieldStyle(isEditing)} />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>Certificates (comma-separated)</label>
+                    <input name="certificates" value={profile.certificates || ''} onChange={handleProfileChange} disabled={!isEditing} placeholder="AWS Cloud Practitioner, PMP Certificate" style={{ ...fieldStyle(isEditing), width: '100%' }} />
+                  </div>
+                </div>
+              )}
+
+              {subTab === 'history' && (
+                <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                  
+                  {/* Interview History */}
+                  <div>
+                    <h3 style={{ fontSize: '1.15rem', fontWeight: 600, color: 'white', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <Clock size={18} style={{ color: 'var(--accent-cyan)' }} /> Completed Sessions & Log ({profile.completedSessionsCount || 0} Sessions)
+                    </h3>
+
+                    {profile.interviewHistory && profile.interviewHistory.length > 0 ? (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxHeight: '250px', overflowY: 'auto', paddingRight: '8px' }}>
+                        {profile.interviewHistory.map((item, index) => (
+                          <div key={index} style={{ padding: '12px 16px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border-light)', borderRadius: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <div>
+                              <strong style={{ fontSize: '0.9rem', color: 'white' }}>{item.event_title}</strong>
+                              <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '4px' }}>Trainer: {item.trainer_name} · Date: {new Date(item.scheduled_at).toLocaleDateString()}</div>
+                            </div>
+                            <span style={{ fontSize: '0.75rem', padding: '3px 8px', borderRadius: '100px', fontWeight: 600, background: item.status === 'completed' ? 'rgba(16,185,129,0.1)' : 'rgba(245,158,11,0.1)', color: item.status === 'completed' ? '#10b981' : '#f59e0b', border: item.status === 'completed' ? '1px solid rgba(16,185,129,0.2)' : '1px solid rgba(245,158,11,0.2)' }}>
+                              {item.status}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div style={{ padding: '12px', background: 'rgba(255,255,255,0.02)', borderRadius: '10px', color: 'var(--text-secondary)', fontSize: '0.8rem' }}>No session logs available. Book a session to get started!</div>
+                    )}
+                  </div>
+
+                  {/* Reviews Given Feed */}
+                  <div>
+                    <h3 style={{ fontSize: '1.15rem', fontWeight: 600, color: 'white', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <Star size={18} style={{ color: 'var(--accent-purple)' }} /> Reviews You've Given
+                    </h3>
+
+                    {profile.reviewsGiven && profile.reviewsGiven.length > 0 ? (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                        {profile.reviewsGiven.map((review, index) => (
+                          <div key={index} style={{ padding: '12px 16px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border-light)', borderRadius: '10px' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                              <strong style={{ fontSize: '0.85rem' }}>{review.event_title}</strong>
+                              <span style={{ color: '#f59e0b', fontSize: '0.8rem', fontWeight: 700 }}>★ {review.rating}/5</span>
+                            </div>
+                            <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', margin: 0, fontStyle: 'italic' }}>"{review.comment || 'No comment provided'}"</p>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div style={{ padding: '12px', background: 'rgba(255,255,255,0.02)', borderRadius: '10px', color: 'var(--text-secondary)', fontSize: '0.8rem' }}>You haven't left any reviews yet.</div>
+                    )}
+                  </div>
+
+                </div>
+              )}
+
+              {/* Password Management */}
+              <div style={{ marginTop: '20px', borderTop: '1px solid var(--border-light)', paddingTop: '28px' }}>
+                <h3 style={{ fontSize: '1.15rem', fontWeight: 600, color: 'white', marginBottom: '16px' }}>Security Settings</h3>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
+                  <input type="password" value={profileForm.current_password} onChange={(e) => setProfileForm((prev) => ({ ...prev, current_password: e.target.value }))} placeholder="Current Password" style={fieldStyle(true)} />
+                  <input type="password" value={profileForm.password} onChange={(e) => setProfileForm((prev) => ({ ...prev, password: e.target.value }))} placeholder="New Password" style={fieldStyle(true)} />
+                  <input type="password" value={profileForm.password_confirmation} onChange={(e) => setProfileForm((prev) => ({ ...prev, password_confirmation: e.target.value }))} placeholder="Confirm New Password" style={fieldStyle(true)} />
+                </div>
+                <button type="button" onClick={handlePasswordChange} className="btn btn-secondary" style={{ marginTop: '16px', padding: '8px 16px', fontSize: '0.8rem' }}>Update Password</button>
               </div>
 
-              <div>
-                <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: 'white', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}><Target size={18} style={{ color: 'var(--accent-cyan)' }} /> Interests & Career Goals</h3>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                  <input name="interests" value={profile.interests || ''} onChange={handleProfileChange} disabled={!isEditing} placeholder="Tech interests" style={fieldStyle(isEditing)} />
-                  <input name="careerGoal" value={profile.careerGoal || ''} onChange={handleProfileChange} disabled={!isEditing} placeholder="Career goal" style={fieldStyle(isEditing)} />
-                  <textarea name="goals" rows="3" value={profile.goals || ''} onChange={handleProfileChange} disabled={!isEditing} placeholder="Preparation goals" style={{ ...fieldStyle(isEditing), resize: 'none' }} />
-                </div>
-              </div>
-
-              <div>
-                <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: 'white', marginBottom: '16px' }}>Change Password</h3>
-                <div style={{ display: 'grid', gap: '12px' }}>
-                  <input type="password" value={profileForm.current_password} onChange={(e) => setProfileForm((prev) => ({ ...prev, current_password: e.target.value }))} placeholder="Current password" style={fieldStyle(true)} />
-                  <input type="password" value={profileForm.password} onChange={(e) => setProfileForm((prev) => ({ ...prev, password: e.target.value }))} placeholder="New password" style={fieldStyle(true)} />
-                  <input type="password" value={profileForm.password_confirmation} onChange={(e) => setProfileForm((prev) => ({ ...prev, password_confirmation: e.target.value }))} placeholder="Confirm new password" style={fieldStyle(true)} />
-                  <button type="button" onClick={handlePasswordChange} className="btn btn-secondary">Update Password</button>
-                </div>
-              </div>
             </div>
           </form>
         </div>

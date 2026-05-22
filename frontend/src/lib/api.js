@@ -17,7 +17,7 @@ function getJsonHeaders() {
   return headers;
 }
 
-async function request(path, options = {}) {
+export async function request(path, options = {}) {
   const { auth = true, body, headers = {}, ...rest } = options;
   const finalHeaders = {
     Accept: 'application/json',
@@ -124,6 +124,21 @@ function normalizeUser(user) {
     profile_image: user.profile_image || user.photo || '',
     email_verified_at: user.email_verified_at || null,
     joinedDate: user.created_at ? new Date(user.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : user.joinedDate || '',
+    
+    // New fields
+    skills: user.skills || '',
+    experienceLevel: user.experience_level || user.experienceLevel || '',
+    resumePath: user.resume_path || user.resumePath || '',
+    portfolioLinks: user.portfolio_links || user.portfolioLinks || '',
+    githubProfile: user.github_profile || user.githubProfile || '',
+    linkedinProfile: user.linkedin_profile || user.linkedinProfile || '',
+    certificates: user.certificates || '',
+    earnedBadges: user.earned_badges || '',
+    points: user.points || 0,
+    rank: user.rank || 'Novice',
+    completedSessionsCount: user.completed_sessions_count || 0,
+    interviewHistory: user.interview_history || [],
+    reviewsGiven: user.reviews_given || [],
   };
 }
 
@@ -207,6 +222,12 @@ export async function getStudentProfile() {
 }
 
 export async function updateStudentProfile(payload) {
+  if (payload instanceof FormData) {
+    return requestFormData('/student/profile', {
+      method: 'POST',
+      body: payload,
+    });
+  }
   return request('/student/profile', {
     method: 'PUT',
     body: payload,
